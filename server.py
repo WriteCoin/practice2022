@@ -23,3 +23,4 @@ except Exception as e:
   print(e)
 else:
   print("Server has been started...")
+  sleep(3628)

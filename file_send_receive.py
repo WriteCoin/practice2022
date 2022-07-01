@@ -1,5 +1,4 @@
 import pickle
-from time import sleep
 from send_receive import Communication
 
 class FileCommunication(Communication):
