@@ -9,6 +9,7 @@ async def on_connection(send, recv):
 if __name__ == '__main__':
   loop = asyncio.get_event_loop()
   try:
-    loop.run_until_complete(on_connection(None, None))
+    while True:
+      loop.run_until_complete(on_connection())
   finally:
     pass

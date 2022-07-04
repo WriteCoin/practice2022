@@ -4,7 +4,9 @@ from socket_fabric import client_sr
 
 async def main():
   send, recv = client_sr("127.0.0.1", 9999)
-  await send(b"hello")
+  text = input()
+  # await send(b"hello")
+  await send(text.encode("UTF-8"))
   assert b"world" == await recv()
   print("Сообщение world получено")
 
