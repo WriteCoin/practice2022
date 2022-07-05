@@ -1,128 +1,42 @@
-import queue
-import socket
+import asyncio
+from functools import partial
+from typing import Optional
 from json_rpc import RecvType, SendType
-import select
 
-BUFF_SIZE = 1024
 
-def client_sr(addr: str, port: int) -> tuple[SendType, RecvType]:
-  try:
-    sock = socket.socket()
-    sock.connect((addr, port))
-    async def send(message: bytes):
-      return sock.send(message)
-    async def recv() -> bytes:
-      return sock.recv(BUFF_SIZE)
-  except Exception as err:
-    print(err)
-    sock.close()
-  return (send, recv)
+async def send(message: bytes, writer: asyncio.StreamWriter) -> None:
+  writer.write(message + b"\n\n")
+  await writer.drain()
 
-def server_sr(addr: str, port: int, listen_count: int = 5):
-  server = socket.socket()
-  server.setblocking(False)
-  server.bind((addr, port))
-  server.listen(listen_count)
+async def recv(reader: asyncio.StreamReader) -> bytes:
+  data = await reader.readline()
+  return data[:len(data) - 1]
 
-  print("Server launched")
+async def client_sr(addr: str, port: int) -> tuple[SendType, RecvType, Optional[asyncio.StreamWriter]]:
+  reader, writer = await asyncio.open_connection(addr, port)
+  return (partial(send, writer=writer), partial(recv, reader=reader), writer)
 
-  inputs = [server]
-  outputs: list[socket.socket] = []
-  message_queues: dict[socket.socket, queue.Queue] = {}
-
+def server_sr(addr: str, port: int):
   def actual_decorator(func):
+    async def wrapper(send: SendType, recv: RecvType):
+      await func(send, recv)
 
-    def read_server_socket(s: socket.socket) -> tuple[SendType, RecvType]:
-      connection, client_address = s.accept()
-      connection.setblocking(False)
-      inputs.append(connection)
-      message_queues[connection] = queue.Queue()
+    async def client_connected(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+      addr = writer.get_extra_info('peername')
       print(f"Connected: {addr}")
-      async def on_send(message: bytes):
-        return connection.send(message)
-      async def on_recv() -> bytes:
-        return connection.recv(BUFF_SIZE)
-      return (on_send, on_recv)
-
-    def read_client_socket(s: socket.socket):
-      data = s.recv(BUFF_SIZE)
-      if data:
-        message_queues[s].put(data)
-        if s not in outputs:
-          outputs.append(s)
-      else:
-        if s in outputs:
-          outputs.remove(s)
-        inputs.remove(s)
-        s.close()
-        del message_queues[s]
-        print(f"Закрытие соединения: {addr}")
-
-    
-    def write_socket(s: socket.socket):
       try:
-        next_msg = message_queues[s].get_nowait()
-      except queue.Empty:
-        outputs.remove(s)
-      else:
-        s.send(next_msg)
-
-    def except_socket(s: socket.socket):
-      inputs.remove(s)
-      if s in outputs:
-        outputs.remove(s)
-      s.close()
-      del message_queues[s]
-      print(f"Закрытие соединения: {addr}")
-
-
-    # async def wrapper(send: SendType, recv: RecvType):
-    async def wrapper():
-
-      async def on_send(message: bytes):
-        pass
-
-      async def on_recv() -> bytes:
-        pass
-
-      while inputs:
-        readable, writeable, exceptional = select.select(inputs, outputs, inputs)
-        for s in readable:
-          if s is server:
-            read_server_socket(s)
-          else:
-            read_client_socket(s)
-        for s in writeable:
-          write_socket(s)
-        for s in exceptional:
-          except_socket(s)
-
-      return
-
-      conn, addr = sock.accept()
-      async def on_connect():
-        print(f"Connected: {addr}")
-        async def on_send(message: bytes):
-          return conn.send(message)
-        async def on_recv() -> bytes:
-          return conn.recv(BUFF_SIZE)
-        try:
-          while True:
-            # data = await on_recv()
-            # if not data:
-            #   continue
-            await func(on_send, on_recv)
-        except Exception as ex:
-          print(ex)
-          print(f"Закрытие соединения: {addr}")
-          conn.close()
-      await on_connect()
-      # await on_connect()
-      # type:ignore
-      # PID = os.fork()
-      # if PID:
-      #   await on_connect()
-      # else:
-      #   await wrapper(send, recv)
+        await wrapper(partial(send, writer=writer), partial(recv, reader=reader))
+      except Exception as ex:
+        print(f"Error: {ex}")
+      finally:
+        print(f"Close the connection")
+        writer.close()
+        await writer.wait_closed()
+    async def new_server():
+      server = await asyncio.start_server(client_connected, addr, port)
+      print("Server launched")
+      async with server:
+        await server.serve_forever()
+    asyncio.run(new_server())
     return wrapper
   return actual_decorator
