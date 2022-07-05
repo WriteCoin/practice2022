@@ -4,17 +4,17 @@
 
 ### 1. Фабрики для send и recv, работа с сокетами в asyncio
 
-Исходный код: `modules/socket_base/socket_fabric.py`.
-Демонстрационные примеры: `modules/socket_base/socket_server.py`, `modules/socket_base/socket_client.py`
+* Исходный код: `modules/socket_base/socket_fabric.py`.
+* Демонстрационные примеры: `modules/socket_base/socket_server.py`, `modules/socket_base/socket_client.py`.
 
 ### 2. Передача JSON-RPC сообщений, вызов удаленной функции
 
-Исходный код: `modules/json_rpc.py`
-Демонстрационные примеры: `modules/server.py`, `modules/client.py`
+* Исходный код: `modules/json_rpc.py`.
+* Демонстрационные примеры: `modules/server.py`, `modules/client.py`.
 
 ### 3. Обертка в класс JsonRpc с методами register и call
 
-Исходный код: `modules/json_rpc.py`
+* Исходный код: `modules/json_rpc.py`.
 
 ### 4. Поддержка notify
 
