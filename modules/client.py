@@ -1,17 +1,14 @@
+from json_rpc import JsonRPC
 import asyncio
-from encodings.utf_8 import decode
-from socket_fabric import client_sr
+from socket_base.socket_fabric import client_sr
 
 
 async def main():
   send, recv, writer = await client_sr("127.0.0.1", 9999)
   try:
-    print("Send request")
-    await send(b"hello")
-    print("Wait response")
+    await send(b'{ "method": "foo", "params": {"bar": "fizz", "baz": "buzz"}}')
     data = await recv()
-    assert b"world" == data
-    print("Response received")
+    print(data.decode("UTF-8"))
   except Exception as ex:
     print(f"Error: {ex}")
   finally:

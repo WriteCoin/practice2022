@@ -1,7 +1,7 @@
 import asyncio
 from functools import partial
 from typing import Optional
-from json_rpc import RecvType, SendType
+from socket_base.send_recv import RecvType, SendType
 
 
 async def send(message: bytes, writer: asyncio.StreamWriter) -> None:
@@ -29,7 +29,7 @@ def server_sr(addr: str, port: int):
       except Exception as ex:
         print(f"Error: {ex}")
       finally:
-        print(f"Close the connection")
+        print(f"Close the connection: {addr}")
         writer.close()
         await writer.wait_closed()
     async def new_server():
