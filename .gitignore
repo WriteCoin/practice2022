@@ -3,3 +3,4 @@ __pycache__/
 ./file_send_receive.py
 ./send_receive.py
 ./socket_send_receive.py
+./modules/practice.code-workspace
