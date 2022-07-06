@@ -1,4 +1,4 @@
-from socket_fabric import server_sr
+from modules.socket_base.socket_fabric import server_sr
 
 
 @server_sr("127.0.0.1", 9999)

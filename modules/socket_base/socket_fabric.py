@@ -1,8 +1,10 @@
 import asyncio
 from contextlib import asynccontextmanager
 from functools import partial
+import threading
 from typing import AsyncGenerator, Optional
-from socket_base.send_recv import RecvType, SendType
+
+from modules.socket_base.send_recv import RecvType, SendType
 
 
 async def send(message: bytes, writer: asyncio.StreamWriter) -> None:
@@ -54,8 +56,10 @@ def server_sr(addr: str, port: int):
             print("Server launched")
             async with server:
                 await server.serve_forever()
-
-        asyncio.run(new_server())
+        def thread_callback():
+            asyncio.run(new_server())
+        thread = threading.Thread(target=thread_callback, args=())
+        thread.start()
         return wrapper
 
     return actual_decorator

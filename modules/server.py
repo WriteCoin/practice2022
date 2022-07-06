@@ -1,6 +1,6 @@
 from time import sleep
-from json_rpc import JsonRPC
-from socket_base.socket_fabric import server_sr
+from modules.json_rpc import JsonRPC
+from modules.socket_base.socket_fabric import server_sr
 
 
 @server_sr("127.0.0.1", 9999)

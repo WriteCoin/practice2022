@@ -1,5 +1,5 @@
 import asyncio
-from socket_fabric import client_sr
+from modules.socket_base.socket_fabric import client_sr
 
 
 async def main():
