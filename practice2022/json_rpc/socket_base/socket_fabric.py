@@ -4,7 +4,7 @@ from functools import partial
 import threading
 from typing import AsyncGenerator, Optional
 
-from modules.socket_base.send_recv import RecvType, SendType
+from practice2022.json_rpc.socket_base.send_recv import RecvType, SendType
 
 
 async def send(message: bytes, writer: asyncio.StreamWriter) -> None:
@@ -56,10 +56,11 @@ def server_sr(addr: str, port: int):
             print("Server launched")
             async with server:
                 await server.serve_forever()
-        def thread_callback():
-            asyncio.run(new_server())
-        thread = threading.Thread(target=thread_callback, args=())
-        thread.start()
+        # def thread_callback():
+        #     asyncio.run(new_server())
+        # thread = threading.Thread(target=thread_callback, args=())
+        # thread.start()
+        asyncio.run(new_server())
         return wrapper
 
     return actual_decorator

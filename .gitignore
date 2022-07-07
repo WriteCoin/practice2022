@@ -5,3 +5,4 @@ __pycache__/
 ./socket_send_receive.py
 
 *.code-workspace
+dist

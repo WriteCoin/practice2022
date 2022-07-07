@@ -18,3 +18,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 main-run = "main:main"
 example = "modules.server:main"
+server = "server:main"
+client = "client:main"
+socket-server = "socket_server:main"
+socket-client = "socket_client:main"

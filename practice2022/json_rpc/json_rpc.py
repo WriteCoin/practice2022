@@ -3,7 +3,7 @@ import inspect
 from typing import Any, Awaitable, Callable, Literal, TypeAlias
 from unicodedata import decimal
 from pydantic import BaseModel
-from modules.socket_base.send_recv import RecvType, SendType
+from practice2022.json_rpc.socket_base.send_recv import RecvType, SendType
 
 
 FuncType: TypeAlias = Awaitable[Callable] | Callable
