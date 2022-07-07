@@ -1,10 +1,8 @@
 import asyncio
 from contextlib import asynccontextmanager
 from functools import partial
-import threading
 from typing import AsyncGenerator, Optional
-
-from practice2022.json_rpc.socket_base.send_recv import RecvType, SendType
+from json_rpc.socket_base.send_recv import RecvType, SendType
 
 
 async def send(message: bytes, writer: asyncio.StreamWriter) -> None:
@@ -32,7 +30,7 @@ async def client_sr(
 
 def server_sr(addr: str, port: int):
     def actual_decorator(func):
-        async def wrapper(send: SendType, recv: RecvType):
+        async def wrapper(send: SendType, recv: RecvType, addr: Optional[str]):
             await func(send, recv)
 
         async def client_connected(
@@ -42,7 +40,7 @@ def server_sr(addr: str, port: int):
             print(f"Connected: {addr}")
             try:
                 await wrapper(
-                    partial(send, writer=writer), partial(recv, reader=reader)
+                    partial(send, writer=writer), partial(recv, reader=reader), addr
                 )
             except Exception as ex:
                 print(f"Error: {ex}")
@@ -56,10 +54,7 @@ def server_sr(addr: str, port: int):
             print("Server launched")
             async with server:
                 await server.serve_forever()
-        # def thread_callback():
-        #     asyncio.run(new_server())
-        # thread = threading.Thread(target=thread_callback, args=())
-        # thread.start()
+
         asyncio.run(new_server())
         return wrapper
 

@@ -1,4 +1,4 @@
-from practice2022.json_rpc.socket_base.socket_fabric import server_sr
+from json_rpc.socket_base.socket_fabric import server_sr
 
 
 def main():
@@ -9,5 +9,6 @@ def main():
         print("Send response")
         await send(b"world")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

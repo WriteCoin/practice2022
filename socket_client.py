@@ -1,5 +1,5 @@
 import asyncio
-from practice2022.json_rpc.socket_base.socket_fabric import client_sr
+from json_rpc.socket_base.socket_fabric import client_sr
 
 
 async def run():
@@ -14,8 +14,10 @@ async def run():
         except Exception as ex:
             print(f"Error: {ex}")
 
+
 def main():
     asyncio.run(run())
+
 
 if __name__ == "__main__":
     main()

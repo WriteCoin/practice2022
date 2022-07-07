@@ -1,4 +1,12 @@
 [[package]]
+name = "accessify"
+version = "0.3.1"
+description = "Python design kit: interfaces, declared exception throws, class members accessibility levels (private and protected methods for humans)."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "black"
 version = "22.6.0"
 description = "The uncompromising code formatter."
@@ -100,9 +108,12 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "4d27ac64992c0ebf338fda7a632608cecc559de3aa76ab58d11c493f12ad9d70"
+content-hash = "cadb5c55b74c3d8eade7411040b1b6843c4228e6212e2e32b2fc6979c9435783"
 
 [metadata.files]
+accessify = [
+    {file = "accessify-0.3.1.tar.gz", hash = "sha256:471905fd15e128c51e37b240804bb2e44f0be887ba105cacf90ef6725b26278a"},
+]
 black = [
     {file = "black-22.6.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:f586c26118bc6e714ec58c09df0157fe2d9ee195c764f630eb0d8e7ccce72e69"},
     {file = "black-22.6.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:b270a168d69edb8b7ed32c193ef10fd27844e5c60852039599f9184460ce0807"},

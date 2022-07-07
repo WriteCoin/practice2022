@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "practice2022"
+name = "json_rpc"
 version = "0.1.0"
 description = "Python API for client-server applications based on JSON-RPC"
 authors = ["WriteCoin <sovtsardom@gmail.com>"]
@@ -7,6 +7,7 @@ authors = ["WriteCoin <sovtsardom@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 pydantic = "^1.9.1"
+accessify = "^0.3.1"
 
 [tool.poetry.dev-dependencies]
 black = "^22.6.0"

@@ -1,6 +1,6 @@
 from time import sleep
-from practice2022.json_rpc.json_rpc import JsonRPC
-from practice2022.json_rpc.socket_base.socket_fabric import server_sr
+from json_rpc.json_rpc import JsonRPC
+from json_rpc.socket_base.socket_fabric import server_sr
 
 
 def main():
@@ -17,6 +17,7 @@ def main():
             print(f"Received {interval!r}")
             sleep(interval)
             print("Finished")
+            return None
 
         @server.register
         def schema() -> dict:
@@ -28,5 +29,6 @@ def main():
 
         await server.run()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

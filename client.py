@@ -1,18 +1,38 @@
-from practice2022.json_rpc.json_rpc import JsonRPC
+from json_rpc.json_rpc import JsonRPC
 import asyncio
-from practice2022.json_rpc.socket_base.socket_fabric import client_sr
+from json_rpc.socket_base.send_recv import RecvType, SendType
+from json_rpc.socket_base.socket_fabric import client_sr
+
+
+async def simple_test(send: SendType, recv: RecvType):
+    await send(
+        b'{"jsonrpc": "2.0", "method": "foo", "params": {"bar": "fizz", "baz": "buzz"}}'
+    )
+    data = await recv()
+    print(data.decode("UTF-8"))
+
+
+async def json_rpc_test(send: SendType, recv: RecvType):
+    client = JsonRPC(send, recv)
+    print("Client JSON RPC 2.0")
+    assert None == await client.call("sleep", [10.0])
+    # assert "fizzbuzz" == await client.call("foo", ["fizz", "buzz"])
+    # assert "fizzbuzz" == await client.call("foo", {"bar": "fizz", "baz": "buzz"})
+    print("Test success")
+
 
 async def run():
     async with client_sr("127.0.0.1", 9999) as (send, recv):
         try:
-            await send(b'{ "method": "foo", "params": {"bar": "fizz", "baz": "buzz"}}')
-            data = await recv()
-            print(data.decode("UTF-8"))
+            # await simple_test(send, recv)
+            await json_rpc_test(send, recv)
         except Exception as ex:
             print(f"Error: {ex}")
 
+
 def main():
     asyncio.run(run())
+
 
 if __name__ == "__main__":
     main()

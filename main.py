@@ -1,7 +1,8 @@
 # import subprocess
 
+
 def main():
-    print('функция main')
+    print("функция main")
     # def command(file: str) -> str:
     #     return f"python -m {file}"
 
@@ -13,5 +14,6 @@ def main():
     # subprocess.Popen([command("modules.client.py")], stdout=subprocess.PIPE)
     # # subprocess.call(command("./modules/client.py"))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
