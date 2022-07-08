@@ -1,11 +1,17 @@
+import asyncio
+from contextlib import asynccontextmanager
 from functools import partial
 import inspect
-from typing import Any, Awaitable, Optional
+import threading
+from time import sleep
+import traceback
+from typing import Any, AsyncGenerator, Awaitable, Callable, Optional
 from pydantic import ValidationError
 from json_rpc.model import (
     Error,
     FuncType,
     InternalError,
+    InternalErrorException,
     InvalidParamsError,
     InvalidRequestError,
     MethodNotFoundError,
@@ -15,7 +21,7 @@ from json_rpc.model import (
     ResponseError,
     ResponseResult,
 )
-from json_rpc.socket_base.send_recv import RecvType, SendType
+from json_rpc.socket_base.send_recv import DisconnectException, RecvType, SendType, threaded
 from accessify import protected
 
 
@@ -25,6 +31,7 @@ class JsonRPC:
     default_request = ProcRequest(
         jsonrpc=default_version, id=None, method="", params=[]
     )
+    notify_command = "notify"
 
     def __init__(self, send: SendType, recv: RecvType, addr: Optional[str] = None):
         self.__send = send
@@ -60,34 +67,32 @@ class JsonRPC:
             if not issubclass(type(value), anno):
                 raise ValueError
 
-    @protected
     async def send(self, message: str, request: ProcRequest = default_request):
         b_message = message.encode(self.default_encondig)
         try:
             await self.__send(b_message)
         except:
-            await self.send_error(InternalError, request)
+            await self._send_error(InternalError, request)
 
-    @protected
     async def recv(self, request: ProcRequest = default_request) -> str | None:
         try:
             data = await self.__recv()
-        except:
-            await self.send_error(InternalError, request)
+        except DisconnectException:
+            return None
+        except Exception:
+            await self._send_error(InternalError, request)
             return None
         else:
             return data.decode(self.default_encondig)
 
-    @protected
-    async def send_error(self, err: Error, request: ProcRequest = default_request):
+    async def _send_error(self, err: Error, request: ProcRequest = default_request):
         response = ResponseError(
             jsonrpc=request.json_rpc, error=err, id=request.id
         ).json(by_alias=True)
         print(f"{self.get_addr()} Response with error: {response}")
         await self.send(response, request)
 
-    @protected
-    async def send_result(self, result: Any, request: ProcRequest = default_request):
+    async def _send_result(self, result: Any, request: ProcRequest = default_request):
         response = ResponseResult(
             jsonrpc=request.json_rpc, result=result, id=request.id
         ).json(by_alias=True)
@@ -97,7 +102,7 @@ class JsonRPC:
     def register(self, func=None, *, name: str | None = None):
         if func is None:
             return partial(self.register, name=name)
-        key = self.get_func_name(func) if name is None else name
+        key = func.__name__ if name is None else name
         self.__functions[key] = func
 
         async def wrapper(*args, **kwargs):
@@ -109,7 +114,8 @@ class JsonRPC:
 
         return wrapper
 
-    async def call(self, func_name: str, args: ParamType | Any) -> Any:
+    @asynccontextmanager
+    async def _remote_call(self, func_name: str, args: ParamType | Any) -> AsyncGenerator[ProcRequest, None]:
         try:
             self.__id += 1
             params = (
@@ -121,52 +127,90 @@ class JsonRPC:
                 params=params,
                 id=self.__id,
             )
-            await self.send(request.json(by_alias=True), request)
-            result_json = await self.recv(request)
-            try:
-                return ResponseError.parse_raw(result_json).error
-            except:
-                return ResponseResult.parse_raw(result_json).result
+            print(f"Send request: {request.json(by_alias=True)}")
+            await self.__send(request.json(by_alias=True).encode(self.default_encondig))
+            yield request
         except:
-            await self.send_error(InternalError)
+            print(traceback.format_exc())
+            raise InternalErrorException
+
+    async def call(self, func_name: str, args: ParamType | Any) -> Any:
+        async with self._remote_call(func_name, args):
+            rcv_bytes = await self.__recv()
+            result_json = rcv_bytes.decode(self.default_encondig)
+            print(f"Response: {result_json}")
+            if not result_json is None:
+                try:
+                    return ResponseError.parse_raw(result_json).error
+                except:
+                    return ResponseResult.parse_raw(result_json).result
+
+    async def notify(self, func_name: str, args: ParamType | Any) -> None:
+        await self.__send(self.notify_command.encode(self.default_encondig))
+        async with self._remote_call(func_name, args):
+            return None
 
     def schema(self) -> dict:
         return {}
 
-    async def run(self):
-        try:
-            data = await self.recv()
-            try:
-                print(f"{self.get_addr()} Request: {data}")
-                request = ProcRequest.parse_raw(data)
-            except ValidationError as e:
-                await self.send_error(InvalidRequestError)
-                return
-            except Exception:
-                await self.send_error(ParseError)
-                return
-            try:
-                func = self.__functions[request.method]
-            except KeyError:
-                await self.send_error(MethodNotFoundError, request)
-                return
-            try:
-                self.validate_func_args(func, request.params)
-            except:
-                await self.send_error(InvalidParamsError, request)
-                return
-            result = (
-                await func(*request.params)
-                if inspect.iscoroutinefunction(func)
-                else func(*request.params)
-                if isinstance(request.params, list)
-                else await func(**request.params)
-                if inspect.iscoroutinefunction(func)
-                else func(**request.params)
-            )
-            if issubclass(type(result), type(Error)):
-                await self.send_error(result)
-        except:
-            await self.send_error(InternalError)
+    @threaded
+    def _func_to_be_threaded(self, func: Callable, params: ParamType):
+        if isinstance(params, list):
+            asyncio.run(func(*params))
         else:
-            await self.send_result(result, request)
+            asyncio.run(func(**params))
+
+    async def run(self):
+        is_notify = False
+        while True:
+            try:
+                data = await self.recv()
+                if data == self.notify_command:
+                    await self._send_result(None)
+                    is_notify = True
+                    continue
+                print(data)
+                if data is None:
+                    break
+                try:
+                    print(f"{self.get_addr()} Request: {data}")
+                    request = ProcRequest.parse_raw(data)
+                except ValidationError as e:
+                    await self._send_error(InvalidRequestError)
+                    return
+                except Exception:
+                    await self._send_error(ParseError)
+                    return
+                try:
+                    func = self.__functions[request.method]
+                except KeyError:
+                    await self._send_error(MethodNotFoundError, request)
+                    return
+                try:
+                    self.validate_func_args(func, request.params)
+                except:
+                    await self._send_error(InvalidParamsError, request)
+                    return
+                if is_notify:
+                    try:
+                        self._func_to_be_threaded(func, request.params)
+                    except:
+                        print(traceback.format_exc())
+                        raise InternalErrorException
+                    is_notify = False
+                    continue
+                result = (
+                    await func(*request.params)
+                    if inspect.iscoroutinefunction(func)
+                    else func(*request.params)
+                    if isinstance(request.params, list)
+                    else await func(**request.params)
+                    if inspect.iscoroutinefunction(func)
+                    else func(**request.params)
+                )
+                if issubclass(type(result), type(Error)):
+                    await self._send_error(result)
+            except:
+                await self._send_error(InternalError)
+            else:
+                await self._send_result(result, request)

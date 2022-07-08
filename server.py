@@ -17,7 +17,7 @@ def main():
             print(f"Received {interval!r}")
             sleep(interval)
             print("Finished")
-            return None
+            # return None
 
         @server.register
         def schema() -> dict:
