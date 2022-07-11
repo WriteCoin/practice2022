@@ -1,3 +1,4 @@
+import asyncio
 from time import sleep
 from json_rpc.json_rpc import JsonRPC
 from json_rpc.socket_base.socket_fabric import server_sr
@@ -15,9 +16,8 @@ def main():
         @server.register(name="sleep")
         async def new_sleep(interval: float) -> None:
             print(f"Received {interval!r}")
-            sleep(interval)
+            await asyncio.sleep(interval)
             print("Finished")
-            # return None
 
         @server.register
         def schema() -> dict:

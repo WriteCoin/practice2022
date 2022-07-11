@@ -2,8 +2,6 @@ import asyncio
 from contextlib import asynccontextmanager
 from functools import partial
 import inspect
-import threading
-from time import sleep
 import traceback
 from typing import Any, AsyncGenerator, Awaitable, Callable, Optional
 from pydantic import ValidationError
@@ -14,6 +12,7 @@ from json_rpc.model import (
     InternalErrorException,
     InvalidParamsError,
     InvalidRequestError,
+    JsonRpcModel,
     MethodNotFoundError,
     ParamType,
     ParseError,
@@ -21,8 +20,7 @@ from json_rpc.model import (
     ResponseError,
     ResponseResult,
 )
-from json_rpc.socket_base.send_recv import DisconnectException, RecvType, SendType, threaded
-from accessify import protected
+from json_rpc.socket_base.send_recv import DisconnectException, RecvType, SendType
 
 
 class JsonRPC:
@@ -39,13 +37,13 @@ class JsonRPC:
         self.__addr = addr
         self.__functions: dict[str, FuncType] = {}
         self.__id = 0
+        self.__tasks: list[asyncio.Task] = []
 
     def get_addr(self):
         return "" if self.__addr is None else f"{self.__addr}: "
 
-    @protected
     @staticmethod
-    def get_func_name(func: FuncType) -> str:
+    def __get_func_name(func: FuncType) -> str:
         func_full_path = str(func).split(" ")[1]
         if func_full_path.find(".<locals>.") != -1:
             paths_to_func = func_full_path.split(".<locals>.")
@@ -56,9 +54,8 @@ class JsonRPC:
         name_func = func_parts[len(func_parts) - 1]
         return name_func
 
-    @protected
     @staticmethod
-    def validate_func_args(func: FuncType, args: ParamType):
+    def __validate_func_args(func: FuncType, args: ParamType):
         func_spec = inspect.getfullargspec(func)
         anno_types = func_spec.annotations
         arg_types = {k: v for k, v in anno_types.items() if k != "return"}
@@ -72,27 +69,32 @@ class JsonRPC:
         try:
             await self.__send(b_message)
         except:
-            await self._send_error(InternalError, request)
+            await self.__send_error(InternalError, request)
 
     async def recv(self, request: ProcRequest = default_request) -> str | None:
+        async def recv():
+            return await self.__recv()
+
         try:
-            data = await self.__recv()
+            data = (await asyncio.gather(asyncio.create_task(recv())))[0]
         except DisconnectException:
+            print("Disconnect")
             return None
         except Exception:
-            await self._send_error(InternalError, request)
+            await self.__send_error(InternalError, request)
             return None
         else:
-            return data.decode(self.default_encondig)
+            result = data.decode(self.default_encondig)
+            return result
 
-    async def _send_error(self, err: Error, request: ProcRequest = default_request):
+    async def __send_error(self, err: Error, request: ProcRequest = default_request):
         response = ResponseError(
             jsonrpc=request.json_rpc, error=err, id=request.id
         ).json(by_alias=True)
         print(f"{self.get_addr()} Response with error: {response}")
         await self.send(response, request)
 
-    async def _send_result(self, result: Any, request: ProcRequest = default_request):
+    async def __send_result(self, result: Any, request: ProcRequest = default_request):
         response = ResponseResult(
             jsonrpc=request.json_rpc, result=result, id=request.id
         ).json(by_alias=True)
@@ -115,9 +117,12 @@ class JsonRPC:
         return wrapper
 
     @asynccontextmanager
-    async def _remote_call(self, func_name: str, args: ParamType | Any) -> AsyncGenerator[ProcRequest, None]:
+    async def __remote_call(
+        self, func_name: str, args: ParamType | Any
+    ) -> AsyncGenerator[tuple[ProcRequest, int], None]:
         try:
             self.__id += 1
+            id = self.__id
             params = (
                 args if isinstance(args, list) or isinstance(args, dict) else [args]
             )
@@ -129,88 +134,95 @@ class JsonRPC:
             )
             print(f"Send request: {request.json(by_alias=True)}")
             await self.__send(request.json(by_alias=True).encode(self.default_encondig))
-            yield request
+            yield (request, id)
         except:
             print(traceback.format_exc())
             raise InternalErrorException
 
     async def call(self, func_name: str, args: ParamType | Any) -> Any:
-        async with self._remote_call(func_name, args):
-            rcv_bytes = await self.__recv()
-            result_json = rcv_bytes.decode(self.default_encondig)
-            print(f"Response: {result_json}")
-            if not result_json is None:
-                try:
-                    return ResponseError.parse_raw(result_json).error
-                except:
-                    return ResponseResult.parse_raw(result_json).result
+        async with self.__remote_call(func_name, args) as (request, id):
+
+            async def recv():
+                return await self.__recv()
+
+            while True:
+                rcv_bytes = (await asyncio.gather(asyncio.create_task(recv())))[0]
+                result_json = rcv_bytes.decode(self.default_encondig)
+                if not result_json is None:
+                    print(f"Response: {result_json}")
+                    base_response = JsonRpcModel.parse_raw(result_json)
+                    if base_response.id != id:
+                        continue
+                    try:
+                        return ResponseError.parse_raw(result_json).error
+                    except:
+                        return ResponseResult.parse_raw(result_json).result
+                else:
+                    print("No response")
 
     async def notify(self, func_name: str, args: ParamType | Any) -> None:
-        await self.__send(self.notify_command.encode(self.default_encondig))
-        async with self._remote_call(func_name, args):
+        async with self.__remote_call(func_name, args):
             return None
 
     def schema(self) -> dict:
         return {}
 
-    @threaded
-    def _func_to_be_threaded(self, func: Callable, params: ParamType):
-        if isinstance(params, list):
-            asyncio.run(func(*params))
+    async def __handle_request(self, data: str):
+        current_task = self.__tasks[-1]
+        try:
+            try:
+                print(f"{self.get_addr()} Request: {data}")
+                request = ProcRequest.parse_raw(data)
+            except ValidationError as e:
+                await self.__send_error(InvalidRequestError)
+                return
+            except Exception:
+                await self.__send_error(ParseError)
+                return
+            try:
+                func = self.__functions[request.method]
+            except KeyError:
+                await self.__send_error(MethodNotFoundError, request)
+                return
+            try:
+                self.__validate_func_args(func, request.params)
+            except:
+                await self.__send_error(InvalidParamsError, request)
+                return
+            result = (
+                await func(*request.params)
+                if inspect.iscoroutinefunction(func)
+                else func(*request.params)
+                if isinstance(request.params, list)
+                else await func(**request.params)
+                if inspect.iscoroutinefunction(func)
+                else func(**request.params)
+            )
+            if issubclass(type(result), type(Error)):
+                await self.__send_error(result)
+        except asyncio.CancelledError:
+            print(f"{self.get_addr()} Task for request: {data} cancelled")
+        except:
+            await self.__send_error(InternalError)
         else:
-            asyncio.run(func(**params))
+            await self.__send_result(result, request)
+        finally:
+            self.__tasks.pop(self.__tasks.index(current_task))
+
+    def __cancel_tasks(self):
+        for task in self.__tasks:
+            task.cancel()
 
     async def run(self):
-        is_notify = False
         while True:
             try:
                 data = await self.recv()
-                if data == self.notify_command:
-                    await self._send_result(None)
-                    is_notify = True
-                    continue
-                print(data)
                 if data is None:
                     break
-                try:
-                    print(f"{self.get_addr()} Request: {data}")
-                    request = ProcRequest.parse_raw(data)
-                except ValidationError as e:
-                    await self._send_error(InvalidRequestError)
-                    return
-                except Exception:
-                    await self._send_error(ParseError)
-                    return
-                try:
-                    func = self.__functions[request.method]
-                except KeyError:
-                    await self._send_error(MethodNotFoundError, request)
-                    return
-                try:
-                    self.validate_func_args(func, request.params)
-                except:
-                    await self._send_error(InvalidParamsError, request)
-                    return
-                if is_notify:
-                    try:
-                        self._func_to_be_threaded(func, request.params)
-                    except:
-                        print(traceback.format_exc())
-                        raise InternalErrorException
-                    is_notify = False
-                    continue
-                result = (
-                    await func(*request.params)
-                    if inspect.iscoroutinefunction(func)
-                    else func(*request.params)
-                    if isinstance(request.params, list)
-                    else await func(**request.params)
-                    if inspect.iscoroutinefunction(func)
-                    else func(**request.params)
-                )
-                if issubclass(type(result), type(Error)):
-                    await self._send_error(result)
             except:
-                await self._send_error(InternalError)
+                await self.__send_error(InternalError)
             else:
-                await self._send_result(result, request)
+                task_request = asyncio.create_task(self.__handle_request(data))
+                self.__tasks.append(task_request)
+                task_request
+        self.__cancel_tasks()
