@@ -16,10 +16,10 @@ async def simple_test(send: SendType, recv: RecvType):
 async def json_rpc_test(send: SendType, recv: RecvType):
     client = JsonRPC(send, recv)
     print("Client JSON RPC 2.0")
-    assert None == await client.notify("sleep", 10.0)
+    assert None == await client.call("sleep", 10.0)
     # assert None == await client.notify("sleep", [10.0])
-    assert "fizzbuzz" == await client.call("foo", ["fizz", "buzz"])
-    # assert "fizzbuzz" == await client.call("foo", {"bar": "fizz", "baz": "buzz"})
+    # assert "fizzbuzz" == await client.call("foo", args.split(','))
+    assert "fizzbuzz" == await client.call("foo", {"bar": "fizz", "baz": "buzz"})
     # res1 = await client.call("foo", ["fizz", "buzz"])
     # sleep(1)
     # res2 = await client.call("foo", {"bar": "fizz", "baz": "buzz"})

@@ -72,11 +72,8 @@ class JsonRPC:
             await self.__send_error(InternalError, request)
 
     async def recv(self, request: ProcRequest = default_request) -> str | None:
-        async def recv():
-            return await self.__recv()
-
         try:
-            data = (await asyncio.gather(asyncio.create_task(recv())))[0]
+            data = await self.__recv()
         except DisconnectException:
             print("Disconnect")
             return None
@@ -141,12 +138,8 @@ class JsonRPC:
 
     async def call(self, func_name: str, args: ParamType | Any) -> Any:
         async with self.__remote_call(func_name, args) as (request, id):
-
-            async def recv():
-                return await self.__recv()
-
             while True:
-                rcv_bytes = (await asyncio.gather(asyncio.create_task(recv())))[0]
+                rcv_bytes = await self.__recv()
                 result_json = rcv_bytes.decode(self.default_encondig)
                 if not result_json is None:
                     print(f"Response: {result_json}")

@@ -39,34 +39,35 @@ def new_token() -> Token:
 
 async def read(reader: asyncio.StreamReader, token: Token):
     async for line in reader:
+        # await read_queue.put((token, get_data_to_read(line)))
         await read_queue.put((token, line))
 
-
-async def server_recv() -> bytes:
-    while True:
-        _, data = await read_queue.get()
-        if data.decode(DEFAULT_ENCODING) == DISCONNECT_COMMAND:
-            raise DisconnectException
-        if not is_data_empty(data):
-            return data
-
+async def server_recv() -> tuple[Token, bytes]:
+    return await read_queue.get()
 
 async def server_send(message: bytes, token: Token) -> None:
     writer = writers[token]
-    writer.write(get_data_to_send(message))
+    # writer.write(get_data_to_send(message))
+    writer.write(message)
+    # writer.writelines([message])
     await writer.drain()
 
 
 async def client_recv(reader: asyncio.StreamReader) -> bytes:
-    while True:
-        line = await reader.readline()
-        line = get_data_to_read(line)
-        if line:
-            return line
+    # return get_data_to_read(await reader.readline())
+    # return await reader.readline()
+    return await reader.read()
 
+    # while True:
+    #     line = await reader.readline()
+    #     line = get_data_to_read(line)
+    #     if line:
+    #         return line
 
 async def client_send(message: bytes, writer: asyncio.StreamWriter) -> None:
-    writer.write(get_data_to_send(message))
+    # writer.write(get_data_to_send(message))
+    writer.write(message)
+    # writer.writelines([message])
     await writer.drain()
 
 
@@ -91,59 +92,27 @@ async def client_sr(
     addr: str, port: int
 ) -> AsyncGenerator[tuple[SendType, RecvType], None]:
     reader, writer = await asyncio.open_connection(addr, port)
-    try:
-        yield (partial(client_send, writer=writer), partial(client_recv, reader=reader))
-    finally:
-        await disconnect(writer)
+    # try:
+    #     yield (partial(client_send, writer=writer), partial(client_recv, reader=reader))
+    # finally:
+    #     await disconnect(writer)
+    yield (partial(client_send, writer=writer), partial(client_recv, reader=reader))
 
 
 async def client_connected(
-    reader: asyncio.StreamReader, writer: asyncio.StreamWriter, wrapper: Any
+    reader: asyncio.StreamReader, writer: asyncio.StreamWriter
 ):
     addr = writer.get_extra_info("peername")
     print(f"Connected: {addr}")
     token = new_token()
     print(f"Token: {token}")
     writers[token] = writer
-    tasks_cancelled = False
-    try:
-        asyncio.create_task(read(reader, token))
-        task = asyncio.create_task(
-            wrapper(partial(server_send, token=token), server_recv)
-        )
-        await task
-    except asyncio.CancelledError:
-        print("Tasks cancelled")
-        tasks_cancelled = True
-    except Exception as ex:
-        print(f"Error: {ex}")
-        print(traceback.format_exc())
-    finally:
-        await disconnect(writer, addr)
-        if tasks_cancelled:
-            print("Remaining tasks rejected")
+    asyncio.create_task(read(reader, token))
 
-
-async def new_server(
-    addr: str,
-    port: int,
-    wrapper: Callable[[SendType, RecvType, Optional[str]], Awaitable[None]],
-):
-    server = await asyncio.start_server(
-        partial(client_connected, wrapper=wrapper), addr, port
-    )
-    print(f"Server has been started on port {port}")
-    async with server:
-        await server.serve_forever()
-
-
-def server_sr(addr: str, port: int):
-    def actual_decorator(func: ServerCallback):
-        async def wrapper(send: SendType, recv: RecvType, addr: Optional[str] = None):
-            await func(send, recv)
-
-        asyncio.run(new_server(addr, port, wrapper))
-
-        return wrapper
-
-    return actual_decorator
+@asynccontextmanager
+async def server_sr(addr: str, port: int):
+    socket_server = await asyncio.start_server(client_connected, addr, port)
+    print(f"Socket server has been started on port {port}")
+    server_task = asyncio.create_task(socket_server.serve_forever())
+    yield server_send, server_recv
+    await server_task
