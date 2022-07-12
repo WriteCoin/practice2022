@@ -4,9 +4,8 @@ from json_rpc.json_rpc import JsonRPC
 from json_rpc.socket_base.socket_fabric import server_sr
 
 
-def main():
-    @server_sr("127.0.0.1", 9999)
-    async def on_connection(send, recv):
+async def run():
+    async with server_sr("127.0.0.1", 9999) as (send, recv):
         server = JsonRPC(send, recv)
 
         @server.register
@@ -28,6 +27,10 @@ def main():
             pass
 
         await server.run()
+
+
+def main():
+    asyncio.run(run())
 
 
 if __name__ == "__main__":

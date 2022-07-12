@@ -1,11 +1,16 @@
 from time import sleep
 from json_rpc.json_rpc import JsonRPC
 import asyncio
-from json_rpc.socket_base.send_recv import RecvType, SendType
-from json_rpc.socket_base.socket_fabric import client_sr
+from json_rpc.socket_base.send_recv import (
+    ClientRecvType,
+    ClientSendType,
+    RecvType,
+    SendType,
+)
+from json_rpc.socket_base.socket_fabric import client_part_send, client_sr
 
 
-async def simple_test(send: SendType, recv: RecvType):
+async def simple_test(send: ClientSendType, recv: ClientRecvType):
     await send(
         b'{"jsonrpc": "2.0", "method": "foo", "params": {"bar": "fizz", "baz": "buzz"}}'
     )
@@ -16,7 +21,8 @@ async def simple_test(send: SendType, recv: RecvType):
 async def json_rpc_test(send: SendType, recv: RecvType):
     client = JsonRPC(send, recv)
     print("Client JSON RPC 2.0")
-    assert None == await client.call("sleep", 10.0)
+    # await client.send('{"jsonrpc": "2.0", "method": "foo", "params": ["fizz", "buzz"], "id": 1}')
+    assert None == await client.call("sleep", [10.0])
     # assert None == await client.notify("sleep", [10.0])
     # assert "fizzbuzz" == await client.call("foo", args.split(','))
     assert "fizzbuzz" == await client.call("foo", {"bar": "fizz", "baz": "buzz"})

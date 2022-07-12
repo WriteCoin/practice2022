@@ -1,15 +1,19 @@
 import asyncio
 from contextlib import asynccontextmanager
 from functools import partial
-import traceback
+import secrets
+import string
 from typing import Any, AsyncGenerator, Awaitable, Callable, Optional
 from json_rpc.socket_base.send_recv import (
+    ClientRecvType,
+    ClientSendType,
     DisconnectException,
     Peername,
     RecvType,
     SendType,
     ServerCallback,
     Token,
+    key_with_value,
 )
 
 
@@ -30,45 +34,75 @@ def get_data_to_send(message: bytes) -> bytes:
 
 
 def is_data_empty(data: bytes) -> bool:
-    return data == b"\n"
+    return data == b"\n" or data == b"" or len(data) == 0
 
 
 def new_token() -> Token:
-    return object()
+    alphabet = string.ascii_letters + string.digits
+    return "".join(secrets.choice(alphabet) for i in range(20))
 
 
-async def read(reader: asyncio.StreamReader, token: Token):
+def is_data_disconnect(data: bytes) -> bool:
+    return data.decode(DEFAULT_ENCODING) == DISCONNECT_COMMAND
+
+
+async def read(reader: asyncio.StreamReader, token: Token = None):
     async for line in reader:
-        # await read_queue.put((token, get_data_to_read(line)))
-        await read_queue.put((token, line))
+        if not is_data_empty(line):
+            if not is_data_disconnect(line):
+                line = get_data_to_read(line)
+            # else:
+            #     raise DisconnectException
+            await read_queue.put((token, line))
+            # await read_queue.put((token, line))
+
 
 async def server_recv() -> tuple[Token, bytes]:
-    return await read_queue.get()
+    token, data = await read_queue.get()
+    if is_data_disconnect(data):
+        raise DisconnectException
+    return (token, data)
 
-async def server_send(message: bytes, token: Token) -> None:
-    writer = writers[token]
-    # writer.write(get_data_to_send(message))
-    writer.write(message)
+    while True:
+        token, data = await read_queue.get()
+        if data.decode(DEFAULT_ENCODING) == DISCONNECT_COMMAND:
+            raise DisconnectException
+        if not is_data_empty(data):
+            return (token, get_data_to_read(data))
+
+
+async def server_send(message: bytes, token: Token | asyncio.StreamWriter) -> None:
+    if isinstance(token, Token):
+        writer = writers[token]
+    else:
+        writer = token
+    writer.write(get_data_to_send(message))
+    # writer.write(message)
     # writer.writelines([message])
     await writer.drain()
 
 
-async def client_recv(reader: asyncio.StreamReader) -> bytes:
+async def client_recv(reader: asyncio.StreamReader):
     # return get_data_to_read(await reader.readline())
     # return await reader.readline()
-    return await reader.read()
+    # return await reader.read()
 
-    # while True:
-    #     line = await reader.readline()
-    #     line = get_data_to_read(line)
-    #     if line:
-    #         return line
+    while True:
+        line = await reader.readline()
+        line = get_data_to_read(line)
+        if line:
+            return line
+
 
 async def client_send(message: bytes, writer: asyncio.StreamWriter) -> None:
-    # writer.write(get_data_to_send(message))
-    writer.write(message)
+    writer.write(get_data_to_send(message))
+    # writer.write(message)
     # writer.writelines([message])
     await writer.drain()
+
+
+async def client_part_send(send: SendType, message: bytes):
+    return partial(send, message=message)
 
 
 async def notify(writer: asyncio.StreamWriter) -> None:
@@ -92,22 +126,29 @@ async def client_sr(
     addr: str, port: int
 ) -> AsyncGenerator[tuple[SendType, RecvType], None]:
     reader, writer = await asyncio.open_connection(addr, port)
-    # try:
-    #     yield (partial(client_send, writer=writer), partial(client_recv, reader=reader))
-    # finally:
-    #     await disconnect(writer)
-    yield (partial(client_send, writer=writer), partial(client_recv, reader=reader))
+    # token: Token = key_with_value(writers, writer)
+    # token_b = await client_recv(reader)
+    # token = token_b.decode(DEFAULT_ENCODING)
+    try:
+        client_task = asyncio.create_task(read(reader))
+        client_task
+        yield (partial(server_send, token=writer), server_recv)
+    finally:
+        await disconnect(writer)
+    # yield (partial(client_send, writer=writer), partial(client_recv, reader=reader))
 
 
-async def client_connected(
-    reader: asyncio.StreamReader, writer: asyncio.StreamWriter
-):
+async def client_connected(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
     addr = writer.get_extra_info("peername")
     print(f"Connected: {addr}")
     token = new_token()
     print(f"Token: {token}")
     writers[token] = writer
-    asyncio.create_task(read(reader, token))
+    # await server_send(str(token).encode(DEFAULT_ENCODING), token)
+    task = asyncio.create_task(read(reader, token))
+    await task
+    await disconnect(writer, addr)
+
 
 @asynccontextmanager
 async def server_sr(addr: str, port: int):
