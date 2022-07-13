@@ -2,30 +2,54 @@ from time import sleep
 from json_rpc.json_rpc import JsonRPC
 import asyncio
 from json_rpc.socket_base.send_recv import (
-    ClientRecvType,
-    ClientSendType,
     RecvType,
     SendType,
 )
-from json_rpc.socket_base.socket_fabric import client_part_send, client_sr
+from json_rpc.socket_base.socket_fabric import client_sr
 
 
-async def simple_test(send: ClientSendType, recv: ClientRecvType):
+async def simple_test(send: SendType, recv: RecvType):
     await send(
-        b'{"jsonrpc": "2.0", "method": "foo", "params": {"bar": "fizz", "baz": "buzz"}}'
+        b'{"jsonrpc": "2.0", "method": "foo", "params": {"bar": "fizz", "baz": "buzz"}}',
+        None,
     )
-    data = await recv()
+    _, data = await recv()
     print(data.decode("UTF-8"))
 
 
 async def json_rpc_test(send: SendType, recv: RecvType):
     client = JsonRPC(send, recv)
     print("Client JSON RPC 2.0")
+
+    results = await asyncio.gather(
+        client.call("sleep", 10.0),
+        client.call("foo", ["1", "2"]),
+        client.call("sleep", 5.0),
+        client.call("foo", ["3", "4"]),
+        client.call("sleep", 1.0),
+    )
+    print(results)
+
+    # for f in asyncio.as_completed(
+    #     [
+    #         client.call("sleep", 10.0),
+    #         client.call("foo", ["1", "2"]),
+    #         client.call("sleep", 5.0),
+    #         client.call("foo", ["3", "4"]),
+    #         client.call("sleep", 1.0),
+    #     ]
+    # ):
+    #     result = await f
+    #     print(result)
     # await client.send('{"jsonrpc": "2.0", "method": "foo", "params": ["fizz", "buzz"], "id": 1}')
-    assert None == await client.call("sleep", [10.0])
+
+    # assert None == await client.call("sleep", 10.0)
+
     # assert None == await client.notify("sleep", [10.0])
     # assert "fizzbuzz" == await client.call("foo", args.split(','))
-    assert "fizzbuzz" == await client.call("foo", {"bar": "fizz", "baz": "buzz"})
+
+    # assert "fizzbuzz" == await client.call("foo", {"bar": "fizz", "baz": "buzz"})
+
     # res1 = await client.call("foo", ["fizz", "buzz"])
     # sleep(1)
     # res2 = await client.call("foo", {"bar": "fizz", "baz": "buzz"})

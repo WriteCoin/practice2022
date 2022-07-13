@@ -21,14 +21,10 @@ from json_rpc.model import (
     ResponseResult,
 )
 from json_rpc.socket_base.send_recv import (
-    ClientRecvType,
-    ClientSendType,
-    DisconnectException,
     RecvType,
     SendType,
     Token,
 )
-from json_rpc.socket_base.socket_fabric import client_part_send
 
 
 class JsonRPC:
@@ -42,19 +38,15 @@ class JsonRPC:
     def __init__(
         self,
         send: SendType,
-        recv: RecvType | ClientRecvType,
+        recv: RecvType,
         addr: Optional[str] = None,
     ):
         self.__send = send
-        # if len(inspect.signature(send).parameters) == 2:
-        #     self.__server_send: SendType = send
-        # else:
-        #     self.__client_send: ClientSendType = send
         self.__recv = recv
         self.__addr = addr
         self.__functions: dict[str, FuncType] = {}
         self.__id = 0
-        self.__tasks: list[asyncio.Task] = []
+        self.__tasks: dict[Token, list[asyncio.Task]] = {}
         if len(inspect.signature(send).parameters) == 1:
             task_get_token = asyncio.gather(asyncio.create_task(self.get_token()))
             task_get_token
@@ -87,31 +79,14 @@ class JsonRPC:
             if not issubclass(type(value), anno):
                 raise ValueError
 
-    async def send(
-        self, message: str, token: Token, request: ProcRequest = default_request
-    ):
+    async def send(self, message: str, token: Token):
         b_message = message.encode(self.default_encondig)
-        try:
-            await self.__send(b_message, token)
-        except:
-            await self.__send_error(InternalError, token, request)
+        await self.__send(b_message, token)
 
-    async def recv(
-        self, request: ProcRequest = default_request
-    ) -> tuple[Token, str] | None:
-        try:
-            token, data = await self.__recv()
-        except DisconnectException:
-            print(f"{self.get_addr()} Disconnect.")
-            return None
-        except Exception as e:
-            # await self.__send_error(InternalError, request)
-            print(f"{self.get_addr()} Internal error: {e}")
-            print(traceback.format_exc())
-            return None
-        else:
-            result = data.decode(self.default_encondig)
-            return (token, result)
+    async def recv(self) -> tuple[Token, str] | None:
+        token, data = await self.__recv()
+        result = data.decode(self.default_encondig)
+        return (token, result)
 
     async def __send_error(
         self, err: Error, token: Token, request: ProcRequest = default_request
@@ -120,7 +95,7 @@ class JsonRPC:
             jsonrpc=request.json_rpc, error=err, id=request.id
         ).json(by_alias=True)
         print(f"{self.get_addr()} Response with error: {response}")
-        await self.send(response, token, request)
+        await self.send(response, token)
 
     async def __send_result(
         self, result: Any, token: Token, request: ProcRequest = default_request
@@ -129,7 +104,7 @@ class JsonRPC:
             jsonrpc=request.json_rpc, result=result, id=request.id
         ).json(by_alias=True)
         print(f"{self.get_addr()} Response: {response}")
-        await self.send(response, token, request)
+        await self.send(response, token)
 
     def register(self, func=None, *, name: str | None = None):
         if func is None:
@@ -148,16 +123,19 @@ class JsonRPC:
 
     @asynccontextmanager
     async def __remote_call(
-        self, func_name: str, args: ParamType | Any
-    ) -> AsyncGenerator[tuple[ProcRequest, int], None]:
+        self, func_name: str, args: ParamType | Any, send_id: bool = True
+    ) -> AsyncGenerator[tuple[ProcRequest, int | None], None]:
         def part_send():
             return partial(
                 self.__send, request.json(by_alias=True).encode(self.default_encondig)
             )
 
         try:
-            self.__id += 1
-            id = self.__id
+            if send_id:
+                self.__id += 1
+                id = self.__id
+            else:
+                id = None
             params = (
                 args if isinstance(args, list) or isinstance(args, dict) else [args]
             )
@@ -169,29 +147,30 @@ class JsonRPC:
             )
             print(f"Send request: {request.json(by_alias=True)}")
             await part_send()()
-            # await client_part_send(self.__send, request.json(by_alias=True).encode(self.default_encondig))
-            # await self.__send(request.json(by_alias=True).encode(self.default_encondig), None)
             yield (request, id)
         except:
             print(traceback.format_exc())
             raise InternalErrorException
 
-    async def call(self, func_name: str, args: ParamType | Any) -> Any:
-        async with self.__remote_call(func_name, args) as (request, id):
-            # while True:
-            _, rcv_bytes = await self.__recv()
-            result_json = rcv_bytes.decode(self.default_encondig)
-            if not result_json is None:
-                print(f"Response: {result_json}")
-                # base_response = JsonRpcModel.parse_raw(result_json)
-                # if base_response.id != id:
-                #     continue
-                try:
-                    return ResponseError.parse_raw(result_json).error
-                except:
-                    return ResponseResult.parse_raw(result_json).result
-            else:
-                print("No response")
+    def call(self, func_name: str, args: ParamType | Any):
+        async def callee():
+            async with self.__remote_call(func_name, args):
+                _, rcv_bytes = await self.__recv()
+                result_json = rcv_bytes.decode(self.default_encondig)
+                if not result_json is None:
+                    print(f"Response: {result_json}")
+                    # base_response = JsonRpcModel.parse_raw(result_json)
+                    # if base_response.id != id:
+                    #     continue
+                    try:
+                        return ResponseError.parse_raw(result_json).error
+                    except:
+                        return ResponseResult.parse_raw(result_json).result
+                else:
+                    print("No response")
+
+        future = asyncio.ensure_future(callee())
+        return future
 
     async def notify(self, func_name: str, args: ParamType | Any) -> None:
         async with self.__remote_call(func_name, args):
@@ -201,7 +180,6 @@ class JsonRPC:
         return {}
 
     async def __handle_request(self, data: str, token: Token):
-        current_task = self.__tasks[-1]
         try:
             try:
                 print(f"{self.get_addr()} Request: {data}")
@@ -239,26 +217,15 @@ class JsonRPC:
             await self.__send_error(InternalError, token)
         else:
             await self.__send_result(result, token, request)
-        finally:
-            self.__tasks.pop(self.__tasks.index(current_task))
-
-    def __cancel_tasks(self):
-        for task in self.__tasks:
-            task.cancel()
 
     async def run(self):
         while True:
             try:
                 req = await self.recv()
-                if req is None:
-                    break
             except Exception as e:
                 print(f"{self.get_addr()} Internal error: {e}")
                 print(traceback.format_exc())
-                # await self.__send_error(InternalError)
             else:
                 token, data = req
                 task_request = asyncio.create_task(self.__handle_request(data, token))
-                self.__tasks.append(task_request)
                 task_request
-        # self.__cancel_tasks()
