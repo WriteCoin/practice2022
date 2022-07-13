@@ -46,14 +46,8 @@ class JsonRPC:
         self.__addr = addr
         self.__functions: dict[str, FuncType] = {}
         self.__id = 0
-        self.__tasks: dict[int, Error | Any | None] = {}
-        self.__tasks_queue: asyncio.Queue = asyncio.Queue()
-        if len(inspect.signature(send).parameters) == 1:
-            task_get_token = asyncio.gather(asyncio.create_task(self.get_token()))
-            task_get_token
-
-    async def get_token(self):
-        pass
+        self.__tasks_queue: dict[int, asyncio.Queue] = {}
+        self.__find_response_task = asyncio.create_task(self.find_response())
 
     def get_addr(self):
         return "" if self.__addr is None else f"{self.__addr}: "
@@ -108,6 +102,9 @@ class JsonRPC:
         await self.send(response, token)
 
     def register(self, func=None, *, name: str | None = None):
+        if not self.__find_response_task.cancelled():
+            self.__find_response_task.cancel()
+
         if func is None:
             return partial(self.register, name=name)
         key = func.__name__ if name is None else name
@@ -122,6 +119,21 @@ class JsonRPC:
 
         return wrapper
 
+    async def find_response(self):
+        _, rcv_bytes = await self.__recv()
+        result_json = rcv_bytes.decode(self.default_encondig)
+        if not result_json is None:
+            print(f"Response: {result_json}")
+            base_response = JsonRpcModel.parse_raw(result_json)
+            try:
+                result = ResponseError.parse_raw(result_json).error
+            except:
+                result = ResponseResult.parse_raw(result_json).result
+            finally:
+                if not base_response.id is None:
+                    await self.__tasks_queue[base_response.id].put(result)
+        await self.find_response()
+
     @asynccontextmanager
     async def __remote_call(
         self, func_name: str, args: ParamType | Any, send_id: bool = True
@@ -135,6 +147,7 @@ class JsonRPC:
             if send_id:
                 self.__id += 1
                 id = self.__id
+                self.__tasks_queue[id] = asyncio.Queue()
             else:
                 id = None
             params = (
@@ -144,7 +157,7 @@ class JsonRPC:
                 jsonrpc=self.default_version,
                 method=func_name,
                 params=params,
-                id=self.__id,
+                id=id,
             )
             print(f"Send request: {request.json(by_alias=True)}")
             await part_send()()
@@ -156,47 +169,14 @@ class JsonRPC:
     def call(self, func_name: str, args: ParamType | Any):
         async def callee():
             async with self.__remote_call(func_name, args) as (request, request_id):
-                request_id = 0 if request_id is None else request_id
-                self.__tasks[request_id] = None
-                # await self.__tasks_queue.put(None)
-                # self.__tasks_queue.join()
-                async def get_response():
-                    # while True:
-                        _, rcv_bytes = await self.__recv()
-                        result_json = rcv_bytes.decode(self.default_encondig)
-                        if not result_json is None:
-                            print(f"Response: {result_json}")
-                            base_response = JsonRpcModel.parse_raw(result_json)
-                            # if base_response.id != id:
-                            #     continue
-                            try:
-                                result = ResponseError.parse_raw(result_json).error
-                            except:
-                                result = ResponseResult.parse_raw(result_json).result
-                            finally:
-                                self.__tasks[base_response.id] = result
-                                # return result
-                        else:
-                            print("No response")
-                # async def find_response():
-                while True:
-                    await get_response()
-                    for id, response in self.__tasks.items():
-                        if id == request_id:
-                            return response
+                return await self.__tasks_queue[request_id].get()
+
         future = asyncio.ensure_future(callee())
         return future
-                # async for id, response in self.__tasks.items():
-                #     await get_response()
-                #     if id == request_id:
-                #         return response
-        # return await callee()
-        # future = asyncio.ensure_future(callee())
-        # return await future
 
-    async def notify(self, func_name: str, args: ParamType | Any) -> None:
-        async with self.__remote_call(func_name, args):
-            return None
+    async def notify(self, func_name: str, args: ParamType | Any):
+        async with self.__remote_call(func_name, args, False):
+            pass
 
     def schema(self) -> dict:
         return {}
