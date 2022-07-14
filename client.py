@@ -1,5 +1,6 @@
+from functools import partial
 from time import sleep
-from json_rpc.json_rpc import JsonRPC
+from json_rpc.json_rpc import JsonRPC, notification
 import asyncio
 from json_rpc.socket_base.send_recv import (
     RecvType,
@@ -9,10 +10,10 @@ from json_rpc.socket_base.socket_fabric import client_sr
 
 
 async def simple_test(send: SendType, recv: RecvType):
-    await send(
-        b'{"jsonrpc": "2.0", "method": "foo", "params": {"bar": "fizz", "baz": "buzz"}}',
-        None,
-    )
+    # await send(b'{"jsonrpc": "2.0", "method": "foo", "params": {"bar": "fizz", "baz": "buzz"}}')
+
+    await (partial(send, b'{"jsonrpc": "2.0", "id": 1, "method": "foo", "params": {"bar": "fizz", "baz": "buzz"}}'))()
+
     _, data = await recv()
     print(data.decode("UTF-8"))
 
@@ -21,14 +22,14 @@ async def json_rpc_test(send: SendType, recv: RecvType):
     client = JsonRPC(send, recv)
     print("Client JSON RPC 2.0")
 
-    results = await asyncio.gather(
-        client.call("foo", ["1", "2"]),
-        client.call("sleep", 10.0),
-        client.call("sleep", 5.0),
-        client.call("sleep", 1.0),
-        client.call("foo", ["3", "4"]),
-    )
-    print(results)
+    # results = await asyncio.gather(
+    #     client.call("foo", ["1", "2"]),
+    #     client.notify("sleep", 10.0),
+    #     client.notify("sleep", 5.0),
+    #     client.notify("sleep", 1.0),
+    #     client.call("foo", ["3", "4"]),
+    # )
+    # print(results)
 
     # for f in asyncio.as_completed(
     #     [
@@ -52,7 +53,7 @@ async def json_rpc_test(send: SendType, recv: RecvType):
 
     # assert None == await client.call("sleep", 10.0)
 
-    # assert None == await client.notify("sleep", [10.0])
+    # assert None == await client.notify("sleep", [2.0])
     # assert "fizzbuzz" == await client.call("foo", args.split(','))
     # res = await client.call("foo", {"bar": "fizz", "baz": "buzz"})
     # print(res)
@@ -65,12 +66,28 @@ async def json_rpc_test(send: SendType, recv: RecvType):
     # print(res2)
     print("Test success")
 
+async def batch_test(send: SendType, recv: RecvType):
+    client = JsonRPC(send, recv)
+    print("Client JSON RPC 2.0 Batch Test")
+
+    assert ["ab", "cd"] == await client.batch(
+        ("foo", ["a", "b"]),
+        notification("sleep", [10.0]),
+        ("foo", {"bar": "c", "baz": "d"}),
+        notification("sleep", {"interval": 10.0})
+    )
+
+    print(await client.call("schema", []))
+
+    print("Test success")
+
 
 async def run():
     async with client_sr("127.0.0.1", 9999) as (send, recv):
         try:
             # await simple_test(send, recv)
-            await json_rpc_test(send, recv)
+            # await json_rpc_test(send, recv)
+            await batch_test(send, recv)
         except Exception as ex:
             print(f"Error: {ex}")
 
