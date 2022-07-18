@@ -3,8 +3,10 @@ from contextlib import asynccontextmanager
 from functools import partial
 import inspect
 import json
+import threading
 import traceback
-from typing import Any, AsyncGenerator, Awaitable, Literal, Mapping, Optional
+from typing import Any, AsyncGenerator, Awaitable, Callable, Dict, List, Literal, Mapping, Optional, Tuple, Union
+from unittest import FunctionTestCase
 from pydantic import ValidationError
 from json_rpc.model import (
     BatchParam,
@@ -26,15 +28,44 @@ from json_rpc.model import (
     ResponseResult,
 )
 from json_rpc.socket_base.send_recv import (
-    RecvType,
+    ClientRecvType,
+    ClientSendType,
     SendType,
+    RecvType,
     Token,
 )
 
-def notification(func_name: str, params: ParamType | Any) -> tuple[str, ParamType | Any, Literal[False]]:
+
+def notification(
+    func_name: str,
+    params: Union[ParamType, Any]
+) -> Tuple[str, Union[ParamType, Any], Literal[False]]:
     return (func_name, params, False)
 
-class JsonRPC:
+
+def new_class():
+    return type('notify', (object, ), dict())
+
+
+def get_args(*args, **kwargs):
+    return [*args] if len(args) else {**kwargs}
+
+
+class aobject(object):
+    """Inheriting this class allows you to define an async __init__.
+
+    So you can create objects by doing something like 'await MyClass(params)'
+    """
+    async def __new__(cls, *a, **kw):
+        instance = super().__new__(cls)
+        await instance.__init__(*a, **kw)  # type: ignore
+        return instance
+
+    async def __init__(self):
+        pass
+
+
+class JsonRPC(aobject):
     default_version = "2.0"
     default_encondig = "UTF-8"
     default_request = ProcRequest(
@@ -42,25 +73,42 @@ class JsonRPC:
     )
     notify_command = "notify"
 
-    def __init__(
+    async def __init__(
         self,
-        send: SendType,
-        recv: RecvType,
+        send: Union[SendType, ClientSendType],
+        recv: Union[RecvType, ClientRecvType],
         addr: Optional[str] = None,
     ):
         self.__send = send
         self.__recv = recv
         self.__addr = addr
-        self.__functions: dict[str, FuncType] = {}
+        self.__functions: Dict[str, FuncType] = {}
         self.__id = 0
-        self.__tasks_queue: dict[int, asyncio.Queue] = {}
-        self.__find_response_task = asyncio.create_task(self.find_response())
+        self.__tasks_queue: Dict[int, asyncio.Queue] = {}
+        if addr is None:
+            self.__find_response_task = asyncio.create_task(
+                self.find_response())
+            await self.alloc_ui()
+
+    def __getitem__(self, item):
+        return getattr(self, item)
+
+    def __setitem__(self, key, value):
+        setattr(self, key, value)
+
+    def cond_client(self):
+        return self.__addr is None and not self.__find_response_task.cancelled()
 
     def get_addr(self):
         return "" if self.__addr is None else f"{self.__addr}: "
 
-    def register(self, func=None, *, name: str | None = None):
-        if not self.__find_response_task.cancelled():
+    def register(
+        self,
+        func=None,
+        *,
+        name: Optional[str] = None
+    ) -> Callable:  # type: ignore
+        if self.cond_client():
             self.__find_response_task.cancel()
 
         if func is None:
@@ -80,12 +128,12 @@ class JsonRPC:
 
     async def send(self, message: str, token: Token):
         b_message = message.encode(self.default_encondig)
-        await self.__send(b_message, token)
+        await self.__send(b_message, token)  # type: ignore
 
-    async def recv(self) -> tuple[Token, str] | None:
+    async def recv(self) -> Tuple[Token, str]:
         token, data = await self.__recv()
-        result = data.decode(self.default_encondig)
-        return (token, result)
+        result = data.decode(self.default_encondig)  # type: ignore
+        return (token, result)  # type: ignore
 
     async def __send_error(
         self, err: ResponseError, token: Token
@@ -100,10 +148,11 @@ class JsonRPC:
         response = ResponseError(
             jsonrpc=request.json_rpc, error=err, id=request.id
         )
-        if not request.id is None:
+        if request.id is not None:
             await self.__send_error(response, token)
         else:
-            print(f"{self.get_addr()} Error for request: {response.json(by_alias=True)}")
+            print(
+                f"{self.get_addr()} Error for request: {response.json(by_alias=True)}")
 
     async def __send_result(
         self, response: ResponseResult, token: Token
@@ -118,27 +167,54 @@ class JsonRPC:
         response = ResponseResult(
             jsonrpc=request.json_rpc, result=result, id=request.id
         )
-        if not request.id is None:
+        if request.id is not None:
             await self.__send_result(response, token)
         else:
-            print(f"{self.get_addr()} Result for request: {response.json(by_alias=True)}")
+            print(
+                f"{self.get_addr()} Result for request: {response.json(by_alias=True)}")
+
+    async def alloc_ui(self):
+        print("Аллокация интерфейсных вызовов")
+        schema = await self.call('schema', [])
+        notify_class = new_class()
+        for alias_func_name in schema['functions']:
+            async def func_call(func_name: str, *args, **kwargs):
+                print("Вызов call")
+                args = get_args(*args, **kwargs)
+                print(f"Аргументы: {args}")
+                print(f"Функция: {func_name}")
+                return await self.call(func_name, args)
+
+            async def func_notify(func_name: str, *args, **kwargs):
+                print("Вызов notify")
+                args = get_args(*args, **kwargs)
+                print(f"Аргументы: {args}")
+                print(f"Функция: {func_name}")
+                await self.notify(func_name, args)
+            setattr(self, alias_func_name, partial(
+                func_call, alias_func_name))
+            setattr(notify_class, alias_func_name, partial(
+                func_notify, alias_func_name))
+
+        setattr(self, "notify", notify_class())
 
     async def find_response(self):
-        _, rcv_bytes = await self.__recv()
-        result_json = rcv_bytes.decode(self.default_encondig)
-        if not result_json is None:
-            print(f"Response: {result_json}")
-            base_response = JsonRpcModel.parse_raw(result_json)
-            try:
-                result = ResponseError.parse_raw(result_json).error
-            except:
-                result = ResponseResult.parse_raw(result_json).result
-            finally:
-                if not base_response.id is None:
-                    await self.__tasks_queue[base_response.id].put(result)
-        await self.find_response()
+        while True:
+            rcv_bytes = await self.__recv()
+            result_json = rcv_bytes.decode(  # type: ignore
+                self.default_encondig)
+            if result_json is not None:
+                print(f"Response: {result_json}")
+                base_response = JsonRpcModel.parse_raw(result_json)
+                try:
+                    result = ResponseError.parse_raw(result_json).error
+                except:
+                    result = ResponseResult.parse_raw(result_json).result
+                finally:
+                    if base_response.id is not None:
+                        await self.__tasks_queue[base_response.id].put(result)
 
-    def __get_request(self, func_name: str, args: ParamType | Any, send_id: bool = True) -> RequestResult:
+    def __get_request(self, func_name: str, args: Union[ParamType, Any], send_id: bool = True) -> RequestResult:
         if send_id:
             self.__id += 1
             id = self.__id
@@ -146,7 +222,8 @@ class JsonRPC:
         else:
             id = None
         params = (
-            args if isinstance(args, list) or isinstance(args, dict) else [args]
+            args if isinstance(args, list) or isinstance(
+                args, dict) else [args]
         )
         request = ProcRequest(
             jsonrpc=self.default_version,
@@ -157,41 +234,36 @@ class JsonRPC:
         return RequestResult(request=request, request_id=id)
 
     async def client_send(self, message: str):
-        return await partial(
-            self.__send, message.encode(self.default_encondig)
-        )()
+        b_message = message.encode(self.default_encondig)
+        await self.__send(b_message)  # type: ignore
 
     async def client_recv(self, request_id: int):
         return await self.__tasks_queue[request_id].get()
 
-    @asynccontextmanager
     async def __remote_call(
-        self, func_name: str, args: ParamType | Any, send_id: bool = True
-    ) -> AsyncGenerator[RequestResult, None]:
-        try:
-            request_result = self.__get_request(func_name, args, send_id)
-            json_request = request_result["request"].json(by_alias=True)
-            print(f"Send request: {json_request}")
-            await self.client_send(json_request)
-            yield request_result
-        except:
-            print(traceback.format_exc())
-            raise InternalErrorException
+        self, func_name: str, args: Union[ParamType, Any], send_id: bool = True
+    ) -> RequestResult:
+        request_result = self.__get_request(func_name, args, send_id)
+        json_request = request_result["request"].json(by_alias=True)
+        print(f"Send request: {json_request}")
+        await self.client_send(json_request)
+        return request_result
 
-    def call(self, func_name: str, args: ParamType | Any):
+    def call(self, func_name: str, args: Union[ParamType, Any]) -> Any:
         async def callee():
-            async with self.__remote_call(func_name, args) as request_result:
+            request_result = await self.__remote_call(func_name, args)
+            if request_result["request_id"] is not None:
                 return await self.client_recv(request_result["request_id"])
 
         future = asyncio.ensure_future(callee())
         return future
 
-    async def notify(self, func_name: str, args: ParamType | Any):
-        async with self.__remote_call(func_name, args, False):
-            pass
+    async def notify(self, func_name: str, args: Union[ParamType, Any]):
+        await self.__remote_call(func_name, args, False)
 
-    async def batch(self, *args: tuple[str, ParamType | Any] | tuple[str, ParamType | Any, bool]) -> list[Any]:
-        requests = [self.__get_request(*arg)["request"] for arg in args]
+    async def batch(self, *args: Union[Tuple[str, Union[ParamType, Any]], Tuple[str, Union[ParamType, Any], bool]]) -> List[Any]:
+        requests = [self.__get_request(*arg)["request"]  # type: ignore
+                    for arg in args]
         json_requests = [request.json(by_alias=True) for request in requests]
         json_request = json.dumps(json_requests)
         print(f"Send batch request: {json_request}")
@@ -199,25 +271,29 @@ class JsonRPC:
 
         results = []
         for request in requests:
-            if not request.id is None:
+            if request.id is not None:
                 result = await self.client_recv(request.id)
                 results.append(result)
 
         return results
 
     def schema(self) -> dict:
-        result: dict[str, dict] = {}
+        result: Dict[str, dict] = {}
         for alias_func_name, func in self.__functions.items():
             arg_spec = inspect.getfullargspec(func)
             parameters = arg_spec._asdict()
             del parameters["annotations"]
-            anno = {k: str(v) if v != None else v for k, v in arg_spec.annotations.items()}
+            anno = {k: str(v) if v != None else v for k,
+                    v in arg_spec.annotations.items()}
             parameters["annotations"] = anno
-            result[alias_func_name] = FuncSchema(funcName=func.__name__, parameters=parameters).dict(by_alias=True)
-        
+            result[alias_func_name] = FuncSchema(
+                funcName=func.__name__,
+                parameters=parameters
+            ).dict(by_alias=True)
+
         dict_base = {
             "title": f"JSON-RPC {self.default_version}",
-            "mode": "server" if self.__find_response_task.cancelled() else "client",
+            "mode": "client" if self.cond_client() else "server",
             "functions": result
         }
         return dict_base
@@ -229,7 +305,8 @@ class JsonRPC:
                 request_data = json.loads(data)
                 if isinstance(request_data, list):
                     for request in request_data:
-                        asyncio.create_task(self.__handle_request(request, token))
+                        asyncio.create_task(
+                            self.__handle_request(request, token))
                     return
                 request = ProcRequest.parse_raw(data)
             except ValidationError as e:
@@ -251,24 +328,33 @@ class JsonRPC:
                 return
             result = (
                 (await func(*request.params)
-                if inspect.iscoroutinefunction(func)
-                else func(*request.params))
+                 if inspect.iscoroutinefunction(func)
+                 else func(*request.params))
                 if isinstance(request.params, list)
                 else await func(**request.params)
                 if inspect.iscoroutinefunction(func)
                 else func(**request.params)
             )
             if issubclass(type(result), type(Error)):
-                await self.__handle_error(result, token, request)
+                await self.__handle_error(
+                    result_err,  # type: ignore
+                    token,
+                    request
+                )
+
         except asyncio.CancelledError:
             print(f"{self.get_addr()} Task for request: {data} cancelled")
         except Exception as e:
             print("Internal Error", e)
             print(traceback.format_exc())
-            await self.__handle_error(InternalError, token, request)
+            await self.__handle_error(
+                InternalError,
+                token,
+                request  # type: ignore
+            )
         else:
             try:
-                if not request.id is None:
+                if request.id is not None:
                     await self.__handle_result(result, token, request)
             except Exception as e:
                 print("Internal Error", e)
@@ -284,5 +370,4 @@ class JsonRPC:
                 print(traceback.format_exc())
             else:
                 token, data = req
-                task = asyncio.create_task(self.__handle_request(data, token))
-                task
+                asyncio.create_task(self.__handle_request(data, token))

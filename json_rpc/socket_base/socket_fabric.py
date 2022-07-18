@@ -3,8 +3,10 @@ from contextlib import asynccontextmanager
 from functools import partial
 import secrets
 import string
-from typing import Any, AsyncGenerator, Optional
+from typing import Any, AsyncGenerator, Dict, Optional, Tuple, Union
 from json_rpc.socket_base.send_recv import (
+    ClientRecvType,
+    ClientSendType,
     Peername,
     RecvType,
     SendType,
@@ -16,7 +18,7 @@ DISCONNECT_COMMAND = "disconnect"
 DEFAULT_ENCODING = "UTF-8"
 NOTIFY_COMMAND = "notify"
 
-writers: dict[Token, asyncio.StreamWriter | None] = {}
+writers: Dict[Token, Optional[asyncio.StreamWriter]] = {}
 read_queue: asyncio.Queue = asyncio.Queue()
 
 
@@ -41,17 +43,24 @@ def is_data_disconnect(data: bytes) -> bool:
     return data.decode(DEFAULT_ENCODING) == DISCONNECT_COMMAND
 
 
-async def read(reader: asyncio.StreamReader, token: Token = None):
+async def read(reader: asyncio.StreamReader, token: Optional[Token] = None):
     async for line in reader:
         if not is_data_empty(line):
             await read_queue.put((token, get_data_to_read(line)))
 
 
-async def server_recv() -> tuple[Token, bytes]:
+async def server_recv() -> Tuple[Token, bytes]:
     return await read_queue.get()
 
 
-async def server_send(message: bytes, token: Token | asyncio.StreamWriter) -> None:
+async def client_recv() -> bytes:
+    _, data = await read_queue.get()
+    return data
+
+
+async def server_send(
+    message: bytes, token: Union[Token, asyncio.StreamWriter]
+) -> None:
     if isinstance(token, Token):
         writer = writers[token]
     else:
@@ -73,12 +82,11 @@ async def disconnect(writer: asyncio.StreamWriter, addr: Optional[Peername] = No
 @asynccontextmanager
 async def client_sr(
     addr: str, port: int
-) -> AsyncGenerator[tuple[SendType, RecvType], None]:
+) -> AsyncGenerator[Tuple[ClientSendType, ClientRecvType], None]:
     reader, writer = await asyncio.open_connection(addr, port)
     try:
-        client_task = asyncio.create_task(read(reader))
-        client_task
-        yield (partial(server_send, token=writer), server_recv)
+        asyncio.create_task(read(reader))
+        yield (partial(server_send, token=writer), client_recv)
     finally:
         await disconnect(writer)
 

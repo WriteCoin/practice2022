@@ -5,7 +5,7 @@ description = "Python API for client-server applications based on JSON-RPC"
 authors = ["WriteCoin <sovtsardom@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.8"
 pydantic = "^1.9.1"
 accessify = "^0.3.1"
 

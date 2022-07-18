@@ -5,8 +5,11 @@ from json_rpc.socket_base.socket_fabric import server_sr
 
 
 async def run():
-    async with server_sr("127.0.0.1", 9999) as (send, recv):
-        server = JsonRPC(send, recv)
+    addr = "127.0.0.1"
+    port = 9999
+
+    async with server_sr(addr, port) as (send, recv):
+        server = await JsonRPC(send, recv, addr) # type: ignore
 
         @server.register
         def foo(bar: str, baz: str) -> str:

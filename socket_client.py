@@ -10,7 +10,7 @@ async def run():
                 print("Send request")
                 await send(b"hello")
                 print("Wait response")
-                _, recv_data = await recv()
+                recv_data = await recv()
                 data = recv_data.decode("UTF-8")
                 print(f"data: {data}")
                 assert b"world" == recv_data

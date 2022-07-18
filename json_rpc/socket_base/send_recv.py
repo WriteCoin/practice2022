@@ -1,9 +1,13 @@
 import threading
-from typing import Awaitable, Callable, Optional, TypeAlias
+from typing import Awaitable, Callable, Optional, Tuple, Union
 
 
-Token: TypeAlias = str
+Token = str | None
 
-SendType: TypeAlias = Callable[[bytes, Token | None], Awaitable[None]]
-RecvType: TypeAlias = Callable[[], Awaitable[tuple[Token, bytes]]]
-Peername: TypeAlias = tuple[str, int]
+SendType = Union[
+    Callable[[bytes, Token], Awaitable[None]], Callable[[bytes], Awaitable[None]]
+]
+RecvType = Callable[[], Awaitable[Tuple[Token, bytes]]]
+ClientSendType = Callable[[bytes], Awaitable[None]]
+ClientRecvType = Callable[[], Awaitable[bytes]]
+Peername = Tuple[str, int]

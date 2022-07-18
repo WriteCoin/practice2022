@@ -1,0 +1,1048 @@
+[
+    {
+        "label": "threading",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "threading",
+        "description": "threading",
+        "detail": "threading",
+        "documentation": {}
+    },
+    {
+        "label": "Awaitable",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Callable",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "AsyncGenerator",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Union",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "AsyncGenerator",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Awaitable",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Literal",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Mapping",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Union",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Awaitable",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Callable",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Mapping",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Union",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "asyncio",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "asyncio",
+        "description": "asyncio",
+        "detail": "asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "asynccontextmanager",
+        "importPath": "contextlib",
+        "description": "contextlib",
+        "isExtraImport": true,
+        "detail": "contextlib",
+        "documentation": {}
+    },
+    {
+        "label": "asynccontextmanager",
+        "importPath": "contextlib",
+        "description": "contextlib",
+        "isExtraImport": true,
+        "detail": "contextlib",
+        "documentation": {}
+    },
+    {
+        "label": "partial",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
+        "detail": "functools",
+        "documentation": {}
+    },
+    {
+        "label": "partial",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
+        "detail": "functools",
+        "documentation": {}
+    },
+    {
+        "label": "partial",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
+        "detail": "functools",
+        "documentation": {}
+    },
+    {
+        "label": "secrets",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "secrets",
+        "description": "secrets",
+        "detail": "secrets",
+        "documentation": {}
+    },
+    {
+        "label": "string",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "string",
+        "description": "string",
+        "detail": "string",
+        "documentation": {}
+    },
+    {
+        "label": "ClientRecvType",
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "ClientSendType",
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "Peername",
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "RecvType",
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "SendType",
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "Token",
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "ClientRecvType",
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "ClientSendType",
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "RecvType",
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "SendType",
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "Token",
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "RecvType",
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "SendType",
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "RecvType",
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "SendType",
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "inspect",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "inspect",
+        "description": "inspect",
+        "detail": "inspect",
+        "documentation": {}
+    },
+    {
+        "label": "FullArgSpec",
+        "importPath": "inspect",
+        "description": "inspect",
+        "isExtraImport": true,
+        "detail": "inspect",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "traceback",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "traceback",
+        "description": "traceback",
+        "detail": "traceback",
+        "documentation": {}
+    },
+    {
+        "label": "ValidationError",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BatchParam",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "BatchRequest",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "Error",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "FuncSchema",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "FuncType",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "InternalError",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "InternalErrorException",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "InvalidParamsError",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "InvalidRequestError",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "JsonRpcModel",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "MethodNotFoundError",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "ParamType",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "ParseError",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "ProcRequest",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "RequestResult",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "ResponseError",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "ResponseResult",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "TypedDict",
+        "importPath": "typing_extensions",
+        "description": "typing_extensions",
+        "isExtraImport": true,
+        "detail": "typing_extensions",
+        "documentation": {}
+    },
+    {
+        "label": "sleep",
+        "importPath": "time",
+        "description": "time",
+        "isExtraImport": true,
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "sleep",
+        "importPath": "time",
+        "description": "time",
+        "isExtraImport": true,
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "JsonRPC",
+        "importPath": "json_rpc.json_rpc",
+        "description": "json_rpc.json_rpc",
+        "isExtraImport": true,
+        "detail": "json_rpc.json_rpc",
+        "documentation": {}
+    },
+    {
+        "label": "notification",
+        "importPath": "json_rpc.json_rpc",
+        "description": "json_rpc.json_rpc",
+        "isExtraImport": true,
+        "detail": "json_rpc.json_rpc",
+        "documentation": {}
+    },
+    {
+        "label": "JsonRPC",
+        "importPath": "json_rpc.json_rpc",
+        "description": "json_rpc.json_rpc",
+        "isExtraImport": true,
+        "detail": "json_rpc.json_rpc",
+        "documentation": {}
+    },
+    {
+        "label": "client_sr",
+        "importPath": "json_rpc.socket_base.socket_fabric",
+        "description": "json_rpc.socket_base.socket_fabric",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.socket_fabric",
+        "documentation": {}
+    },
+    {
+        "label": "server_sr",
+        "importPath": "json_rpc.socket_base.socket_fabric",
+        "description": "json_rpc.socket_base.socket_fabric",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.socket_fabric",
+        "documentation": {}
+    },
+    {
+        "label": "client_sr",
+        "importPath": "json_rpc.socket_base.socket_fabric",
+        "description": "json_rpc.socket_base.socket_fabric",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.socket_fabric",
+        "documentation": {}
+    },
+    {
+        "label": "server_sr",
+        "importPath": "json_rpc.socket_base.socket_fabric",
+        "description": "json_rpc.socket_base.socket_fabric",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.socket_fabric",
+        "documentation": {}
+    },
+    {
+        "label": "Token",
+        "kind": 5,
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "peekOfCode": "Token = str\nSendType = Callable[[bytes, Token], Awaitable[None]]\nRecvType = Callable[[], Awaitable[Tuple[Token, bytes]]]\nClientSendType = Callable[[bytes], Awaitable[None]]\nClientRecvType = Callable[[], Awaitable[bytes]]\nPeername = Tuple[str, int]",
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "SendType",
+        "kind": 5,
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "peekOfCode": "SendType = Callable[[bytes, Token], Awaitable[None]]\nRecvType = Callable[[], Awaitable[Tuple[Token, bytes]]]\nClientSendType = Callable[[bytes], Awaitable[None]]\nClientRecvType = Callable[[], Awaitable[bytes]]\nPeername = Tuple[str, int]",
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "RecvType",
+        "kind": 5,
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "peekOfCode": "RecvType = Callable[[], Awaitable[Tuple[Token, bytes]]]\nClientSendType = Callable[[bytes], Awaitable[None]]\nClientRecvType = Callable[[], Awaitable[bytes]]\nPeername = Tuple[str, int]",
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "ClientSendType",
+        "kind": 5,
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "peekOfCode": "ClientSendType = Callable[[bytes], Awaitable[None]]\nClientRecvType = Callable[[], Awaitable[bytes]]\nPeername = Tuple[str, int]",
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "ClientRecvType",
+        "kind": 5,
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "peekOfCode": "ClientRecvType = Callable[[], Awaitable[bytes]]\nPeername = Tuple[str, int]",
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "Peername",
+        "kind": 5,
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "peekOfCode": "Peername = Tuple[str, int]",
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "get_data_to_read",
+        "kind": 2,
+        "importPath": "json_rpc.socket_base.socket_fabric",
+        "description": "json_rpc.socket_base.socket_fabric",
+        "peekOfCode": "def get_data_to_read(line: bytes) -> bytes:\n    return line[: len(line) - 1]\ndef get_data_to_send(message: bytes) -> bytes:\n    return message + b\"\\n\\n\"\ndef is_data_empty(data: bytes) -> bool:\n    return data == b\"\\n\" or data == b\"\" or len(data) == 0\ndef new_token() -> Token:\n    alphabet = string.ascii_letters + string.digits\n    return \"\".join(secrets.choice(alphabet) for i in range(20))\ndef is_data_disconnect(data: bytes) -> bool:",
+        "detail": "json_rpc.socket_base.socket_fabric",
+        "documentation": {}
+    },
+    {
+        "label": "get_data_to_send",
+        "kind": 2,
+        "importPath": "json_rpc.socket_base.socket_fabric",
+        "description": "json_rpc.socket_base.socket_fabric",
+        "peekOfCode": "def get_data_to_send(message: bytes) -> bytes:\n    return message + b\"\\n\\n\"\ndef is_data_empty(data: bytes) -> bool:\n    return data == b\"\\n\" or data == b\"\" or len(data) == 0\ndef new_token() -> Token:\n    alphabet = string.ascii_letters + string.digits\n    return \"\".join(secrets.choice(alphabet) for i in range(20))\ndef is_data_disconnect(data: bytes) -> bool:\n    return data.decode(DEFAULT_ENCODING) == DISCONNECT_COMMAND\nasync def read(reader: asyncio.StreamReader, token: Optional[Token] = None):",
+        "detail": "json_rpc.socket_base.socket_fabric",
+        "documentation": {}
+    },
+    {
+        "label": "is_data_empty",
+        "kind": 2,
+        "importPath": "json_rpc.socket_base.socket_fabric",
+        "description": "json_rpc.socket_base.socket_fabric",
+        "peekOfCode": "def is_data_empty(data: bytes) -> bool:\n    return data == b\"\\n\" or data == b\"\" or len(data) == 0\ndef new_token() -> Token:\n    alphabet = string.ascii_letters + string.digits\n    return \"\".join(secrets.choice(alphabet) for i in range(20))\ndef is_data_disconnect(data: bytes) -> bool:\n    return data.decode(DEFAULT_ENCODING) == DISCONNECT_COMMAND\nasync def read(reader: asyncio.StreamReader, token: Optional[Token] = None):\n    async for line in reader:\n        if not is_data_empty(line):",
+        "detail": "json_rpc.socket_base.socket_fabric",
+        "documentation": {}
+    },
+    {
+        "label": "new_token",
+        "kind": 2,
+        "importPath": "json_rpc.socket_base.socket_fabric",
+        "description": "json_rpc.socket_base.socket_fabric",
+        "peekOfCode": "def new_token() -> Token:\n    alphabet = string.ascii_letters + string.digits\n    return \"\".join(secrets.choice(alphabet) for i in range(20))\ndef is_data_disconnect(data: bytes) -> bool:\n    return data.decode(DEFAULT_ENCODING) == DISCONNECT_COMMAND\nasync def read(reader: asyncio.StreamReader, token: Optional[Token] = None):\n    async for line in reader:\n        if not is_data_empty(line):\n            await read_queue.put((token, get_data_to_read(line)))\nasync def server_recv() -> Tuple[Token, bytes]:",
+        "detail": "json_rpc.socket_base.socket_fabric",
+        "documentation": {}
+    },
+    {
+        "label": "is_data_disconnect",
+        "kind": 2,
+        "importPath": "json_rpc.socket_base.socket_fabric",
+        "description": "json_rpc.socket_base.socket_fabric",
+        "peekOfCode": "def is_data_disconnect(data: bytes) -> bool:\n    return data.decode(DEFAULT_ENCODING) == DISCONNECT_COMMAND\nasync def read(reader: asyncio.StreamReader, token: Optional[Token] = None):\n    async for line in reader:\n        if not is_data_empty(line):\n            await read_queue.put((token, get_data_to_read(line)))\nasync def server_recv() -> Tuple[Token, bytes]:\n    return await read_queue.get()\nasync def client_recv() -> bytes:\n    _, data = await read_queue.get()",
+        "detail": "json_rpc.socket_base.socket_fabric",
+        "documentation": {}
+    },
+    {
+        "label": "DISCONNECT_COMMAND",
+        "kind": 5,
+        "importPath": "json_rpc.socket_base.socket_fabric",
+        "description": "json_rpc.socket_base.socket_fabric",
+        "peekOfCode": "DISCONNECT_COMMAND = \"disconnect\"\nDEFAULT_ENCODING = \"UTF-8\"\nNOTIFY_COMMAND = \"notify\"\nwriters: Dict[Token, Optional[asyncio.StreamWriter]] = {}\nread_queue: asyncio.Queue = asyncio.Queue()\ndef get_data_to_read(line: bytes) -> bytes:\n    return line[: len(line) - 1]\ndef get_data_to_send(message: bytes) -> bytes:\n    return message + b\"\\n\\n\"\ndef is_data_empty(data: bytes) -> bool:",
+        "detail": "json_rpc.socket_base.socket_fabric",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_ENCODING",
+        "kind": 5,
+        "importPath": "json_rpc.socket_base.socket_fabric",
+        "description": "json_rpc.socket_base.socket_fabric",
+        "peekOfCode": "DEFAULT_ENCODING = \"UTF-8\"\nNOTIFY_COMMAND = \"notify\"\nwriters: Dict[Token, Optional[asyncio.StreamWriter]] = {}\nread_queue: asyncio.Queue = asyncio.Queue()\ndef get_data_to_read(line: bytes) -> bytes:\n    return line[: len(line) - 1]\ndef get_data_to_send(message: bytes) -> bytes:\n    return message + b\"\\n\\n\"\ndef is_data_empty(data: bytes) -> bool:\n    return data == b\"\\n\" or data == b\"\" or len(data) == 0",
+        "detail": "json_rpc.socket_base.socket_fabric",
+        "documentation": {}
+    },
+    {
+        "label": "NOTIFY_COMMAND",
+        "kind": 5,
+        "importPath": "json_rpc.socket_base.socket_fabric",
+        "description": "json_rpc.socket_base.socket_fabric",
+        "peekOfCode": "NOTIFY_COMMAND = \"notify\"\nwriters: Dict[Token, Optional[asyncio.StreamWriter]] = {}\nread_queue: asyncio.Queue = asyncio.Queue()\ndef get_data_to_read(line: bytes) -> bytes:\n    return line[: len(line) - 1]\ndef get_data_to_send(message: bytes) -> bytes:\n    return message + b\"\\n\\n\"\ndef is_data_empty(data: bytes) -> bool:\n    return data == b\"\\n\" or data == b\"\" or len(data) == 0\ndef new_token() -> Token:",
+        "detail": "json_rpc.socket_base.socket_fabric",
+        "documentation": {}
+    },
+    {
+        "label": "JsonRPC",
+        "kind": 6,
+        "importPath": "json_rpc.json_rpc",
+        "description": "json_rpc.json_rpc",
+        "peekOfCode": "class JsonRPC:\n    default_version = \"2.0\"\n    default_encondig = \"UTF-8\"\n    default_request = ProcRequest(\n        jsonrpc=default_version, id=None, method=\"\", params=[]\n    )\n    notify_command = \"notify\"\n    def __init__(\n        self,\n        send: SendType,",
+        "detail": "json_rpc.json_rpc",
+        "documentation": {}
+    },
+    {
+        "label": "notification",
+        "kind": 2,
+        "importPath": "json_rpc.json_rpc",
+        "description": "json_rpc.json_rpc",
+        "peekOfCode": "def notification(func_name: str, params: Union[ParamType, Any]) -> Tuple[str, Union[ParamType, Any], Literal[False]]:\n    return (func_name, params, False)\nclass JsonRPC:\n    default_version = \"2.0\"\n    default_encondig = \"UTF-8\"\n    default_request = ProcRequest(\n        jsonrpc=default_version, id=None, method=\"\", params=[]\n    )\n    notify_command = \"notify\"\n    def __init__(",
+        "detail": "json_rpc.json_rpc",
+        "documentation": {}
+    },
+    {
+        "label": "BatchParam",
+        "kind": 6,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "class BatchParam(TypedDict):\n    func_name: str\n    args: Union[ParamType, Any]\nclass JsonRpcModel(BaseModel):\n    json_rpc: str = Field(alias=\"jsonrpc\")\n    id: Optional[int]\nclass ProcRequest(JsonRpcModel):\n    method: str\n    params: ParamType\nclass RequestResult(TypedDict):",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "JsonRpcModel",
+        "kind": 6,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "class JsonRpcModel(BaseModel):\n    json_rpc: str = Field(alias=\"jsonrpc\")\n    id: Optional[int]\nclass ProcRequest(JsonRpcModel):\n    method: str\n    params: ParamType\nclass RequestResult(TypedDict):\n    request: ProcRequest\n    request_id: Optional[int]\nclass BatchRequest(BaseModel):",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "ProcRequest",
+        "kind": 6,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "class ProcRequest(JsonRpcModel):\n    method: str\n    params: ParamType\nclass RequestResult(TypedDict):\n    request: ProcRequest\n    request_id: Optional[int]\nclass BatchRequest(BaseModel):\n    params: List[ProcRequest]\nclass Error(TypedDict):\n    code: int",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "RequestResult",
+        "kind": 6,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "class RequestResult(TypedDict):\n    request: ProcRequest\n    request_id: Optional[int]\nclass BatchRequest(BaseModel):\n    params: List[ProcRequest]\nclass Error(TypedDict):\n    code: int\n    message: str\nInvalidRequestError = Error(code=-32600, message=\"Invalid request\")\nMethodNotFoundError = Error(code=-32601, message=\"Method not found\")",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "BatchRequest",
+        "kind": 6,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "class BatchRequest(BaseModel):\n    params: List[ProcRequest]\nclass Error(TypedDict):\n    code: int\n    message: str\nInvalidRequestError = Error(code=-32600, message=\"Invalid request\")\nMethodNotFoundError = Error(code=-32601, message=\"Method not found\")\nInvalidParamsError = Error(code=-32602, message=\"Invalid params\")\nInternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "Error",
+        "kind": 6,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "class Error(TypedDict):\n    code: int\n    message: str\nInvalidRequestError = Error(code=-32600, message=\"Invalid request\")\nMethodNotFoundError = Error(code=-32601, message=\"Method not found\")\nInvalidParamsError = Error(code=-32602, message=\"Invalid params\")\nInternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\nclass ResponseError(JsonRpcModel):\n    error: Error",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "ResponseError",
+        "kind": 6,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "class ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):\n    result: Any\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return InternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    # alias_func_name: str = Field(alias=\"aliasFuncName\")",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "ResponseResult",
+        "kind": 6,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "class ResponseResult(JsonRpcModel):\n    result: Any\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return InternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    # alias_func_name: str = Field(alias=\"aliasFuncName\")\n    parameters: dict\nclass JsonRpcSchema(BaseModel):",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "InternalErrorException",
+        "kind": 6,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "class InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return InternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    # alias_func_name: str = Field(alias=\"aliasFuncName\")\n    parameters: dict\nclass JsonRpcSchema(BaseModel):\n    title: str = \"JSON-RPC 2.0\"",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "FuncSchema",
+        "kind": 6,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "class FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    # alias_func_name: str = Field(alias=\"aliasFuncName\")\n    parameters: dict\nclass JsonRpcSchema(BaseModel):\n    title: str = \"JSON-RPC 2.0\"",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "JsonRpcSchema",
+        "kind": 6,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "class JsonRpcSchema(BaseModel):\n    title: str = \"JSON-RPC 2.0\"",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "FuncType",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "FuncType = Union[Callable[(...), Awaitable[None]], Callable]\nParamType = Union[List[Any], Dict[str, Any]]\nclass BatchParam(TypedDict):\n    func_name: str\n    args: Union[ParamType, Any]\nclass JsonRpcModel(BaseModel):\n    json_rpc: str = Field(alias=\"jsonrpc\")\n    id: Optional[int]\nclass ProcRequest(JsonRpcModel):\n    method: str",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "ParamType",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "ParamType = Union[List[Any], Dict[str, Any]]\nclass BatchParam(TypedDict):\n    func_name: str\n    args: Union[ParamType, Any]\nclass JsonRpcModel(BaseModel):\n    json_rpc: str = Field(alias=\"jsonrpc\")\n    id: Optional[int]\nclass ProcRequest(JsonRpcModel):\n    method: str\n    params: ParamType",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "InvalidRequestError",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "InvalidRequestError = Error(code=-32600, message=\"Invalid request\")\nMethodNotFoundError = Error(code=-32601, message=\"Method not found\")\nInvalidParamsError = Error(code=-32602, message=\"Invalid params\")\nInternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\nclass ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):\n    result: Any\nclass InternalErrorException(Exception):",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "MethodNotFoundError",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "MethodNotFoundError = Error(code=-32601, message=\"Method not found\")\nInvalidParamsError = Error(code=-32602, message=\"Invalid params\")\nInternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\nclass ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):\n    result: Any\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "InvalidParamsError",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "InvalidParamsError = Error(code=-32602, message=\"Invalid params\")\nInternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\nclass ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):\n    result: Any\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return InternalError[\"message\"]",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "InternalError",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "InternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\nclass ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):\n    result: Any\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return InternalError[\"message\"]\nclass FuncSchema(BaseModel):",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "ParseError",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "ParseError = Error(code=-32700, message=\"Parse error\")\nclass ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):\n    result: Any\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return InternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "client",
+        "description": "client",
+        "peekOfCode": "def main():\n    asyncio.run(run())\nif __name__ == \"__main__\":\n    main()",
+        "detail": "client",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def main():\n    print(\"функция main\")\n    # def command(file: str) -> str:\n    #     return f\"python -m {file}\"\n    # print(\"Server launch\")\n    # # subprocess.call(command(\"./modules/server.py\"))\n    # subprocess.Popen([command(\"modules.server.py\")], stdout=subprocess.PIPE)\n    # print(\"Client launch\")\n    # subprocess.Popen([command(\"modules.client.py\")], stdout=subprocess.PIPE)\n    # # subprocess.call(command(\"./modules/client.py\"))",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "server",
+        "description": "server",
+        "peekOfCode": "def main():\n    asyncio.run(run())\nif __name__ == \"__main__\":\n    main()",
+        "detail": "server",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "socket_client",
+        "description": "socket_client",
+        "peekOfCode": "def main():\n    asyncio.run(run())\nif __name__ == \"__main__\":\n    main()",
+        "detail": "socket_client",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "socket_server",
+        "description": "socket_server",
+        "peekOfCode": "def main():\n    asyncio.run(run())\nif __name__ == \"__main__\":\n    main()",
+        "detail": "socket_server",
+        "documentation": {}
+    }
+]
