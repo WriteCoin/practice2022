@@ -111,6 +111,9 @@ async def item_attr_test(send: ClientSendType, recv: ClientRecvType):
         .collect()
     )
 
+    assert "fizzbuzz" == await client.foo("fizz", "buzz")
+    assert None == await client.notify.sleep(10.0)
+
     print("Test success")
 
 
