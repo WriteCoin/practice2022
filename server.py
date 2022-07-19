@@ -1,6 +1,6 @@
 import asyncio
 from time import sleep
-from json_rpc.json_rpc import JsonRPC
+from json_rpc.server import ServerJsonRPC
 from json_rpc.socket_base.socket_fabric import server_sr
 
 
@@ -9,7 +9,7 @@ async def run():
     port = 9999
 
     async with server_sr(addr, port) as (send, recv):
-        server = await JsonRPC(send, recv, addr) # type: ignore
+        server = ServerJsonRPC(send, recv, addr)
 
         @server.register
         def foo(bar: str, baz: str) -> str:

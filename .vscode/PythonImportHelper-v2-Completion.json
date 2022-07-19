@@ -105,14 +105,6 @@
         "documentation": {}
     },
     {
-        "label": "AsyncGenerator",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
         "label": "Awaitable",
         "importPath": "typing",
         "description": "typing",
@@ -146,14 +138,6 @@
     },
     {
         "label": "Literal",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Mapping",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -249,6 +233,70 @@
         "documentation": {}
     },
     {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Callable",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "ClassVar",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "final",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
         "label": "asyncio",
         "kind": 6,
         "isExtraImport": true,
@@ -271,6 +319,14 @@
         "description": "contextlib",
         "isExtraImport": true,
         "detail": "contextlib",
+        "documentation": {}
+    },
+    {
+        "label": "partial",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
+        "detail": "functools",
         "documentation": {}
     },
     {
@@ -340,22 +396,6 @@
         "documentation": {}
     },
     {
-        "label": "RecvType",
-        "importPath": "json_rpc.socket_base.send_recv",
-        "description": "json_rpc.socket_base.send_recv",
-        "isExtraImport": true,
-        "detail": "json_rpc.socket_base.send_recv",
-        "documentation": {}
-    },
-    {
-        "label": "SendType",
-        "importPath": "json_rpc.socket_base.send_recv",
-        "description": "json_rpc.socket_base.send_recv",
-        "isExtraImport": true,
-        "detail": "json_rpc.socket_base.send_recv",
-        "documentation": {}
-    },
-    {
         "label": "Token",
         "importPath": "json_rpc.socket_base.send_recv",
         "description": "json_rpc.socket_base.send_recv",
@@ -380,7 +420,7 @@
         "documentation": {}
     },
     {
-        "label": "SendType",
+        "label": "RecvType",
         "importPath": "json_rpc.socket_base.send_recv",
         "description": "json_rpc.socket_base.send_recv",
         "isExtraImport": true,
@@ -388,7 +428,7 @@
         "documentation": {}
     },
     {
-        "label": "RecvType",
+        "label": "SendType",
         "importPath": "json_rpc.socket_base.send_recv",
         "description": "json_rpc.socket_base.send_recv",
         "isExtraImport": true,
@@ -461,6 +501,14 @@
         "documentation": {}
     },
     {
+        "label": "getargs",
+        "importPath": "inspect",
+        "description": "inspect",
+        "isExtraImport": true,
+        "detail": "inspect",
+        "documentation": {}
+    },
+    {
         "label": "FullArgSpec",
         "importPath": "inspect",
         "description": "inspect",
@@ -478,112 +526,7 @@
         "documentation": {}
     },
     {
-        "label": "traceback",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "traceback",
-        "description": "traceback",
-        "detail": "traceback",
-        "documentation": {}
-    },
-    {
-        "label": "FunctionTestCase",
-        "importPath": "unittest",
-        "description": "unittest",
-        "isExtraImport": true,
-        "detail": "unittest",
-        "documentation": {}
-    },
-    {
-        "label": "ValidationError",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "Field",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BatchParam",
-        "importPath": "json_rpc.model",
-        "description": "json_rpc.model",
-        "isExtraImport": true,
-        "detail": "json_rpc.model",
-        "documentation": {}
-    },
-    {
-        "label": "BatchRequest",
-        "importPath": "json_rpc.model",
-        "description": "json_rpc.model",
-        "isExtraImport": true,
-        "detail": "json_rpc.model",
-        "documentation": {}
-    },
-    {
-        "label": "Error",
-        "importPath": "json_rpc.model",
-        "description": "json_rpc.model",
-        "isExtraImport": true,
-        "detail": "json_rpc.model",
-        "documentation": {}
-    },
-    {
-        "label": "FuncSchema",
-        "importPath": "json_rpc.model",
-        "description": "json_rpc.model",
-        "isExtraImport": true,
-        "detail": "json_rpc.model",
-        "documentation": {}
-    },
-    {
-        "label": "FuncType",
-        "importPath": "json_rpc.model",
-        "description": "json_rpc.model",
-        "isExtraImport": true,
-        "detail": "json_rpc.model",
-        "documentation": {}
-    },
-    {
-        "label": "InternalError",
-        "importPath": "json_rpc.model",
-        "description": "json_rpc.model",
-        "isExtraImport": true,
-        "detail": "json_rpc.model",
-        "documentation": {}
-    },
-    {
-        "label": "InternalErrorException",
-        "importPath": "json_rpc.model",
-        "description": "json_rpc.model",
-        "isExtraImport": true,
-        "detail": "json_rpc.model",
-        "documentation": {}
-    },
-    {
-        "label": "InvalidParamsError",
-        "importPath": "json_rpc.model",
-        "description": "json_rpc.model",
-        "isExtraImport": true,
-        "detail": "json_rpc.model",
-        "documentation": {}
-    },
-    {
-        "label": "InvalidRequestError",
+        "label": "ArgsType",
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
         "isExtraImport": true,
@@ -599,23 +542,7 @@
         "documentation": {}
     },
     {
-        "label": "MethodNotFoundError",
-        "importPath": "json_rpc.model",
-        "description": "json_rpc.model",
-        "isExtraImport": true,
-        "detail": "json_rpc.model",
-        "documentation": {}
-    },
-    {
         "label": "ParamType",
-        "importPath": "json_rpc.model",
-        "description": "json_rpc.model",
-        "isExtraImport": true,
-        "detail": "json_rpc.model",
-        "documentation": {}
-    },
-    {
-        "label": "ParseError",
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
         "isExtraImport": true,
@@ -655,6 +582,102 @@
         "documentation": {}
     },
     {
+        "label": "Error",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "FuncSchema",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "FuncType",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "InternalError",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "InvalidParamsError",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "InvalidRequestError",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "MethodNotFoundError",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "ParamType",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "ParseError",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "ProcRequest",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "ResponseError",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "ResponseResult",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "isExtraImport": true,
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
         "label": "TypedDict",
         "importPath": "typing_extensions",
         "description": "typing_extensions",
@@ -663,11 +686,44 @@
         "documentation": {}
     },
     {
-        "label": "sleep",
-        "importPath": "time",
-        "description": "time",
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
         "isExtraImport": true,
-        "detail": "time",
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "ValidationError",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "ValidationError",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "traceback",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "traceback",
+        "description": "traceback",
+        "detail": "traceback",
         "documentation": {}
     },
     {
@@ -679,27 +735,27 @@
         "documentation": {}
     },
     {
-        "label": "JsonRPC",
-        "importPath": "json_rpc.json_rpc",
-        "description": "json_rpc.json_rpc",
+        "label": "sleep",
+        "importPath": "time",
+        "description": "time",
         "isExtraImport": true,
-        "detail": "json_rpc.json_rpc",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "ClientJsonRPC",
+        "importPath": "json_rpc.client",
+        "description": "json_rpc.client",
+        "isExtraImport": true,
+        "detail": "json_rpc.client",
         "documentation": {}
     },
     {
         "label": "notification",
-        "importPath": "json_rpc.json_rpc",
-        "description": "json_rpc.json_rpc",
+        "importPath": "json_rpc.client",
+        "description": "json_rpc.client",
         "isExtraImport": true,
-        "detail": "json_rpc.json_rpc",
-        "documentation": {}
-    },
-    {
-        "label": "JsonRPC",
-        "importPath": "json_rpc.json_rpc",
-        "description": "json_rpc.json_rpc",
-        "isExtraImport": true,
-        "detail": "json_rpc.json_rpc",
+        "detail": "json_rpc.client",
         "documentation": {}
     },
     {
@@ -732,6 +788,39 @@
         "description": "json_rpc.socket_base.socket_fabric",
         "isExtraImport": true,
         "detail": "json_rpc.socket_base.socket_fabric",
+        "documentation": {}
+    },
+    {
+        "label": "pprint",
+        "importPath": "pprint",
+        "description": "pprint",
+        "isExtraImport": true,
+        "detail": "pprint",
+        "documentation": {}
+    },
+    {
+        "label": "CodeType",
+        "importPath": "types",
+        "description": "types",
+        "isExtraImport": true,
+        "detail": "types",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "ServerJsonRPC",
+        "importPath": "json_rpc.server",
+        "description": "json_rpc.server",
+        "isExtraImport": true,
+        "detail": "json_rpc.server",
         "documentation": {}
     },
     {
@@ -739,7 +828,7 @@
         "kind": 5,
         "importPath": "json_rpc.socket_base.send_recv",
         "description": "json_rpc.socket_base.send_recv",
-        "peekOfCode": "Token = str | None\nSendType = Union[\n    Callable[[bytes, Token], Awaitable[None]], Callable[[bytes], Awaitable[None]]\n]\nRecvType = Callable[[], Awaitable[Tuple[Token, bytes]]]\nClientSendType = Callable[[bytes], Awaitable[None]]\nClientRecvType = Callable[[], Awaitable[bytes]]\nPeername = Tuple[str, int]",
+        "peekOfCode": "Token = str\nSendType = Union[\n    Callable[[bytes, Token], Awaitable[None]], Callable[[bytes], Awaitable[None]]\n]\nRecvType = Callable[[], Awaitable[Tuple[Token, bytes]]]\nClientSendType = Callable[[bytes], Awaitable[None]]\nClientRecvType = Callable[[], Awaitable[bytes]]\nPeername = Tuple[str, int]",
         "detail": "json_rpc.socket_base.send_recv",
         "documentation": {}
     },
@@ -861,48 +950,75 @@
         "documentation": {}
     },
     {
-        "label": "aobject",
+        "label": "ItemAttrDecorator",
         "kind": 6,
-        "importPath": "json_rpc.json_rpc",
-        "description": "json_rpc.json_rpc",
-        "peekOfCode": "class aobject(object):\n    \"\"\"Inheriting this class allows you to define an async __init__.\n    So you can create objects by doing something like 'await MyClass(params)'\n    \"\"\"\n    async def __new__(cls, *a, **kw):\n        instance = super().__new__(cls)\n        await instance.__init__(*a, **kw)  # type: ignore\n        return instance\n    async def __init__(self):\n        pass",
-        "detail": "json_rpc.json_rpc",
+        "importPath": "json_rpc.client",
+        "description": "json_rpc.client",
+        "peekOfCode": "class ItemAttrDecorator():\n    def __init__(self, func: FuncType):\n        self.func = func\n    async def __func(self, name: str, *args, **kwargs):\n        return await self.func(name, get_args(*args, **kwargs))\n    def __getitem__(self, name: str):\n        return partial(self.__func, name)\n    def __getattr__(self, name: str):\n        return self[name]\n    def __str__(self):",
+        "detail": "json_rpc.client",
         "documentation": {}
     },
     {
-        "label": "JsonRPC",
+        "label": "BatchDecorator",
         "kind": 6,
-        "importPath": "json_rpc.json_rpc",
-        "description": "json_rpc.json_rpc",
-        "peekOfCode": "class JsonRPC(aobject):\n    default_version = \"2.0\"\n    default_encondig = \"UTF-8\"\n    default_request = ProcRequest(\n        jsonrpc=default_version, id=None, method=\"\", params=[]\n    )\n    notify_command = \"notify\"\n    async def __init__(\n        self,\n        send: Union[SendType, ClientSendType],",
-        "detail": "json_rpc.json_rpc",
+        "importPath": "json_rpc.client",
+        "description": "json_rpc.client",
+        "peekOfCode": "class BatchDecorator(ItemAttrDecorator):\n    def __init__(self, func: FuncType):\n        super().__init__(func)\nclass ClientJsonRPC():\n    default_version = \"2.0\"\n    default_encondig = \"UTF-8\"\n    default_request = ProcRequest(\n        jsonrpc=default_version, id=None, method=\"\", params=[]\n    )\n    notify_command = \"notify\"",
+        "detail": "json_rpc.client",
+        "documentation": {}
+    },
+    {
+        "label": "ClientJsonRPC",
+        "kind": 6,
+        "importPath": "json_rpc.client",
+        "description": "json_rpc.client",
+        "peekOfCode": "class ClientJsonRPC():\n    default_version = \"2.0\"\n    default_encondig = \"UTF-8\"\n    default_request = ProcRequest(\n        jsonrpc=default_version, id=None, method=\"\", params=[]\n    )\n    notify_command = \"notify\"\n    def __init__(\n        self,\n        send: ClientSendType,",
+        "detail": "json_rpc.client",
         "documentation": {}
     },
     {
         "label": "notification",
         "kind": 2,
-        "importPath": "json_rpc.json_rpc",
-        "description": "json_rpc.json_rpc",
-        "peekOfCode": "def notification(\n    func_name: str,\n    params: Union[ParamType, Any]\n) -> Tuple[str, Union[ParamType, Any], Literal[False]]:\n    return (func_name, params, False)\ndef new_class():\n    return type('notify', (object, ), dict())\ndef get_args(*args, **kwargs):\n    return [*args] if len(args) else {**kwargs}\nclass aobject(object):",
-        "detail": "json_rpc.json_rpc",
+        "importPath": "json_rpc.client",
+        "description": "json_rpc.client",
+        "peekOfCode": "def notification(\n    func_name: str,\n    params: Union[ParamType, Any]\n) -> Tuple[str, Union[ParamType, Any], Literal[False]]:\n    return (func_name, params, False)\ndef new_class():\n    return type('notify', (object, ), dict())\ndef get_args(*args, **kwargs):\n    return [*args] if len(args) else {**kwargs}\nFuncType = Callable[[str, ArgsType], Awaitable[Any]]",
+        "detail": "json_rpc.client",
         "documentation": {}
     },
     {
         "label": "new_class",
         "kind": 2,
-        "importPath": "json_rpc.json_rpc",
-        "description": "json_rpc.json_rpc",
-        "peekOfCode": "def new_class():\n    return type('notify', (object, ), dict())\ndef get_args(*args, **kwargs):\n    return [*args] if len(args) else {**kwargs}\nclass aobject(object):\n    \"\"\"Inheriting this class allows you to define an async __init__.\n    So you can create objects by doing something like 'await MyClass(params)'\n    \"\"\"\n    async def __new__(cls, *a, **kw):\n        instance = super().__new__(cls)",
-        "detail": "json_rpc.json_rpc",
+        "importPath": "json_rpc.client",
+        "description": "json_rpc.client",
+        "peekOfCode": "def new_class():\n    return type('notify', (object, ), dict())\ndef get_args(*args, **kwargs):\n    return [*args] if len(args) else {**kwargs}\nFuncType = Callable[[str, ArgsType], Awaitable[Any]]\nBatchArgs = Union[Tuple[str, Union[ParamType, Any]],\n                  Tuple[str, Union[ParamType, Any], bool]]\nclass ItemAttrDecorator():\n    def __init__(self, func: FuncType):\n        self.func = func",
+        "detail": "json_rpc.client",
         "documentation": {}
     },
     {
         "label": "get_args",
         "kind": 2,
-        "importPath": "json_rpc.json_rpc",
-        "description": "json_rpc.json_rpc",
-        "peekOfCode": "def get_args(*args, **kwargs):\n    return [*args] if len(args) else {**kwargs}\nclass aobject(object):\n    \"\"\"Inheriting this class allows you to define an async __init__.\n    So you can create objects by doing something like 'await MyClass(params)'\n    \"\"\"\n    async def __new__(cls, *a, **kw):\n        instance = super().__new__(cls)\n        await instance.__init__(*a, **kw)  # type: ignore\n        return instance",
-        "detail": "json_rpc.json_rpc",
+        "importPath": "json_rpc.client",
+        "description": "json_rpc.client",
+        "peekOfCode": "def get_args(*args, **kwargs):\n    return [*args] if len(args) else {**kwargs}\nFuncType = Callable[[str, ArgsType], Awaitable[Any]]\nBatchArgs = Union[Tuple[str, Union[ParamType, Any]],\n                  Tuple[str, Union[ParamType, Any], bool]]\nclass ItemAttrDecorator():\n    def __init__(self, func: FuncType):\n        self.func = func\n    async def __func(self, name: str, *args, **kwargs):\n        return await self.func(name, get_args(*args, **kwargs))",
+        "detail": "json_rpc.client",
+        "documentation": {}
+    },
+    {
+        "label": "FuncType",
+        "kind": 5,
+        "importPath": "json_rpc.client",
+        "description": "json_rpc.client",
+        "peekOfCode": "FuncType = Callable[[str, ArgsType], Awaitable[Any]]\nBatchArgs = Union[Tuple[str, Union[ParamType, Any]],\n                  Tuple[str, Union[ParamType, Any], bool]]\nclass ItemAttrDecorator():\n    def __init__(self, func: FuncType):\n        self.func = func\n    async def __func(self, name: str, *args, **kwargs):\n        return await self.func(name, get_args(*args, **kwargs))\n    def __getitem__(self, name: str):\n        return partial(self.__func, name)",
+        "detail": "json_rpc.client",
+        "documentation": {}
+    },
+    {
+        "label": "BatchArgs",
+        "kind": 5,
+        "importPath": "json_rpc.client",
+        "description": "json_rpc.client",
+        "peekOfCode": "BatchArgs = Union[Tuple[str, Union[ParamType, Any]],\n                  Tuple[str, Union[ParamType, Any], bool]]\nclass ItemAttrDecorator():\n    def __init__(self, func: FuncType):\n        self.func = func\n    async def __func(self, name: str, *args, **kwargs):\n        return await self.func(name, get_args(*args, **kwargs))\n    def __getitem__(self, name: str):\n        return partial(self.__func, name)\n    def __getattr__(self, name: str):",
+        "detail": "json_rpc.client",
         "documentation": {}
     },
     {
@@ -928,7 +1044,7 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class ProcRequest(JsonRpcModel):\n    method: str\n    params: ParamType\nclass RequestResult(TypedDict):\n    request: ProcRequest\n    request_id: Optional[int]\nclass BatchRequest(BaseModel):\n    params: List[ProcRequest]\nclass Error(TypedDict):\n    code: int",
+        "peekOfCode": "class ProcRequest(JsonRpcModel):\n    method: str\n    params: ParamType\nclass RequestResult(TypedDict):\n    request: ProcRequest\n    request_id: Optional[int]\nclass BatchRequest(BaseModel):\n    params: List[ProcRequest]\nclass ErrorData(TypedDict):\n    exc: Exception",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -937,7 +1053,7 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class RequestResult(TypedDict):\n    request: ProcRequest\n    request_id: Optional[int]\nclass BatchRequest(BaseModel):\n    params: List[ProcRequest]\nclass Error(TypedDict):\n    code: int\n    message: str\nInvalidRequestError = Error(code=-32600, message=\"Invalid request\")\nMethodNotFoundError = Error(code=-32601, message=\"Method not found\")",
+        "peekOfCode": "class RequestResult(TypedDict):\n    request: ProcRequest\n    request_id: Optional[int]\nclass BatchRequest(BaseModel):\n    params: List[ProcRequest]\nclass ErrorData(TypedDict):\n    exc: Exception\n    message: Callable[[], str]\nclass Error(TypedDict):\n    code: int",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -946,7 +1062,16 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class BatchRequest(BaseModel):\n    params: List[ProcRequest]\nclass Error(TypedDict):\n    code: int\n    message: str\nInvalidRequestError = Error(code=-32600, message=\"Invalid request\")\nMethodNotFoundError = Error(code=-32601, message=\"Method not found\")\nInvalidParamsError = Error(code=-32602, message=\"Invalid params\")\nInternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")",
+        "peekOfCode": "class BatchRequest(BaseModel):\n    params: List[ProcRequest]\nclass ErrorData(TypedDict):\n    exc: Exception\n    message: Callable[[], str]\nclass Error(TypedDict):\n    code: int\n    message: str\n    # data: Optional[ErrorData]\nInvalidRequestError = Error(code=-32600, message=\"Invalid request\")",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "ErrorData",
+        "kind": 6,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "class ErrorData(TypedDict):\n    exc: Exception\n    message: Callable[[], str]\nclass Error(TypedDict):\n    code: int\n    message: str\n    # data: Optional[ErrorData]\nInvalidRequestError = Error(code=-32600, message=\"Invalid request\")\nMethodNotFoundError = Error(code=-32601, message=\"Method not found\")\nInvalidParamsError = Error(code=-32602, message=\"Invalid params\")",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -955,7 +1080,7 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class Error(TypedDict):\n    code: int\n    message: str\nInvalidRequestError = Error(code=-32600, message=\"Invalid request\")\nMethodNotFoundError = Error(code=-32601, message=\"Method not found\")\nInvalidParamsError = Error(code=-32602, message=\"Invalid params\")\nInternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\nclass ResponseError(JsonRpcModel):\n    error: Error",
+        "peekOfCode": "class Error(TypedDict):\n    code: int\n    message: str\n    # data: Optional[ErrorData]\nInvalidRequestError = Error(code=-32600, message=\"Invalid request\")\nMethodNotFoundError = Error(code=-32601, message=\"Method not found\")\nInvalidParamsError = Error(code=-32602, message=\"Invalid params\")\nInternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\n# def get_invalid_request_error(data: ErrorData):",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -964,7 +1089,7 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):\n    result: Any\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return InternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    parameters: dict",
+        "peekOfCode": "class ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):\n    result: Any\n# class InternalErrorException(Exception):\n#     def __str__(self) -> str:\n#         return InternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    parameters: dict",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -973,16 +1098,7 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class ResponseResult(JsonRpcModel):\n    result: Any\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return InternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    parameters: dict\nclass JsonRpcSchema(BaseModel):\n    title: str = \"JSON-RPC 2.0\"",
-        "detail": "json_rpc.model",
-        "documentation": {}
-    },
-    {
-        "label": "InternalErrorException",
-        "kind": 6,
-        "importPath": "json_rpc.model",
-        "description": "json_rpc.model",
-        "peekOfCode": "class InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return InternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    parameters: dict\nclass JsonRpcSchema(BaseModel):\n    title: str = \"JSON-RPC 2.0\"",
+        "peekOfCode": "class ResponseResult(JsonRpcModel):\n    result: Any\n# class InternalErrorException(Exception):\n#     def __str__(self) -> str:\n#         return InternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    parameters: dict\nclass JsonRpcSchema(BaseModel):\n    title: str = \"JSON-RPC 2.0\"",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -1009,7 +1125,7 @@
         "kind": 5,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "FuncType = Union[Callable[(...), Awaitable[None]], Callable]\nParamType = Union[List[Any], Dict[str, Any]]\nclass BatchParam(TypedDict):\n    func_name: str\n    args: Union[ParamType, Any]\nclass JsonRpcModel(BaseModel):\n    json_rpc: str = Field(alias=\"jsonrpc\")\n    id: Optional[int]\nclass ProcRequest(JsonRpcModel):\n    method: str",
+        "peekOfCode": "FuncType = Union[Callable[(...), Awaitable[None]], Callable]\nParamType = Union[List[Any], Dict[str, Any]]\nArgsType = Union[ParamType, Any]\nclass BatchParam(TypedDict):\n    func_name: str\n    args: Union[ParamType, Any]\nclass JsonRpcModel(BaseModel):\n    json_rpc: str = Field(alias=\"jsonrpc\")\n    id: Optional[int]\nclass ProcRequest(JsonRpcModel):",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -1018,7 +1134,16 @@
         "kind": 5,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "ParamType = Union[List[Any], Dict[str, Any]]\nclass BatchParam(TypedDict):\n    func_name: str\n    args: Union[ParamType, Any]\nclass JsonRpcModel(BaseModel):\n    json_rpc: str = Field(alias=\"jsonrpc\")\n    id: Optional[int]\nclass ProcRequest(JsonRpcModel):\n    method: str\n    params: ParamType",
+        "peekOfCode": "ParamType = Union[List[Any], Dict[str, Any]]\nArgsType = Union[ParamType, Any]\nclass BatchParam(TypedDict):\n    func_name: str\n    args: Union[ParamType, Any]\nclass JsonRpcModel(BaseModel):\n    json_rpc: str = Field(alias=\"jsonrpc\")\n    id: Optional[int]\nclass ProcRequest(JsonRpcModel):\n    method: str",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "ArgsType",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "ArgsType = Union[ParamType, Any]\nclass BatchParam(TypedDict):\n    func_name: str\n    args: Union[ParamType, Any]\nclass JsonRpcModel(BaseModel):\n    json_rpc: str = Field(alias=\"jsonrpc\")\n    id: Optional[int]\nclass ProcRequest(JsonRpcModel):\n    method: str\n    params: ParamType",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -1027,7 +1152,7 @@
         "kind": 5,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "InvalidRequestError = Error(code=-32600, message=\"Invalid request\")\nMethodNotFoundError = Error(code=-32601, message=\"Method not found\")\nInvalidParamsError = Error(code=-32602, message=\"Invalid params\")\nInternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\nclass ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):\n    result: Any\nclass InternalErrorException(Exception):",
+        "peekOfCode": "InvalidRequestError = Error(code=-32600, message=\"Invalid request\")\nMethodNotFoundError = Error(code=-32601, message=\"Method not found\")\nInvalidParamsError = Error(code=-32602, message=\"Invalid params\")\nInternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\n# def get_invalid_request_error(data: ErrorData):\n#     return Error(\n#         code=-32600, \n#         message=\"Invalid request\", \n#         data=data",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -1036,7 +1161,7 @@
         "kind": 5,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "MethodNotFoundError = Error(code=-32601, message=\"Method not found\")\nInvalidParamsError = Error(code=-32602, message=\"Invalid params\")\nInternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\nclass ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):\n    result: Any\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:",
+        "peekOfCode": "MethodNotFoundError = Error(code=-32601, message=\"Method not found\")\nInvalidParamsError = Error(code=-32602, message=\"Invalid params\")\nInternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\n# def get_invalid_request_error(data: ErrorData):\n#     return Error(\n#         code=-32600, \n#         message=\"Invalid request\", \n#         data=data\n#     )",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -1045,7 +1170,7 @@
         "kind": 5,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "InvalidParamsError = Error(code=-32602, message=\"Invalid params\")\nInternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\nclass ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):\n    result: Any\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return InternalError[\"message\"]",
+        "peekOfCode": "InvalidParamsError = Error(code=-32602, message=\"Invalid params\")\nInternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\n# def get_invalid_request_error(data: ErrorData):\n#     return Error(\n#         code=-32600, \n#         message=\"Invalid request\", \n#         data=data\n#     )\n# def get_method_not_found_eror(data: ErrorData):",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -1054,7 +1179,7 @@
         "kind": 5,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "InternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\nclass ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):\n    result: Any\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return InternalError[\"message\"]\nclass FuncSchema(BaseModel):",
+        "peekOfCode": "InternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\n# def get_invalid_request_error(data: ErrorData):\n#     return Error(\n#         code=-32600, \n#         message=\"Invalid request\", \n#         data=data\n#     )\n# def get_method_not_found_eror(data: ErrorData):\n#     return Error(",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -1063,8 +1188,17 @@
         "kind": 5,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "ParseError = Error(code=-32700, message=\"Parse error\")\nclass ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):\n    result: Any\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return InternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")",
+        "peekOfCode": "ParseError = Error(code=-32700, message=\"Parse error\")\n# def get_invalid_request_error(data: ErrorData):\n#     return Error(\n#         code=-32600, \n#         message=\"Invalid request\", \n#         data=data\n#     )\n# def get_method_not_found_eror(data: ErrorData):\n#     return Error(\n#         code=-32601,",
         "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "ServerJsonRPC",
+        "kind": 6,
+        "importPath": "json_rpc.server",
+        "description": "json_rpc.server",
+        "peekOfCode": "class ServerJsonRPC():\n    default_version = \"2.0\"\n    default_encondig = \"UTF-8\"\n    default_request = ProcRequest(\n        jsonrpc=default_version, id=None, method=\"\", params=[]\n    )\n    notify_command = \"notify\"\n    def __init__(\n        self,\n        send: SendType,",
+        "detail": "json_rpc.server",
         "documentation": {}
     },
     {
@@ -1077,11 +1211,20 @@
         "documentation": {}
     },
     {
-        "label": "main",
-        "kind": 2,
+        "label": "_Cella",
+        "kind": 6,
         "importPath": "main",
         "description": "main",
-        "peekOfCode": "def main():\n    print(\"функция main\")\n    # def command(file: str) -> str:\n    #     return f\"python -m {file}\"\n    # print(\"Server launch\")\n    # # subprocess.call(command(\"./modules/server.py\"))\n    # subprocess.Popen([command(\"modules.server.py\")], stdout=subprocess.PIPE)\n    # print(\"Client launch\")\n    # subprocess.Popen([command(\"modules.client.py\")], stdout=subprocess.PIPE)\n    # # subprocess.call(command(\"./modules/client.py\"))",
+        "peekOfCode": "class _Cella:\n    __hash__: ClassVar[None]  # type: ignore[assignment]\n    cell_contents: Any\n# Doesn't exist at runtime, but deleting this breaks mypy. See #2999\n@final\nclass Fu:\n    # Make sure this class definition stays roughly in line with `types.FunctionType`\n    @property\n    def __closure__(self) -> tuple[_Cella, ...] | None: ...\n    __code__: CodeType",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "Fu",
+        "kind": 6,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "class Fu:\n    # Make sure this class definition stays roughly in line with `types.FunctionType`\n    @property\n    def __closure__(self) -> tuple[_Cella, ...] | None: ...\n    __code__: CodeType\n    __defaults__: tuple[Any, ...] | None\n    __dict__: dict[str, Any]\n    @property\n    def __globals__(self) -> dict[str, Any]: ...\n    __name__: str",
         "detail": "main",
         "documentation": {}
     },

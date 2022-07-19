@@ -1,6 +1,7 @@
 from functools import partial
 from time import sleep
-from json_rpc.json_rpc import JsonRPC, notification
+import traceback
+from json_rpc.client import ClientJsonRPC, notification
 import asyncio
 from json_rpc.socket_base.send_recv import (
     ClientRecvType,
@@ -9,6 +10,7 @@ from json_rpc.socket_base.send_recv import (
     SendType,
 )
 from json_rpc.socket_base.socket_fabric import client_sr
+from pprint import pprint
 
 
 async def simple_test(send: ClientSendType, recv: ClientRecvType):
@@ -25,7 +27,7 @@ async def simple_test(send: ClientSendType, recv: ClientRecvType):
 
 
 async def json_rpc_test(send: ClientSendType, recv: ClientRecvType):
-    client = JsonRPC(send, recv)
+    client = ClientJsonRPC(send, recv)
     print("Client JSON RPC 2.0")
 
     # results = await asyncio.gather(
@@ -74,7 +76,7 @@ async def json_rpc_test(send: ClientSendType, recv: ClientRecvType):
 
 
 async def batch_test(send: ClientSendType, recv: ClientRecvType):
-    client = JsonRPC(send, recv)
+    client = ClientJsonRPC(send, recv)
     print("Client JSON RPC 2.0 Batch Test")
 
     assert ["ab", "cd"] == await client.batch(
@@ -89,14 +91,28 @@ async def batch_test(send: ClientSendType, recv: ClientRecvType):
     print("Test success")
 
 
-async def ui_test(send: ClientSendType, recv: ClientRecvType):
-    client = await JsonRPC(send, recv)  # type: ignore
-    print("Client JSON RPC 2.0 UI Test")
+async def item_attr_test(send: ClientSendType, recv: ClientRecvType):
+    client = ClientJsonRPC(send, recv)
+    print("Client JSON RPC 2.0 Item Attr Test")
 
-    assert "fizzbuzz" == await client.foo("fizz", "buzz")  # type: ignore
-    # type: ignore
-    assert "fizzbuzz" == await client.foo(bar="fizz", baz="buzz")
-    assert None == await client.notify("sleep", 10)
+    # assert "fizzbuzz" == await client.foo("fizz", "buzz")
+    # assert "fizzbuzz" == await client.foo(bar="fizz", baz="buzz")
+    # assert None == await client.notify("sleep", 10.0)
+    # assert None == await client.notify.sleep(10.0)
+    # assert None == await client.notify.sleep(interval=10.0)
+
+    assert None == await client.notify.sleep(10.0)
+    assert ["ab", "cd"] == (
+        await client.batch
+        .foo("a", "b")
+        .notify.sleep(10.0)
+        .foo(bar="c", baz="d")
+        .notify.sleep(interval=10.0)
+        .collect()
+    )
+
+    assert "fizzbuzz" == await client.foo("fizz", "buzz")
+    assert None == await client.notify.sleep(10.0)
 
     print("Test success")
 
@@ -107,9 +123,10 @@ async def run():
             # await simple_test(send, recv)
             # await json_rpc_test(send, recv)
             # await batch_test(send, recv)
-            await ui_test(send, recv)
+            await item_attr_test(send, recv)
         except Exception as ex:
             print(f"Error: {ex}")
+            print(traceback.format_exc())
 
 
 def main():

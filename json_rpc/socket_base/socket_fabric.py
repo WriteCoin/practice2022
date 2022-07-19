@@ -8,8 +8,6 @@ from json_rpc.socket_base.send_recv import (
     ClientRecvType,
     ClientSendType,
     Peername,
-    RecvType,
-    SendType,
     Token,
 )
 

@@ -2,7 +2,7 @@ import threading
 from typing import Awaitable, Callable, Optional, Tuple, Union
 
 
-Token = str | None
+Token = str
 
 SendType = Union[
     Callable[[bytes, Token], Awaitable[None]], Callable[[bytes], Awaitable[None]]

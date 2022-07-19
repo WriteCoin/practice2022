@@ -1,71 +1,15 @@
 import asyncio
-from contextlib import asynccontextmanager
 from functools import partial
 import inspect
 import json
-import threading
 import traceback
-from typing import Any, AsyncGenerator, Awaitable, Callable, Dict, List, Literal, Mapping, Optional, Tuple, Union
-from unittest import FunctionTestCase
+from typing import Any, Callable, Dict, Optional, Tuple
 from pydantic import ValidationError
-from json_rpc.model import (
-    BatchParam,
-    BatchRequest,
-    Error,
-    FuncSchema,
-    FuncType,
-    InternalError,
-    InternalErrorException,
-    InvalidParamsError,
-    InvalidRequestError,
-    JsonRpcModel,
-    MethodNotFoundError,
-    ParamType,
-    ParseError,
-    ProcRequest,
-    RequestResult,
-    ResponseError,
-    ResponseResult,
-)
-from json_rpc.socket_base.send_recv import (
-    ClientRecvType,
-    ClientSendType,
-    SendType,
-    RecvType,
-    Token,
-)
+from json_rpc.model import Error, FuncSchema, FuncType, InternalError, InvalidParamsError, InvalidRequestError, MethodNotFoundError, ParamType, ParseError, ProcRequest, ResponseError, ResponseResult
+from json_rpc.socket_base.send_recv import RecvType, SendType, Token
 
 
-def notification(
-    func_name: str,
-    params: Union[ParamType, Any]
-) -> Tuple[str, Union[ParamType, Any], Literal[False]]:
-    return (func_name, params, False)
-
-
-def new_class():
-    return type('notify', (object, ), dict())
-
-
-def get_args(*args, **kwargs):
-    return [*args] if len(args) else {**kwargs}
-
-
-class aobject(object):
-    """Inheriting this class allows you to define an async __init__.
-
-    So you can create objects by doing something like 'await MyClass(params)'
-    """
-    async def __new__(cls, *a, **kw):
-        instance = super().__new__(cls)
-        await instance.__init__(*a, **kw)  # type: ignore
-        return instance
-
-    async def __init__(self):
-        pass
-
-
-class JsonRPC(aobject):
+class ServerJsonRPC():
     default_version = "2.0"
     default_encondig = "UTF-8"
     default_request = ProcRequest(
@@ -73,31 +17,16 @@ class JsonRPC(aobject):
     )
     notify_command = "notify"
 
-    async def __init__(
+    def __init__(
         self,
-        send: Union[SendType, ClientSendType],
-        recv: Union[RecvType, ClientRecvType],
+        send: SendType,
+        recv: RecvType,
         addr: Optional[str] = None,
     ):
         self.__send = send
         self.__recv = recv
         self.__addr = addr
         self.__functions: Dict[str, FuncType] = {}
-        self.__id = 0
-        self.__tasks_queue: Dict[int, asyncio.Queue] = {}
-        if addr is None:
-            self.__find_response_task = asyncio.create_task(
-                self.find_response())
-            await self.alloc_ui()
-
-    def __getitem__(self, item):
-        return getattr(self, item)
-
-    def __setitem__(self, key, value):
-        setattr(self, key, value)
-
-    def cond_client(self):
-        return self.__addr is None and not self.__find_response_task.cancelled()
 
     def get_addr(self):
         return "" if self.__addr is None else f"{self.__addr}: "
@@ -108,8 +37,6 @@ class JsonRPC(aobject):
         *,
         name: Optional[str] = None
     ) -> Callable:  # type: ignore
-        if self.cond_client():
-            self.__find_response_task.cancel()
 
         if func is None:
             return partial(self.register, name=name)
@@ -173,110 +100,6 @@ class JsonRPC(aobject):
             print(
                 f"{self.get_addr()} Result for request: {response.json(by_alias=True)}")
 
-    async def alloc_ui(self):
-        print("Аллокация интерфейсных вызовов")
-        schema = await self.call('schema', [])
-        notify_class = new_class()
-        for alias_func_name in schema['functions']:
-            async def func_call(func_name: str, *args, **kwargs):
-                print("Вызов call")
-                args = get_args(*args, **kwargs)
-                print(f"Аргументы: {args}")
-                print(f"Функция: {func_name}")
-                return await self.call(func_name, args)
-
-            async def func_notify(func_name: str, *args, **kwargs):
-                print("Вызов notify")
-                args = get_args(*args, **kwargs)
-                print(f"Аргументы: {args}")
-                print(f"Функция: {func_name}")
-                await self.notify(func_name, args)
-            setattr(self, alias_func_name, partial(
-                func_call, alias_func_name))
-            setattr(notify_class, alias_func_name, partial(
-                func_notify, alias_func_name))
-
-        setattr(self, "notify", notify_class())
-
-    async def find_response(self):
-        while True:
-            rcv_bytes = await self.__recv()
-            result_json = rcv_bytes.decode(  # type: ignore
-                self.default_encondig)
-            if result_json is not None:
-                print(f"Response: {result_json}")
-                base_response = JsonRpcModel.parse_raw(result_json)
-                try:
-                    result = ResponseError.parse_raw(result_json).error
-                except:
-                    result = ResponseResult.parse_raw(result_json).result
-                finally:
-                    if base_response.id is not None:
-                        await self.__tasks_queue[base_response.id].put(result)
-
-    def __get_request(self, func_name: str, args: Union[ParamType, Any], send_id: bool = True) -> RequestResult:
-        if send_id:
-            self.__id += 1
-            id = self.__id
-            self.__tasks_queue[id] = asyncio.Queue()
-        else:
-            id = None
-        params = (
-            args if isinstance(args, list) or isinstance(
-                args, dict) else [args]
-        )
-        request = ProcRequest(
-            jsonrpc=self.default_version,
-            method=func_name,
-            params=params,
-            id=id,
-        )
-        return RequestResult(request=request, request_id=id)
-
-    async def client_send(self, message: str):
-        b_message = message.encode(self.default_encondig)
-        await self.__send(b_message)  # type: ignore
-
-    async def client_recv(self, request_id: int):
-        return await self.__tasks_queue[request_id].get()
-
-    async def __remote_call(
-        self, func_name: str, args: Union[ParamType, Any], send_id: bool = True
-    ) -> RequestResult:
-        request_result = self.__get_request(func_name, args, send_id)
-        json_request = request_result["request"].json(by_alias=True)
-        print(f"Send request: {json_request}")
-        await self.client_send(json_request)
-        return request_result
-
-    def call(self, func_name: str, args: Union[ParamType, Any]) -> Any:
-        async def callee():
-            request_result = await self.__remote_call(func_name, args)
-            if request_result["request_id"] is not None:
-                return await self.client_recv(request_result["request_id"])
-
-        future = asyncio.ensure_future(callee())
-        return future
-
-    async def notify(self, func_name: str, args: Union[ParamType, Any]):
-        await self.__remote_call(func_name, args, False)
-
-    async def batch(self, *args: Union[Tuple[str, Union[ParamType, Any]], Tuple[str, Union[ParamType, Any], bool]]) -> List[Any]:
-        requests = [self.__get_request(*arg)["request"]  # type: ignore
-                    for arg in args]
-        json_requests = [request.json(by_alias=True) for request in requests]
-        json_request = json.dumps(json_requests)
-        print(f"Send batch request: {json_request}")
-        await self.client_send(json_request)
-
-        results = []
-        for request in requests:
-            if request.id is not None:
-                result = await self.client_recv(request.id)
-                results.append(result)
-
-        return results
-
     def schema(self) -> dict:
         result: Dict[str, dict] = {}
         for alias_func_name, func in self.__functions.items():
@@ -293,7 +116,6 @@ class JsonRPC(aobject):
 
         dict_base = {
             "title": f"JSON-RPC {self.default_version}",
-            "mode": "client" if self.cond_client() else "server",
             "functions": result
         }
         return dict_base
