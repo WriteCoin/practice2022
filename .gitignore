@@ -3,6 +3,6 @@ __pycache__/
 ./file_send_receive.py
 ./send_receive.py
 ./socket_send_receive.py
-
+.vscode
 *.code-workspace
 dist

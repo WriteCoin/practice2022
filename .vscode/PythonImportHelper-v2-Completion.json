@@ -41,6 +41,14 @@
         "documentation": {}
     },
     {
+        "label": "Union",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
         "label": "Any",
         "importPath": "typing",
         "description": "typing",
@@ -106,6 +114,14 @@
     },
     {
         "label": "Awaitable",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Callable",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -364,14 +380,6 @@
         "documentation": {}
     },
     {
-        "label": "RecvType",
-        "importPath": "json_rpc.socket_base.send_recv",
-        "description": "json_rpc.socket_base.send_recv",
-        "isExtraImport": true,
-        "detail": "json_rpc.socket_base.send_recv",
-        "documentation": {}
-    },
-    {
         "label": "SendType",
         "importPath": "json_rpc.socket_base.send_recv",
         "description": "json_rpc.socket_base.send_recv",
@@ -380,7 +388,31 @@
         "documentation": {}
     },
     {
+        "label": "RecvType",
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
         "label": "Token",
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "ClientRecvType",
+        "importPath": "json_rpc.socket_base.send_recv",
+        "description": "json_rpc.socket_base.send_recv",
+        "isExtraImport": true,
+        "detail": "json_rpc.socket_base.send_recv",
+        "documentation": {}
+    },
+    {
+        "label": "ClientSendType",
         "importPath": "json_rpc.socket_base.send_recv",
         "description": "json_rpc.socket_base.send_recv",
         "isExtraImport": true,
@@ -452,6 +484,14 @@
         "importPath": "traceback",
         "description": "traceback",
         "detail": "traceback",
+        "documentation": {}
+    },
+    {
+        "label": "FunctionTestCase",
+        "importPath": "unittest",
+        "description": "unittest",
+        "isExtraImport": true,
+        "detail": "unittest",
         "documentation": {}
     },
     {
@@ -699,7 +739,7 @@
         "kind": 5,
         "importPath": "json_rpc.socket_base.send_recv",
         "description": "json_rpc.socket_base.send_recv",
-        "peekOfCode": "Token = str\nSendType = Callable[[bytes, Token], Awaitable[None]]\nRecvType = Callable[[], Awaitable[Tuple[Token, bytes]]]\nClientSendType = Callable[[bytes], Awaitable[None]]\nClientRecvType = Callable[[], Awaitable[bytes]]\nPeername = Tuple[str, int]",
+        "peekOfCode": "Token = str | None\nSendType = Union[\n    Callable[[bytes, Token], Awaitable[None]], Callable[[bytes], Awaitable[None]]\n]\nRecvType = Callable[[], Awaitable[Tuple[Token, bytes]]]\nClientSendType = Callable[[bytes], Awaitable[None]]\nClientRecvType = Callable[[], Awaitable[bytes]]\nPeername = Tuple[str, int]",
         "detail": "json_rpc.socket_base.send_recv",
         "documentation": {}
     },
@@ -708,7 +748,7 @@
         "kind": 5,
         "importPath": "json_rpc.socket_base.send_recv",
         "description": "json_rpc.socket_base.send_recv",
-        "peekOfCode": "SendType = Callable[[bytes, Token], Awaitable[None]]\nRecvType = Callable[[], Awaitable[Tuple[Token, bytes]]]\nClientSendType = Callable[[bytes], Awaitable[None]]\nClientRecvType = Callable[[], Awaitable[bytes]]\nPeername = Tuple[str, int]",
+        "peekOfCode": "SendType = Union[\n    Callable[[bytes, Token], Awaitable[None]], Callable[[bytes], Awaitable[None]]\n]\nRecvType = Callable[[], Awaitable[Tuple[Token, bytes]]]\nClientSendType = Callable[[bytes], Awaitable[None]]\nClientRecvType = Callable[[], Awaitable[bytes]]\nPeername = Tuple[str, int]",
         "detail": "json_rpc.socket_base.send_recv",
         "documentation": {}
     },
@@ -821,11 +861,20 @@
         "documentation": {}
     },
     {
+        "label": "aobject",
+        "kind": 6,
+        "importPath": "json_rpc.json_rpc",
+        "description": "json_rpc.json_rpc",
+        "peekOfCode": "class aobject(object):\n    \"\"\"Inheriting this class allows you to define an async __init__.\n    So you can create objects by doing something like 'await MyClass(params)'\n    \"\"\"\n    async def __new__(cls, *a, **kw):\n        instance = super().__new__(cls)\n        await instance.__init__(*a, **kw)  # type: ignore\n        return instance\n    async def __init__(self):\n        pass",
+        "detail": "json_rpc.json_rpc",
+        "documentation": {}
+    },
+    {
         "label": "JsonRPC",
         "kind": 6,
         "importPath": "json_rpc.json_rpc",
         "description": "json_rpc.json_rpc",
-        "peekOfCode": "class JsonRPC:\n    default_version = \"2.0\"\n    default_encondig = \"UTF-8\"\n    default_request = ProcRequest(\n        jsonrpc=default_version, id=None, method=\"\", params=[]\n    )\n    notify_command = \"notify\"\n    def __init__(\n        self,\n        send: SendType,",
+        "peekOfCode": "class JsonRPC(aobject):\n    default_version = \"2.0\"\n    default_encondig = \"UTF-8\"\n    default_request = ProcRequest(\n        jsonrpc=default_version, id=None, method=\"\", params=[]\n    )\n    notify_command = \"notify\"\n    async def __init__(\n        self,\n        send: Union[SendType, ClientSendType],",
         "detail": "json_rpc.json_rpc",
         "documentation": {}
     },
@@ -834,7 +883,25 @@
         "kind": 2,
         "importPath": "json_rpc.json_rpc",
         "description": "json_rpc.json_rpc",
-        "peekOfCode": "def notification(func_name: str, params: Union[ParamType, Any]) -> Tuple[str, Union[ParamType, Any], Literal[False]]:\n    return (func_name, params, False)\nclass JsonRPC:\n    default_version = \"2.0\"\n    default_encondig = \"UTF-8\"\n    default_request = ProcRequest(\n        jsonrpc=default_version, id=None, method=\"\", params=[]\n    )\n    notify_command = \"notify\"\n    def __init__(",
+        "peekOfCode": "def notification(\n    func_name: str,\n    params: Union[ParamType, Any]\n) -> Tuple[str, Union[ParamType, Any], Literal[False]]:\n    return (func_name, params, False)\ndef new_class():\n    return type('notify', (object, ), dict())\ndef get_args(*args, **kwargs):\n    return [*args] if len(args) else {**kwargs}\nclass aobject(object):",
+        "detail": "json_rpc.json_rpc",
+        "documentation": {}
+    },
+    {
+        "label": "new_class",
+        "kind": 2,
+        "importPath": "json_rpc.json_rpc",
+        "description": "json_rpc.json_rpc",
+        "peekOfCode": "def new_class():\n    return type('notify', (object, ), dict())\ndef get_args(*args, **kwargs):\n    return [*args] if len(args) else {**kwargs}\nclass aobject(object):\n    \"\"\"Inheriting this class allows you to define an async __init__.\n    So you can create objects by doing something like 'await MyClass(params)'\n    \"\"\"\n    async def __new__(cls, *a, **kw):\n        instance = super().__new__(cls)",
+        "detail": "json_rpc.json_rpc",
+        "documentation": {}
+    },
+    {
+        "label": "get_args",
+        "kind": 2,
+        "importPath": "json_rpc.json_rpc",
+        "description": "json_rpc.json_rpc",
+        "peekOfCode": "def get_args(*args, **kwargs):\n    return [*args] if len(args) else {**kwargs}\nclass aobject(object):\n    \"\"\"Inheriting this class allows you to define an async __init__.\n    So you can create objects by doing something like 'await MyClass(params)'\n    \"\"\"\n    async def __new__(cls, *a, **kw):\n        instance = super().__new__(cls)\n        await instance.__init__(*a, **kw)  # type: ignore\n        return instance",
         "detail": "json_rpc.json_rpc",
         "documentation": {}
     },
@@ -897,7 +964,7 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):\n    result: Any\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return InternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    # alias_func_name: str = Field(alias=\"aliasFuncName\")",
+        "peekOfCode": "class ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):\n    result: Any\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return InternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    parameters: dict",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -906,7 +973,7 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class ResponseResult(JsonRpcModel):\n    result: Any\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return InternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    # alias_func_name: str = Field(alias=\"aliasFuncName\")\n    parameters: dict\nclass JsonRpcSchema(BaseModel):",
+        "peekOfCode": "class ResponseResult(JsonRpcModel):\n    result: Any\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return InternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    parameters: dict\nclass JsonRpcSchema(BaseModel):\n    title: str = \"JSON-RPC 2.0\"",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -915,7 +982,7 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return InternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    # alias_func_name: str = Field(alias=\"aliasFuncName\")\n    parameters: dict\nclass JsonRpcSchema(BaseModel):\n    title: str = \"JSON-RPC 2.0\"",
+        "peekOfCode": "class InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return InternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    parameters: dict\nclass JsonRpcSchema(BaseModel):\n    title: str = \"JSON-RPC 2.0\"",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -924,7 +991,7 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    # alias_func_name: str = Field(alias=\"aliasFuncName\")\n    parameters: dict\nclass JsonRpcSchema(BaseModel):\n    title: str = \"JSON-RPC 2.0\"",
+        "peekOfCode": "class FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    parameters: dict\nclass JsonRpcSchema(BaseModel):\n    title: str = \"JSON-RPC 2.0\"",
         "detail": "json_rpc.model",
         "documentation": {}
     },
