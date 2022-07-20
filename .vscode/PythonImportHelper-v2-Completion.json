@@ -1,14 +1,5 @@
 [
     {
-        "label": "threading",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "threading",
-        "description": "threading",
-        "detail": "threading",
-        "documentation": {}
-    },
-    {
         "label": "Awaitable",
         "importPath": "typing",
         "description": "typing",
@@ -18,14 +9,6 @@
     },
     {
         "label": "Callable",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Optional",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -306,54 +289,6 @@
         "documentation": {}
     },
     {
-        "label": "asynccontextmanager",
-        "importPath": "contextlib",
-        "description": "contextlib",
-        "isExtraImport": true,
-        "detail": "contextlib",
-        "documentation": {}
-    },
-    {
-        "label": "asynccontextmanager",
-        "importPath": "contextlib",
-        "description": "contextlib",
-        "isExtraImport": true,
-        "detail": "contextlib",
-        "documentation": {}
-    },
-    {
-        "label": "partial",
-        "importPath": "functools",
-        "description": "functools",
-        "isExtraImport": true,
-        "detail": "functools",
-        "documentation": {}
-    },
-    {
-        "label": "partial",
-        "importPath": "functools",
-        "description": "functools",
-        "isExtraImport": true,
-        "detail": "functools",
-        "documentation": {}
-    },
-    {
-        "label": "partial",
-        "importPath": "functools",
-        "description": "functools",
-        "isExtraImport": true,
-        "detail": "functools",
-        "documentation": {}
-    },
-    {
-        "label": "partial",
-        "importPath": "functools",
-        "description": "functools",
-        "isExtraImport": true,
-        "detail": "functools",
-        "documentation": {}
-    },
-    {
         "label": "secrets",
         "kind": 6,
         "isExtraImport": true,
@@ -369,6 +304,54 @@
         "importPath": "string",
         "description": "string",
         "detail": "string",
+        "documentation": {}
+    },
+    {
+        "label": "asynccontextmanager",
+        "importPath": "contextlib",
+        "description": "contextlib",
+        "isExtraImport": true,
+        "detail": "contextlib",
+        "documentation": {}
+    },
+    {
+        "label": "asynccontextmanager",
+        "importPath": "contextlib",
+        "description": "contextlib",
+        "isExtraImport": true,
+        "detail": "contextlib",
+        "documentation": {}
+    },
+    {
+        "label": "partial",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
+        "detail": "functools",
+        "documentation": {}
+    },
+    {
+        "label": "partial",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
+        "detail": "functools",
+        "documentation": {}
+    },
+    {
+        "label": "partial",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
+        "detail": "functools",
+        "documentation": {}
+    },
+    {
+        "label": "partial",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
+        "detail": "functools",
         "documentation": {}
     },
     {
@@ -492,6 +475,15 @@
         "documentation": {}
     },
     {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
         "label": "inspect",
         "kind": 6,
         "isExtraImport": true,
@@ -517,16 +509,15 @@
         "documentation": {}
     },
     {
-        "label": "json",
-        "kind": 6,
+        "label": "ArgsType",
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
         "isExtraImport": true,
-        "importPath": "json",
-        "description": "json",
-        "detail": "json",
+        "detail": "json_rpc.model",
         "documentation": {}
     },
     {
-        "label": "ArgsType",
+        "label": "exceptions",
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
         "isExtraImport": true,
@@ -606,7 +597,7 @@
         "documentation": {}
     },
     {
-        "label": "InternalError",
+        "label": "DefaultInternalError",
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
         "isExtraImport": true,
@@ -614,7 +605,7 @@
         "documentation": {}
     },
     {
-        "label": "InvalidParamsError",
+        "label": "DefaultInvalidParamsError",
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
         "isExtraImport": true,
@@ -622,7 +613,7 @@
         "documentation": {}
     },
     {
-        "label": "InvalidRequestError",
+        "label": "DefaultInvalidRequestError",
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
         "isExtraImport": true,
@@ -630,7 +621,7 @@
         "documentation": {}
     },
     {
-        "label": "MethodNotFoundError",
+        "label": "DefaultMethodNotFoundError",
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
         "isExtraImport": true,
@@ -646,7 +637,7 @@
         "documentation": {}
     },
     {
-        "label": "ParseError",
+        "label": "DefaultParseError",
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
         "isExtraImport": true,
@@ -678,11 +669,11 @@
         "documentation": {}
     },
     {
-        "label": "TypedDict",
-        "importPath": "typing_extensions",
-        "description": "typing_extensions",
+        "label": "ParseError",
+        "importPath": "lib2to3.pgen2.parse",
+        "description": "lib2to3.pgen2.parse",
         "isExtraImport": true,
-        "detail": "typing_extensions",
+        "detail": "lib2to3.pgen2.parse",
         "documentation": {}
     },
     {
@@ -718,12 +709,28 @@
         "documentation": {}
     },
     {
+        "label": "TypedDict",
+        "importPath": "typing_extensions",
+        "description": "typing_extensions",
+        "isExtraImport": true,
+        "detail": "typing_extensions",
+        "documentation": {}
+    },
+    {
         "label": "traceback",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "traceback",
         "description": "traceback",
         "detail": "traceback",
+        "documentation": {}
+    },
+    {
+        "label": "pprint",
+        "importPath": "pprint",
+        "description": "pprint",
+        "isExtraImport": true,
+        "detail": "pprint",
         "documentation": {}
     },
     {
@@ -791,11 +798,12 @@
         "documentation": {}
     },
     {
-        "label": "pprint",
-        "importPath": "pprint",
-        "description": "pprint",
+        "label": "sys",
+        "kind": 6,
         "isExtraImport": true,
-        "detail": "pprint",
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
         "documentation": {}
     },
     {
@@ -804,15 +812,6 @@
         "description": "types",
         "isExtraImport": true,
         "detail": "types",
-        "documentation": {}
-    },
-    {
-        "label": "sys",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "sys",
-        "description": "sys",
-        "detail": "sys",
         "documentation": {}
     },
     {
@@ -882,7 +881,7 @@
         "kind": 2,
         "importPath": "json_rpc.socket_base.socket_fabric",
         "description": "json_rpc.socket_base.socket_fabric",
-        "peekOfCode": "def get_data_to_read(line: bytes) -> bytes:\n    return line[: len(line) - 1]\ndef get_data_to_send(message: bytes) -> bytes:\n    return message + b\"\\n\\n\"\ndef is_data_empty(data: bytes) -> bool:\n    return data == b\"\\n\" or data == b\"\" or len(data) == 0\ndef new_token() -> Token:\n    alphabet = string.ascii_letters + string.digits\n    return \"\".join(secrets.choice(alphabet) for i in range(20))\ndef is_data_disconnect(data: bytes) -> bool:",
+        "peekOfCode": "def get_data_to_read(line: bytes) -> bytes:\n    return line[: len(line) - 1]\ndef get_data_to_send(message: bytes) -> bytes:\n    return message + b\"\\n\\n\"\ndef is_data_empty(data: bytes) -> bool:\n    return data == b\"\\n\" or data == b\"\" or len(data) == 0\ndef new_token() -> Token:\n    alphabet = string.ascii_letters + string.digits\n    return \"\".join(secrets.choice(alphabet) for i in range(20))\nasync def read(reader: asyncio.StreamReader, token: Optional[Token] = None):",
         "detail": "json_rpc.socket_base.socket_fabric",
         "documentation": {}
     },
@@ -891,7 +890,7 @@
         "kind": 2,
         "importPath": "json_rpc.socket_base.socket_fabric",
         "description": "json_rpc.socket_base.socket_fabric",
-        "peekOfCode": "def get_data_to_send(message: bytes) -> bytes:\n    return message + b\"\\n\\n\"\ndef is_data_empty(data: bytes) -> bool:\n    return data == b\"\\n\" or data == b\"\" or len(data) == 0\ndef new_token() -> Token:\n    alphabet = string.ascii_letters + string.digits\n    return \"\".join(secrets.choice(alphabet) for i in range(20))\ndef is_data_disconnect(data: bytes) -> bool:\n    return data.decode(DEFAULT_ENCODING) == DISCONNECT_COMMAND\nasync def read(reader: asyncio.StreamReader, token: Optional[Token] = None):",
+        "peekOfCode": "def get_data_to_send(message: bytes) -> bytes:\n    return message + b\"\\n\\n\"\ndef is_data_empty(data: bytes) -> bool:\n    return data == b\"\\n\" or data == b\"\" or len(data) == 0\ndef new_token() -> Token:\n    alphabet = string.ascii_letters + string.digits\n    return \"\".join(secrets.choice(alphabet) for i in range(20))\nasync def read(reader: asyncio.StreamReader, token: Optional[Token] = None):\n    async for line in reader:\n        if not is_data_empty(line):",
         "detail": "json_rpc.socket_base.socket_fabric",
         "documentation": {}
     },
@@ -900,7 +899,7 @@
         "kind": 2,
         "importPath": "json_rpc.socket_base.socket_fabric",
         "description": "json_rpc.socket_base.socket_fabric",
-        "peekOfCode": "def is_data_empty(data: bytes) -> bool:\n    return data == b\"\\n\" or data == b\"\" or len(data) == 0\ndef new_token() -> Token:\n    alphabet = string.ascii_letters + string.digits\n    return \"\".join(secrets.choice(alphabet) for i in range(20))\ndef is_data_disconnect(data: bytes) -> bool:\n    return data.decode(DEFAULT_ENCODING) == DISCONNECT_COMMAND\nasync def read(reader: asyncio.StreamReader, token: Optional[Token] = None):\n    async for line in reader:\n        if not is_data_empty(line):",
+        "peekOfCode": "def is_data_empty(data: bytes) -> bool:\n    return data == b\"\\n\" or data == b\"\" or len(data) == 0\ndef new_token() -> Token:\n    alphabet = string.ascii_letters + string.digits\n    return \"\".join(secrets.choice(alphabet) for i in range(20))\nasync def read(reader: asyncio.StreamReader, token: Optional[Token] = None):\n    async for line in reader:\n        if not is_data_empty(line):\n            await read_queue.put((token, get_data_to_read(line)))\nasync def server_recv() -> Tuple[Token, bytes]:",
         "detail": "json_rpc.socket_base.socket_fabric",
         "documentation": {}
     },
@@ -909,62 +908,8 @@
         "kind": 2,
         "importPath": "json_rpc.socket_base.socket_fabric",
         "description": "json_rpc.socket_base.socket_fabric",
-        "peekOfCode": "def new_token() -> Token:\n    alphabet = string.ascii_letters + string.digits\n    return \"\".join(secrets.choice(alphabet) for i in range(20))\ndef is_data_disconnect(data: bytes) -> bool:\n    return data.decode(DEFAULT_ENCODING) == DISCONNECT_COMMAND\nasync def read(reader: asyncio.StreamReader, token: Optional[Token] = None):\n    async for line in reader:\n        if not is_data_empty(line):\n            await read_queue.put((token, get_data_to_read(line)))\nasync def server_recv() -> Tuple[Token, bytes]:",
+        "peekOfCode": "def new_token() -> Token:\n    alphabet = string.ascii_letters + string.digits\n    return \"\".join(secrets.choice(alphabet) for i in range(20))\nasync def read(reader: asyncio.StreamReader, token: Optional[Token] = None):\n    async for line in reader:\n        if not is_data_empty(line):\n            await read_queue.put((token, get_data_to_read(line)))\nasync def server_recv() -> Tuple[Token, bytes]:\n    return await read_queue.get()\nasync def client_recv() -> bytes:",
         "detail": "json_rpc.socket_base.socket_fabric",
-        "documentation": {}
-    },
-    {
-        "label": "is_data_disconnect",
-        "kind": 2,
-        "importPath": "json_rpc.socket_base.socket_fabric",
-        "description": "json_rpc.socket_base.socket_fabric",
-        "peekOfCode": "def is_data_disconnect(data: bytes) -> bool:\n    return data.decode(DEFAULT_ENCODING) == DISCONNECT_COMMAND\nasync def read(reader: asyncio.StreamReader, token: Optional[Token] = None):\n    async for line in reader:\n        if not is_data_empty(line):\n            await read_queue.put((token, get_data_to_read(line)))\nasync def server_recv() -> Tuple[Token, bytes]:\n    return await read_queue.get()\nasync def client_recv() -> bytes:\n    _, data = await read_queue.get()",
-        "detail": "json_rpc.socket_base.socket_fabric",
-        "documentation": {}
-    },
-    {
-        "label": "DISCONNECT_COMMAND",
-        "kind": 5,
-        "importPath": "json_rpc.socket_base.socket_fabric",
-        "description": "json_rpc.socket_base.socket_fabric",
-        "peekOfCode": "DISCONNECT_COMMAND = \"disconnect\"\nDEFAULT_ENCODING = \"UTF-8\"\nNOTIFY_COMMAND = \"notify\"\nwriters: Dict[Token, Optional[asyncio.StreamWriter]] = {}\nread_queue: asyncio.Queue = asyncio.Queue()\ndef get_data_to_read(line: bytes) -> bytes:\n    return line[: len(line) - 1]\ndef get_data_to_send(message: bytes) -> bytes:\n    return message + b\"\\n\\n\"\ndef is_data_empty(data: bytes) -> bool:",
-        "detail": "json_rpc.socket_base.socket_fabric",
-        "documentation": {}
-    },
-    {
-        "label": "DEFAULT_ENCODING",
-        "kind": 5,
-        "importPath": "json_rpc.socket_base.socket_fabric",
-        "description": "json_rpc.socket_base.socket_fabric",
-        "peekOfCode": "DEFAULT_ENCODING = \"UTF-8\"\nNOTIFY_COMMAND = \"notify\"\nwriters: Dict[Token, Optional[asyncio.StreamWriter]] = {}\nread_queue: asyncio.Queue = asyncio.Queue()\ndef get_data_to_read(line: bytes) -> bytes:\n    return line[: len(line) - 1]\ndef get_data_to_send(message: bytes) -> bytes:\n    return message + b\"\\n\\n\"\ndef is_data_empty(data: bytes) -> bool:\n    return data == b\"\\n\" or data == b\"\" or len(data) == 0",
-        "detail": "json_rpc.socket_base.socket_fabric",
-        "documentation": {}
-    },
-    {
-        "label": "NOTIFY_COMMAND",
-        "kind": 5,
-        "importPath": "json_rpc.socket_base.socket_fabric",
-        "description": "json_rpc.socket_base.socket_fabric",
-        "peekOfCode": "NOTIFY_COMMAND = \"notify\"\nwriters: Dict[Token, Optional[asyncio.StreamWriter]] = {}\nread_queue: asyncio.Queue = asyncio.Queue()\ndef get_data_to_read(line: bytes) -> bytes:\n    return line[: len(line) - 1]\ndef get_data_to_send(message: bytes) -> bytes:\n    return message + b\"\\n\\n\"\ndef is_data_empty(data: bytes) -> bool:\n    return data == b\"\\n\" or data == b\"\" or len(data) == 0\ndef new_token() -> Token:",
-        "detail": "json_rpc.socket_base.socket_fabric",
-        "documentation": {}
-    },
-    {
-        "label": "ItemAttrDecorator",
-        "kind": 6,
-        "importPath": "json_rpc.client",
-        "description": "json_rpc.client",
-        "peekOfCode": "class ItemAttrDecorator():\n    def __init__(self, func: FuncType):\n        self.func = func\n    async def __func(self, name: str, *args, **kwargs):\n        return await self.func(name, get_args(*args, **kwargs))\n    def __getitem__(self, name: str):\n        return partial(self.__func, name)\n    def __getattr__(self, name: str):\n        return self[name]\n    def __str__(self):",
-        "detail": "json_rpc.client",
-        "documentation": {}
-    },
-    {
-        "label": "BatchDecorator",
-        "kind": 6,
-        "importPath": "json_rpc.client",
-        "description": "json_rpc.client",
-        "peekOfCode": "class BatchDecorator(ItemAttrDecorator):\n    def __init__(self, func: FuncType):\n        super().__init__(func)\nclass ClientJsonRPC():\n    default_version = \"2.0\"\n    default_encondig = \"UTF-8\"\n    default_request = ProcRequest(\n        jsonrpc=default_version, id=None, method=\"\", params=[]\n    )\n    notify_command = \"notify\"",
-        "detail": "json_rpc.client",
         "documentation": {}
     },
     {
@@ -977,20 +922,29 @@
         "documentation": {}
     },
     {
-        "label": "notification",
-        "kind": 2,
+        "label": "CallNotifyDecorator",
+        "kind": 6,
         "importPath": "json_rpc.client",
         "description": "json_rpc.client",
-        "peekOfCode": "def notification(\n    func_name: str,\n    params: Union[ParamType, Any]\n) -> Tuple[str, Union[ParamType, Any], Literal[False]]:\n    return (func_name, params, False)\ndef new_class():\n    return type('notify', (object, ), dict())\ndef get_args(*args, **kwargs):\n    return [*args] if len(args) else {**kwargs}\nFuncType = Callable[[str, ArgsType], Awaitable[Any]]",
+        "peekOfCode": "class CallNotifyDecorator():\n    def __init__(self, client: ClientJsonRPC, func: FuncType):\n        self.client = client\n        self.func = func\n    async def __func(self, name: str, *args, **kwargs):\n        return await self.func(name, get_args(*args, **kwargs))\n    def __getitem__(self, name: str):\n        return partial(self.__func, name)\n    def __getattr__(self, name: str):\n        return self[name]",
         "detail": "json_rpc.client",
         "documentation": {}
     },
     {
-        "label": "new_class",
+        "label": "BatchDecorator",
+        "kind": 6,
+        "importPath": "json_rpc.client",
+        "description": "json_rpc.client",
+        "peekOfCode": "class BatchDecorator():\n    def __init__(self, client: ClientJsonRPC, func: BatchFunc, args: List[BatchArg] = [], call_available: bool = True, no_notify: bool = True):\n        self.client = client\n        self.func = func\n        self.args = args\n        self.call_available = call_available\n        self.no_notify = no_notify\n        if no_notify:\n            self.notify = self.__class__(\n                self.client, self.func, self.args, False, False)",
+        "detail": "json_rpc.client",
+        "documentation": {}
+    },
+    {
+        "label": "notification",
         "kind": 2,
         "importPath": "json_rpc.client",
         "description": "json_rpc.client",
-        "peekOfCode": "def new_class():\n    return type('notify', (object, ), dict())\ndef get_args(*args, **kwargs):\n    return [*args] if len(args) else {**kwargs}\nFuncType = Callable[[str, ArgsType], Awaitable[Any]]\nBatchArgs = Union[Tuple[str, Union[ParamType, Any]],\n                  Tuple[str, Union[ParamType, Any], bool]]\nclass ItemAttrDecorator():\n    def __init__(self, func: FuncType):\n        self.func = func",
+        "peekOfCode": "def notification(\n    func_name: str,\n    params: Union[ParamType, Any]\n) -> BatchArg:\n    return (func_name, params, False)\ndef get_args(*args, **kwargs):\n    return [*args] if len(args) else {**kwargs}\nclass ClientJsonRPC():\n    default_version = \"2.0\"\n    default_encondig = \"UTF-8\"",
         "detail": "json_rpc.client",
         "documentation": {}
     },
@@ -999,16 +953,16 @@
         "kind": 2,
         "importPath": "json_rpc.client",
         "description": "json_rpc.client",
-        "peekOfCode": "def get_args(*args, **kwargs):\n    return [*args] if len(args) else {**kwargs}\nFuncType = Callable[[str, ArgsType], Awaitable[Any]]\nBatchArgs = Union[Tuple[str, Union[ParamType, Any]],\n                  Tuple[str, Union[ParamType, Any], bool]]\nclass ItemAttrDecorator():\n    def __init__(self, func: FuncType):\n        self.func = func\n    async def __func(self, name: str, *args, **kwargs):\n        return await self.func(name, get_args(*args, **kwargs))",
+        "peekOfCode": "def get_args(*args, **kwargs):\n    return [*args] if len(args) else {**kwargs}\nclass ClientJsonRPC():\n    default_version = \"2.0\"\n    default_encondig = \"UTF-8\"\n    default_request = ProcRequest(\n        jsonrpc=default_version, id=None, method=\"\", params=[]\n    )\n    notify_command = \"notify\"\n    def __init__(",
         "detail": "json_rpc.client",
         "documentation": {}
     },
     {
-        "label": "FuncType",
+        "label": "BatchArg",
         "kind": 5,
         "importPath": "json_rpc.client",
         "description": "json_rpc.client",
-        "peekOfCode": "FuncType = Callable[[str, ArgsType], Awaitable[Any]]\nBatchArgs = Union[Tuple[str, Union[ParamType, Any]],\n                  Tuple[str, Union[ParamType, Any], bool]]\nclass ItemAttrDecorator():\n    def __init__(self, func: FuncType):\n        self.func = func\n    async def __func(self, name: str, *args, **kwargs):\n        return await self.func(name, get_args(*args, **kwargs))\n    def __getitem__(self, name: str):\n        return partial(self.__func, name)",
+        "peekOfCode": "BatchArg = Union[Tuple[str, Union[ParamType, Any]],\n                 Tuple[str, Union[ParamType, Any], bool]]\nBatchArgs = Tuple[BatchArg, ...]\ndef notification(\n    func_name: str,\n    params: Union[ParamType, Any]\n) -> BatchArg:\n    return (func_name, params, False)\ndef get_args(*args, **kwargs):\n    return [*args] if len(args) else {**kwargs}",
         "detail": "json_rpc.client",
         "documentation": {}
     },
@@ -1017,7 +971,25 @@
         "kind": 5,
         "importPath": "json_rpc.client",
         "description": "json_rpc.client",
-        "peekOfCode": "BatchArgs = Union[Tuple[str, Union[ParamType, Any]],\n                  Tuple[str, Union[ParamType, Any], bool]]\nclass ItemAttrDecorator():\n    def __init__(self, func: FuncType):\n        self.func = func\n    async def __func(self, name: str, *args, **kwargs):\n        return await self.func(name, get_args(*args, **kwargs))\n    def __getitem__(self, name: str):\n        return partial(self.__func, name)\n    def __getattr__(self, name: str):",
+        "peekOfCode": "BatchArgs = Tuple[BatchArg, ...]\ndef notification(\n    func_name: str,\n    params: Union[ParamType, Any]\n) -> BatchArg:\n    return (func_name, params, False)\ndef get_args(*args, **kwargs):\n    return [*args] if len(args) else {**kwargs}\nclass ClientJsonRPC():\n    default_version = \"2.0\"",
+        "detail": "json_rpc.client",
+        "documentation": {}
+    },
+    {
+        "label": "FuncType",
+        "kind": 5,
+        "importPath": "json_rpc.client",
+        "description": "json_rpc.client",
+        "peekOfCode": "FuncType = Callable[[str, ArgsType], Awaitable[Any]]\nBatchFunc = Callable[[BatchArg], Awaitable[List[Any]]]\nclass CallNotifyDecorator():\n    def __init__(self, client: ClientJsonRPC, func: FuncType):\n        self.client = client\n        self.func = func\n    async def __func(self, name: str, *args, **kwargs):\n        return await self.func(name, get_args(*args, **kwargs))\n    def __getitem__(self, name: str):\n        return partial(self.__func, name)",
+        "detail": "json_rpc.client",
+        "documentation": {}
+    },
+    {
+        "label": "BatchFunc",
+        "kind": 5,
+        "importPath": "json_rpc.client",
+        "description": "json_rpc.client",
+        "peekOfCode": "BatchFunc = Callable[[BatchArg], Awaitable[List[Any]]]\nclass CallNotifyDecorator():\n    def __init__(self, client: ClientJsonRPC, func: FuncType):\n        self.client = client\n        self.func = func\n    async def __func(self, name: str, *args, **kwargs):\n        return await self.func(name, get_args(*args, **kwargs))\n    def __getitem__(self, name: str):\n        return partial(self.__func, name)\n    def __getattr__(self, name: str):",
         "detail": "json_rpc.client",
         "documentation": {}
     },
@@ -1044,7 +1016,7 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class ProcRequest(JsonRpcModel):\n    method: str\n    params: ParamType\nclass RequestResult(TypedDict):\n    request: ProcRequest\n    request_id: Optional[int]\nclass BatchRequest(BaseModel):\n    params: List[ProcRequest]\nclass ErrorData(TypedDict):\n    exc: Exception",
+        "peekOfCode": "class ProcRequest(JsonRpcModel):\n    method: str\n    params: ParamType\nclass RequestResult(TypedDict):\n    request: ProcRequest\n    request_id: Optional[int]\nclass BatchRequest(BaseModel):\n    params: List[ProcRequest]\nclass ErrorData(TypedDict):\n    loc: Optional[list]",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -1053,7 +1025,7 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class RequestResult(TypedDict):\n    request: ProcRequest\n    request_id: Optional[int]\nclass BatchRequest(BaseModel):\n    params: List[ProcRequest]\nclass ErrorData(TypedDict):\n    exc: Exception\n    message: Callable[[], str]\nclass Error(TypedDict):\n    code: int",
+        "peekOfCode": "class RequestResult(TypedDict):\n    request: ProcRequest\n    request_id: Optional[int]\nclass BatchRequest(BaseModel):\n    params: List[ProcRequest]\nclass ErrorData(TypedDict):\n    loc: Optional[list]\n    msg: Optional[str]\n    type: str\n    ctx: Optional[dict]",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -1062,7 +1034,7 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class BatchRequest(BaseModel):\n    params: List[ProcRequest]\nclass ErrorData(TypedDict):\n    exc: Exception\n    message: Callable[[], str]\nclass Error(TypedDict):\n    code: int\n    message: str\n    # data: Optional[ErrorData]\nInvalidRequestError = Error(code=-32600, message=\"Invalid request\")",
+        "peekOfCode": "class BatchRequest(BaseModel):\n    params: List[ProcRequest]\nclass ErrorData(TypedDict):\n    loc: Optional[list]\n    msg: Optional[str]\n    type: str\n    ctx: Optional[dict]\nclass Error(TypedDict):\n    code: int\n    message: str",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -1071,7 +1043,7 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class ErrorData(TypedDict):\n    exc: Exception\n    message: Callable[[], str]\nclass Error(TypedDict):\n    code: int\n    message: str\n    # data: Optional[ErrorData]\nInvalidRequestError = Error(code=-32600, message=\"Invalid request\")\nMethodNotFoundError = Error(code=-32601, message=\"Method not found\")\nInvalidParamsError = Error(code=-32602, message=\"Invalid params\")",
+        "peekOfCode": "class ErrorData(TypedDict):\n    loc: Optional[list]\n    msg: Optional[str]\n    type: str\n    ctx: Optional[dict]\nclass Error(TypedDict):\n    code: int\n    message: str\n    data: Optional[ErrorData]\nINVALID_REQUEST_ERROR_CODE = -32600",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -1080,7 +1052,7 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class Error(TypedDict):\n    code: int\n    message: str\n    # data: Optional[ErrorData]\nInvalidRequestError = Error(code=-32600, message=\"Invalid request\")\nMethodNotFoundError = Error(code=-32601, message=\"Method not found\")\nInvalidParamsError = Error(code=-32602, message=\"Invalid params\")\nInternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\n# def get_invalid_request_error(data: ErrorData):",
+        "peekOfCode": "class Error(TypedDict):\n    code: int\n    message: str\n    data: Optional[ErrorData]\nINVALID_REQUEST_ERROR_CODE = -32600\nINVALID_REQUEST_ERROR_MESSAGE = \"Invalid request\"\nINVALID_REQUEST_ERROR_TYPE = \"invalid_request\"\nMETHOD_NOT_FOUND_ERROR_CODE = -32601\nMETHOD_NOT_FOUND_ERROR_MESSAGE = \"Method not found\"\nMETHOD_NOT_FOUND_ERROR_TYPE = \"method_not_found\"",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -1089,7 +1061,7 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):\n    result: Any\n# class InternalErrorException(Exception):\n#     def __str__(self) -> str:\n#         return InternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    parameters: dict",
+        "peekOfCode": "class ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):\n    result: Any\nclass InvalidRequestException(Exception):\n    def __str__(self) -> str:\n        return DefaultInvalidRequestError[\"message\"]\nclass MethodNotFoundException(Exception):\n    def __str__(self) -> str:\n        return DefaultMethodNotFoundError[\"message\"]",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -1098,7 +1070,34 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class ResponseResult(JsonRpcModel):\n    result: Any\n# class InternalErrorException(Exception):\n#     def __str__(self) -> str:\n#         return InternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    parameters: dict\nclass JsonRpcSchema(BaseModel):\n    title: str = \"JSON-RPC 2.0\"",
+        "peekOfCode": "class ResponseResult(JsonRpcModel):\n    result: Any\nclass InvalidRequestException(Exception):\n    def __str__(self) -> str:\n        return DefaultInvalidRequestError[\"message\"]\nclass MethodNotFoundException(Exception):\n    def __str__(self) -> str:\n        return DefaultMethodNotFoundError[\"message\"]\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "InvalidRequestException",
+        "kind": 6,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "class InvalidRequestException(Exception):\n    def __str__(self) -> str:\n        return DefaultInvalidRequestError[\"message\"]\nclass MethodNotFoundException(Exception):\n    def __str__(self) -> str:\n        return DefaultMethodNotFoundError[\"message\"]\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return DefaultInternalError[\"message\"]\nclass FuncSchema(BaseModel):",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "MethodNotFoundException",
+        "kind": 6,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "class MethodNotFoundException(Exception):\n    def __str__(self) -> str:\n        return DefaultMethodNotFoundError[\"message\"]\nclass InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return DefaultInternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    parameters: dict\nclass JsonRpcSchema(BaseModel):",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "InternalErrorException",
+        "kind": 6,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "class InternalErrorException(Exception):\n    def __str__(self) -> str:\n        return DefaultInternalError[\"message\"]\nclass FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    parameters: dict\nclass JsonRpcSchema(BaseModel):\n    title: str = \"JSON-RPC 2.0\"\nexceptions = {\n    INVALID_REQUEST_ERROR_TYPE: InvalidRequestException,",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -1107,7 +1106,7 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    parameters: dict\nclass JsonRpcSchema(BaseModel):\n    title: str = \"JSON-RPC 2.0\"",
+        "peekOfCode": "class FuncSchema(BaseModel):\n    func_name: str = Field(alias=\"funcName\")\n    parameters: dict\nclass JsonRpcSchema(BaseModel):\n    title: str = \"JSON-RPC 2.0\"\nexceptions = {\n    INVALID_REQUEST_ERROR_TYPE: InvalidRequestException,\n    METHOD_NOT_FOUND_ERROR_TYPE: MethodNotFoundException,\n    INVALID_PARAMS_ERROR_TYPE: TypeError,\n    INTERNAL_ERROR_TYPE: InternalErrorException,",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -1116,7 +1115,52 @@
         "kind": 6,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "class JsonRpcSchema(BaseModel):\n    title: str = \"JSON-RPC 2.0\"",
+        "peekOfCode": "class JsonRpcSchema(BaseModel):\n    title: str = \"JSON-RPC 2.0\"\nexceptions = {\n    INVALID_REQUEST_ERROR_TYPE: InvalidRequestException,\n    METHOD_NOT_FOUND_ERROR_TYPE: MethodNotFoundException,\n    INVALID_PARAMS_ERROR_TYPE: TypeError,\n    INTERNAL_ERROR_TYPE: InternalErrorException,\n    PARSE_ERROR_TYPE: ParseError\n}",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "get_invalid_request_error",
+        "kind": 2,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "def get_invalid_request_error(data: ErrorData):\n    return Error(\n        code=INVALID_REQUEST_ERROR_CODE,\n        message=INVALID_REQUEST_ERROR_MESSAGE,\n        data=data\n    )\ndef get_method_not_found_error(data: ErrorData):\n    return Error(\n        code=METHOD_NOT_FOUND_ERROR_CODE,\n        message=METHOD_NOT_FOUND_ERROR_MESSAGE,",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "get_method_not_found_error",
+        "kind": 2,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "def get_method_not_found_error(data: ErrorData):\n    return Error(\n        code=METHOD_NOT_FOUND_ERROR_CODE,\n        message=METHOD_NOT_FOUND_ERROR_MESSAGE,\n        data=data\n    )\ndef get_invalid_params_error(data: ErrorData):\n    return Error(\n        code=INVALID_PARAMS_ERROR_CODE,\n        message=INVALID_PARAMS_ERROR_MESSAGE,",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "get_invalid_params_error",
+        "kind": 2,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "def get_invalid_params_error(data: ErrorData):\n    return Error(\n        code=INVALID_PARAMS_ERROR_CODE,\n        message=INVALID_PARAMS_ERROR_MESSAGE,\n        data=data\n    )\ndef get_internal_error(data: ErrorData):\n    return Error(\n        code=INTERNAL_ERROR_CODE,\n        message=INTERNAL_ERROR_MESSAGE,",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "get_internal_error",
+        "kind": 2,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "def get_internal_error(data: ErrorData):\n    return Error(\n        code=INTERNAL_ERROR_CODE,\n        message=INTERNAL_ERROR_MESSAGE,\n        data=data\n    )\ndef get_parse_error(data: ErrorData):\n    return Error(\n        code=PARSE_ERROR_CODE,\n        message=PARSE_ERROR_MESSAGE,",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "get_parse_error",
+        "kind": 2,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "def get_parse_error(data: ErrorData):\n    return Error(\n        code=PARSE_ERROR_CODE,\n        message=PARSE_ERROR_MESSAGE,\n        data=data\n    )\nDefaultInvalidRequestErrorData = ErrorData(\n    loc=None,\n    msg=None,\n    type=INVALID_REQUEST_ERROR_TYPE,",
         "detail": "json_rpc.model",
         "documentation": {}
     },
@@ -1148,47 +1192,236 @@
         "documentation": {}
     },
     {
-        "label": "InvalidRequestError",
+        "label": "INVALID_REQUEST_ERROR_CODE",
         "kind": 5,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "InvalidRequestError = Error(code=-32600, message=\"Invalid request\")\nMethodNotFoundError = Error(code=-32601, message=\"Method not found\")\nInvalidParamsError = Error(code=-32602, message=\"Invalid params\")\nInternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\n# def get_invalid_request_error(data: ErrorData):\n#     return Error(\n#         code=-32600, \n#         message=\"Invalid request\", \n#         data=data",
+        "peekOfCode": "INVALID_REQUEST_ERROR_CODE = -32600\nINVALID_REQUEST_ERROR_MESSAGE = \"Invalid request\"\nINVALID_REQUEST_ERROR_TYPE = \"invalid_request\"\nMETHOD_NOT_FOUND_ERROR_CODE = -32601\nMETHOD_NOT_FOUND_ERROR_MESSAGE = \"Method not found\"\nMETHOD_NOT_FOUND_ERROR_TYPE = \"method_not_found\"\nINVALID_PARAMS_ERROR_CODE = -32602\nINVALID_PARAMS_ERROR_MESSAGE = \"Invalid params\"\nINVALID_PARAMS_ERROR_TYPE = \"type_error\"\nINTERNAL_ERROR_CODE = -32603",
         "detail": "json_rpc.model",
         "documentation": {}
     },
     {
-        "label": "MethodNotFoundError",
+        "label": "INVALID_REQUEST_ERROR_MESSAGE",
         "kind": 5,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "MethodNotFoundError = Error(code=-32601, message=\"Method not found\")\nInvalidParamsError = Error(code=-32602, message=\"Invalid params\")\nInternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\n# def get_invalid_request_error(data: ErrorData):\n#     return Error(\n#         code=-32600, \n#         message=\"Invalid request\", \n#         data=data\n#     )",
+        "peekOfCode": "INVALID_REQUEST_ERROR_MESSAGE = \"Invalid request\"\nINVALID_REQUEST_ERROR_TYPE = \"invalid_request\"\nMETHOD_NOT_FOUND_ERROR_CODE = -32601\nMETHOD_NOT_FOUND_ERROR_MESSAGE = \"Method not found\"\nMETHOD_NOT_FOUND_ERROR_TYPE = \"method_not_found\"\nINVALID_PARAMS_ERROR_CODE = -32602\nINVALID_PARAMS_ERROR_MESSAGE = \"Invalid params\"\nINVALID_PARAMS_ERROR_TYPE = \"type_error\"\nINTERNAL_ERROR_CODE = -32603\nINTERNAL_ERROR_MESSAGE = \"Internal error\"",
         "detail": "json_rpc.model",
         "documentation": {}
     },
     {
-        "label": "InvalidParamsError",
+        "label": "INVALID_REQUEST_ERROR_TYPE",
         "kind": 5,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "InvalidParamsError = Error(code=-32602, message=\"Invalid params\")\nInternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\n# def get_invalid_request_error(data: ErrorData):\n#     return Error(\n#         code=-32600, \n#         message=\"Invalid request\", \n#         data=data\n#     )\n# def get_method_not_found_eror(data: ErrorData):",
+        "peekOfCode": "INVALID_REQUEST_ERROR_TYPE = \"invalid_request\"\nMETHOD_NOT_FOUND_ERROR_CODE = -32601\nMETHOD_NOT_FOUND_ERROR_MESSAGE = \"Method not found\"\nMETHOD_NOT_FOUND_ERROR_TYPE = \"method_not_found\"\nINVALID_PARAMS_ERROR_CODE = -32602\nINVALID_PARAMS_ERROR_MESSAGE = \"Invalid params\"\nINVALID_PARAMS_ERROR_TYPE = \"type_error\"\nINTERNAL_ERROR_CODE = -32603\nINTERNAL_ERROR_MESSAGE = \"Internal error\"\nINTERNAL_ERROR_TYPE = \"internal_error\"",
         "detail": "json_rpc.model",
         "documentation": {}
     },
     {
-        "label": "InternalError",
+        "label": "METHOD_NOT_FOUND_ERROR_CODE",
         "kind": 5,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "InternalError = Error(code=-32603, message=\"Internal error\")\nParseError = Error(code=-32700, message=\"Parse error\")\n# def get_invalid_request_error(data: ErrorData):\n#     return Error(\n#         code=-32600, \n#         message=\"Invalid request\", \n#         data=data\n#     )\n# def get_method_not_found_eror(data: ErrorData):\n#     return Error(",
+        "peekOfCode": "METHOD_NOT_FOUND_ERROR_CODE = -32601\nMETHOD_NOT_FOUND_ERROR_MESSAGE = \"Method not found\"\nMETHOD_NOT_FOUND_ERROR_TYPE = \"method_not_found\"\nINVALID_PARAMS_ERROR_CODE = -32602\nINVALID_PARAMS_ERROR_MESSAGE = \"Invalid params\"\nINVALID_PARAMS_ERROR_TYPE = \"type_error\"\nINTERNAL_ERROR_CODE = -32603\nINTERNAL_ERROR_MESSAGE = \"Internal error\"\nINTERNAL_ERROR_TYPE = \"internal_error\"\nPARSE_ERROR_CODE = -32700",
         "detail": "json_rpc.model",
         "documentation": {}
     },
     {
-        "label": "ParseError",
+        "label": "METHOD_NOT_FOUND_ERROR_MESSAGE",
         "kind": 5,
         "importPath": "json_rpc.model",
         "description": "json_rpc.model",
-        "peekOfCode": "ParseError = Error(code=-32700, message=\"Parse error\")\n# def get_invalid_request_error(data: ErrorData):\n#     return Error(\n#         code=-32600, \n#         message=\"Invalid request\", \n#         data=data\n#     )\n# def get_method_not_found_eror(data: ErrorData):\n#     return Error(\n#         code=-32601,",
+        "peekOfCode": "METHOD_NOT_FOUND_ERROR_MESSAGE = \"Method not found\"\nMETHOD_NOT_FOUND_ERROR_TYPE = \"method_not_found\"\nINVALID_PARAMS_ERROR_CODE = -32602\nINVALID_PARAMS_ERROR_MESSAGE = \"Invalid params\"\nINVALID_PARAMS_ERROR_TYPE = \"type_error\"\nINTERNAL_ERROR_CODE = -32603\nINTERNAL_ERROR_MESSAGE = \"Internal error\"\nINTERNAL_ERROR_TYPE = \"internal_error\"\nPARSE_ERROR_CODE = -32700\nPARSE_ERROR_MESSAGE = \"Parse error\"",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "METHOD_NOT_FOUND_ERROR_TYPE",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "METHOD_NOT_FOUND_ERROR_TYPE = \"method_not_found\"\nINVALID_PARAMS_ERROR_CODE = -32602\nINVALID_PARAMS_ERROR_MESSAGE = \"Invalid params\"\nINVALID_PARAMS_ERROR_TYPE = \"type_error\"\nINTERNAL_ERROR_CODE = -32603\nINTERNAL_ERROR_MESSAGE = \"Internal error\"\nINTERNAL_ERROR_TYPE = \"internal_error\"\nPARSE_ERROR_CODE = -32700\nPARSE_ERROR_MESSAGE = \"Parse error\"\nPARSE_ERROR_TYPE = \"parse_error\"",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "INVALID_PARAMS_ERROR_CODE",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "INVALID_PARAMS_ERROR_CODE = -32602\nINVALID_PARAMS_ERROR_MESSAGE = \"Invalid params\"\nINVALID_PARAMS_ERROR_TYPE = \"type_error\"\nINTERNAL_ERROR_CODE = -32603\nINTERNAL_ERROR_MESSAGE = \"Internal error\"\nINTERNAL_ERROR_TYPE = \"internal_error\"\nPARSE_ERROR_CODE = -32700\nPARSE_ERROR_MESSAGE = \"Parse error\"\nPARSE_ERROR_TYPE = \"parse_error\"\ndef get_invalid_request_error(data: ErrorData):",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "INVALID_PARAMS_ERROR_MESSAGE",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "INVALID_PARAMS_ERROR_MESSAGE = \"Invalid params\"\nINVALID_PARAMS_ERROR_TYPE = \"type_error\"\nINTERNAL_ERROR_CODE = -32603\nINTERNAL_ERROR_MESSAGE = \"Internal error\"\nINTERNAL_ERROR_TYPE = \"internal_error\"\nPARSE_ERROR_CODE = -32700\nPARSE_ERROR_MESSAGE = \"Parse error\"\nPARSE_ERROR_TYPE = \"parse_error\"\ndef get_invalid_request_error(data: ErrorData):\n    return Error(",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "INVALID_PARAMS_ERROR_TYPE",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "INVALID_PARAMS_ERROR_TYPE = \"type_error\"\nINTERNAL_ERROR_CODE = -32603\nINTERNAL_ERROR_MESSAGE = \"Internal error\"\nINTERNAL_ERROR_TYPE = \"internal_error\"\nPARSE_ERROR_CODE = -32700\nPARSE_ERROR_MESSAGE = \"Parse error\"\nPARSE_ERROR_TYPE = \"parse_error\"\ndef get_invalid_request_error(data: ErrorData):\n    return Error(\n        code=INVALID_REQUEST_ERROR_CODE,",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "INTERNAL_ERROR_CODE",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "INTERNAL_ERROR_CODE = -32603\nINTERNAL_ERROR_MESSAGE = \"Internal error\"\nINTERNAL_ERROR_TYPE = \"internal_error\"\nPARSE_ERROR_CODE = -32700\nPARSE_ERROR_MESSAGE = \"Parse error\"\nPARSE_ERROR_TYPE = \"parse_error\"\ndef get_invalid_request_error(data: ErrorData):\n    return Error(\n        code=INVALID_REQUEST_ERROR_CODE,\n        message=INVALID_REQUEST_ERROR_MESSAGE,",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "INTERNAL_ERROR_MESSAGE",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "INTERNAL_ERROR_MESSAGE = \"Internal error\"\nINTERNAL_ERROR_TYPE = \"internal_error\"\nPARSE_ERROR_CODE = -32700\nPARSE_ERROR_MESSAGE = \"Parse error\"\nPARSE_ERROR_TYPE = \"parse_error\"\ndef get_invalid_request_error(data: ErrorData):\n    return Error(\n        code=INVALID_REQUEST_ERROR_CODE,\n        message=INVALID_REQUEST_ERROR_MESSAGE,\n        data=data",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "INTERNAL_ERROR_TYPE",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "INTERNAL_ERROR_TYPE = \"internal_error\"\nPARSE_ERROR_CODE = -32700\nPARSE_ERROR_MESSAGE = \"Parse error\"\nPARSE_ERROR_TYPE = \"parse_error\"\ndef get_invalid_request_error(data: ErrorData):\n    return Error(\n        code=INVALID_REQUEST_ERROR_CODE,\n        message=INVALID_REQUEST_ERROR_MESSAGE,\n        data=data\n    )",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "PARSE_ERROR_CODE",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "PARSE_ERROR_CODE = -32700\nPARSE_ERROR_MESSAGE = \"Parse error\"\nPARSE_ERROR_TYPE = \"parse_error\"\ndef get_invalid_request_error(data: ErrorData):\n    return Error(\n        code=INVALID_REQUEST_ERROR_CODE,\n        message=INVALID_REQUEST_ERROR_MESSAGE,\n        data=data\n    )\ndef get_method_not_found_error(data: ErrorData):",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "PARSE_ERROR_MESSAGE",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "PARSE_ERROR_MESSAGE = \"Parse error\"\nPARSE_ERROR_TYPE = \"parse_error\"\ndef get_invalid_request_error(data: ErrorData):\n    return Error(\n        code=INVALID_REQUEST_ERROR_CODE,\n        message=INVALID_REQUEST_ERROR_MESSAGE,\n        data=data\n    )\ndef get_method_not_found_error(data: ErrorData):\n    return Error(",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "PARSE_ERROR_TYPE",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "PARSE_ERROR_TYPE = \"parse_error\"\ndef get_invalid_request_error(data: ErrorData):\n    return Error(\n        code=INVALID_REQUEST_ERROR_CODE,\n        message=INVALID_REQUEST_ERROR_MESSAGE,\n        data=data\n    )\ndef get_method_not_found_error(data: ErrorData):\n    return Error(\n        code=METHOD_NOT_FOUND_ERROR_CODE,",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "DefaultInvalidRequestErrorData",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "DefaultInvalidRequestErrorData = ErrorData(\n    loc=None,\n    msg=None,\n    type=INVALID_REQUEST_ERROR_TYPE,\n    ctx=None\n)\nDefaultInvalidRequestError = get_invalid_request_error(\n    DefaultInvalidRequestErrorData)\nDefaultMethodNotFoundErrorData = ErrorData(\n    loc=None,",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "DefaultInvalidRequestError",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "DefaultInvalidRequestError = get_invalid_request_error(\n    DefaultInvalidRequestErrorData)\nDefaultMethodNotFoundErrorData = ErrorData(\n    loc=None,\n    msg=None,\n    type=METHOD_NOT_FOUND_ERROR_TYPE,\n    ctx=None\n)\nDefaultMethodNotFoundError = get_method_not_found_error(\n    DefaultMethodNotFoundErrorData)",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "DefaultMethodNotFoundErrorData",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "DefaultMethodNotFoundErrorData = ErrorData(\n    loc=None,\n    msg=None,\n    type=METHOD_NOT_FOUND_ERROR_TYPE,\n    ctx=None\n)\nDefaultMethodNotFoundError = get_method_not_found_error(\n    DefaultMethodNotFoundErrorData)\nDefaultInvalidParamsErrorData = ErrorData(\n    loc=None,",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "DefaultMethodNotFoundError",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "DefaultMethodNotFoundError = get_method_not_found_error(\n    DefaultMethodNotFoundErrorData)\nDefaultInvalidParamsErrorData = ErrorData(\n    loc=None,\n    msg=None,\n    type=INVALID_PARAMS_ERROR_TYPE,\n    ctx=None\n)\nDefaultInvalidParamsError = get_invalid_params_error(\n    DefaultInvalidParamsErrorData)",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "DefaultInvalidParamsErrorData",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "DefaultInvalidParamsErrorData = ErrorData(\n    loc=None,\n    msg=None,\n    type=INVALID_PARAMS_ERROR_TYPE,\n    ctx=None\n)\nDefaultInvalidParamsError = get_invalid_params_error(\n    DefaultInvalidParamsErrorData)\nDefaultInternalErrorData = ErrorData(\n    loc=None,",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "DefaultInvalidParamsError",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "DefaultInvalidParamsError = get_invalid_params_error(\n    DefaultInvalidParamsErrorData)\nDefaultInternalErrorData = ErrorData(\n    loc=None,\n    msg=None,\n    type=INTERNAL_ERROR_TYPE,\n    ctx=None\n)\nDefaultInternalError = get_internal_error(DefaultInternalErrorData)\nDefaultParseErrorData = ErrorData(",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "DefaultInternalErrorData",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "DefaultInternalErrorData = ErrorData(\n    loc=None,\n    msg=None,\n    type=INTERNAL_ERROR_TYPE,\n    ctx=None\n)\nDefaultInternalError = get_internal_error(DefaultInternalErrorData)\nDefaultParseErrorData = ErrorData(\n    loc=None,\n    msg=None,",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "DefaultInternalError",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "DefaultInternalError = get_internal_error(DefaultInternalErrorData)\nDefaultParseErrorData = ErrorData(\n    loc=None,\n    msg=None,\n    type=PARSE_ERROR_TYPE,\n    ctx=None\n)\nDefaultParseError = get_parse_error(DefaultParseErrorData)\nclass ResponseError(JsonRpcModel):\n    error: Error",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "DefaultParseErrorData",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "DefaultParseErrorData = ErrorData(\n    loc=None,\n    msg=None,\n    type=PARSE_ERROR_TYPE,\n    ctx=None\n)\nDefaultParseError = get_parse_error(DefaultParseErrorData)\nclass ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "DefaultParseError",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "DefaultParseError = get_parse_error(DefaultParseErrorData)\nclass ResponseError(JsonRpcModel):\n    error: Error\nclass ResponseResult(JsonRpcModel):\n    result: Any\nclass InvalidRequestException(Exception):\n    def __str__(self) -> str:\n        return DefaultInvalidRequestError[\"message\"]\nclass MethodNotFoundException(Exception):\n    def __str__(self) -> str:",
+        "detail": "json_rpc.model",
+        "documentation": {}
+    },
+    {
+        "label": "exceptions",
+        "kind": 5,
+        "importPath": "json_rpc.model",
+        "description": "json_rpc.model",
+        "peekOfCode": "exceptions = {\n    INVALID_REQUEST_ERROR_TYPE: InvalidRequestException,\n    METHOD_NOT_FOUND_ERROR_TYPE: MethodNotFoundException,\n    INVALID_PARAMS_ERROR_TYPE: TypeError,\n    INTERNAL_ERROR_TYPE: InternalErrorException,\n    PARSE_ERROR_TYPE: ParseError\n}",
         "detail": "json_rpc.model",
         "documentation": {}
     },

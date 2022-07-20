@@ -1,56 +1,30 @@
 import asyncio
+import json
 from contextlib import asynccontextmanager
 from functools import partial
 from inspect import getargs
-import json
-from typing import Any, Awaitable, Callable, Dict, List, Literal, Optional, Tuple, Union
-from json_rpc.model import ArgsType, JsonRpcModel, ParamType, ProcRequest, RequestResult, ResponseError, ResponseResult
+from typing import (Any, Awaitable, Callable, Dict, List, Literal, Optional,
+                    Tuple, Union)
+
+from json_rpc.model import (ArgsType, exceptions, JsonRpcModel, ParamType, ProcRequest,
+                            RequestResult, ResponseError, ResponseResult)
 from json_rpc.socket_base.send_recv import ClientRecvType, ClientSendType
+
+
+BatchArg = Union[Tuple[str, Union[ParamType, Any]],
+                 Tuple[str, Union[ParamType, Any], bool]]
+BatchArgs = Tuple[BatchArg, ...]
 
 
 def notification(
     func_name: str,
     params: Union[ParamType, Any]
-) -> Tuple[str, Union[ParamType, Any], Literal[False]]:
+) -> BatchArg:
     return (func_name, params, False)
-
-
-def new_class():
-    return type('notify', (object, ), dict())
 
 
 def get_args(*args, **kwargs):
     return [*args] if len(args) else {**kwargs}
-
-
-FuncType = Callable[[str, ArgsType], Awaitable[Any]]
-BatchArgs = Union[Tuple[str, Union[ParamType, Any]],
-                  Tuple[str, Union[ParamType, Any], bool]]
-
-
-class ItemAttrDecorator():
-    def __init__(self, func: FuncType):
-        self.func = func
-
-    async def __func(self, name: str, *args, **kwargs):
-        return await self.func(name, get_args(*args, **kwargs))
-
-    def __getitem__(self, name: str):
-        return partial(self.__func, name)
-
-    def __getattr__(self, name: str):
-        return self[name]
-
-    def __str__(self):
-        return self.func
-
-    async def __call__(self, name: str, *args, **kwargs):
-        return await self.__func(name, *args, **kwargs)
-
-
-class BatchDecorator(ItemAttrDecorator):
-    def __init__(self, func: FuncType):
-        super().__init__(func)
 
 
 class ClientJsonRPC():
@@ -70,9 +44,8 @@ class ClientJsonRPC():
         self.__recv = recv
         self.__id = 0
         self.__tasks_queue: Dict[int, asyncio.Queue] = {}
-        self.__batch_args = []
-        self.is_batch = False
-        self.no_notify = True
+        self.notify = CallNotifyDecorator(self, self.__notify)
+        self.batch = BatchDecorator(self, self.__batch)
         asyncio.create_task(self.find_response())
 
     async def send(self, message: str):
@@ -80,7 +53,10 @@ class ClientJsonRPC():
         await self.__send(b_message)
 
     async def recv(self, request_id: int) -> str:
-        return await self.__tasks_queue[request_id].get()
+        result = await self.__tasks_queue[request_id].get()
+        if issubclass(result, Exception):
+            raise result
+        return result
 
     async def find_response(self):
         while True:
@@ -92,6 +68,8 @@ class ClientJsonRPC():
                 base_response = JsonRpcModel.parse_raw(result_json)
                 try:
                     result = ResponseError.parse_raw(result_json).error
+                    if result["data"] is not None:
+                        result = exceptions[result["data"]["type"]]
                 except:
                     result = ResponseResult.parse_raw(result_json).result
                 finally:
@@ -135,7 +113,14 @@ class ClientJsonRPC():
         future = asyncio.ensure_future(callee())
         return future
 
-    async def __batch(self, *args: Union[Tuple[str, Union[ParamType, Any]], Tuple[str, Union[ParamType, Any], bool]]) -> List[Any]:
+    async def __notify(self, name: str, *args, **kwargs):
+        await self.__remote_call(
+            name,
+            get_args(*args, **kwargs)[0],  # type: ignore
+            False
+        )
+
+    async def __batch(self, *args: BatchArg) -> List[Any]:
         requests = [self.__get_request(*arg)["request"]  # type: ignore
                     for arg in args]
         json_requests = [request.json(by_alias=True) for request in requests]
@@ -154,43 +139,64 @@ class ClientJsonRPC():
     async def __call(self, name: str, *args, **kwargs):
         return await self.call(name, get_args(*args, **kwargs))
 
-    async def __notify(self, name: str, *args, **kwargs):
-        await self.__remote_call(
-            name,
-            get_args(*args, **kwargs)[0],  # type: ignore
-            False
-        )
-
-    def accumulate(self, name: str, *args, **kwargs):
-        self.__batch_args.append(
-            (name, get_args(*args, **kwargs), self.no_notify)
-        )
-        self.no_notify = not self.no_notify if not self.no_notify else self.no_notify
-        return self
-
-    async def __call__(self, *args: Union[Tuple[str, Union[ParamType, Any]], Tuple[str, Union[ParamType, Any], bool]]):
-        return await self.__batch(*args)
-
     def __getitem__(self, name: str):
-        if not self.is_batch:
-            if name == 'notify':
-                return ItemAttrDecorator(self.__notify)
-            elif name == 'batch':
-                self.is_batch = True
-                return self
-            else:
-                return partial(self.__call, name)
-        elif name == 'notify':
-            self.no_notify = False
-            return self
-        else:
-            return partial(self.accumulate, name)
+        return partial(self.__call, name)
 
     def __getattr__(self, name: str):
         return self[name]
 
+
+FuncType = Callable[[str, ArgsType], Awaitable[Any]]
+BatchFunc = Callable[[BatchArg], Awaitable[List[Any]]]
+
+
+class CallNotifyDecorator():
+    def __init__(self, client: ClientJsonRPC, func: FuncType):
+        self.client = client
+        self.func = func
+
+    async def __func(self, name: str, *args, **kwargs):
+        return await self.func(name, get_args(*args, **kwargs))
+
+    def __getitem__(self, name: str):
+        return partial(self.__func, name)
+
+    def __getattr__(self, name: str):
+        return self[name]
+
+    async def __call__(self, name: str, *args, **kwargs):
+        return await self.__func(name, *args, **kwargs)
+
+
+class BatchDecorator():
+    def __init__(self, client: ClientJsonRPC, func: BatchFunc, args: List[BatchArg] = [], call_available: bool = True, no_notify: bool = True):
+        self.client = client
+        self.func = func
+        self.args = args
+        self.call_available = call_available
+        self.no_notify = no_notify
+        if no_notify:
+            self.notify = self.__class__(
+                self.client, self.func, self.args, False, False)
+
+    def accumulate(self, arg: BatchArg):
+        self.args.append(arg)
+        return self.__class__(self.client, self.func, self.args, False)
+
+    def __func(self, name: str, *args, **kwargs):
+        return self.accumulate((name, get_args(*args, **kwargs), self.no_notify))
+
+    def __getitem__(self, name: str):
+        return partial(self.__func, name)
+
+    def __getattr__(self, name: str):
+        return self[name]
+
+    async def __call__(self, *args: BatchArg):
+        if self.call_available:
+            return await self.func(*args)
+        else:
+            print("Oops...")
+
     async def collect(self):
-        self.is_batch = False
-        result = await self.__batch(*self.__batch_args)
-        self.__batch_args.clear()
-        return result
+        return await self.func(*self.args)

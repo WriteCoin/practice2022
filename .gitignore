@@ -4,5 +4,6 @@ __pycache__/
 ./send_receive.py
 ./socket_send_receive.py
 .vscode
+.vscode/
 *.code-workspace
 dist

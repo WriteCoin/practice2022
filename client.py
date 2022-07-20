@@ -1,16 +1,13 @@
-from functools import partial
-from time import sleep
-import traceback
-from json_rpc.client import ClientJsonRPC, notification
 import asyncio
-from json_rpc.socket_base.send_recv import (
-    ClientRecvType,
-    ClientSendType,
-    RecvType,
-    SendType,
-)
-from json_rpc.socket_base.socket_fabric import client_sr
+import traceback
+from functools import partial
 from pprint import pprint
+from time import sleep
+
+from json_rpc.client import ClientJsonRPC, notification
+from json_rpc.socket_base.send_recv import (ClientRecvType, ClientSendType,
+                                            RecvType, SendType)
+from json_rpc.socket_base.socket_fabric import client_sr
 
 
 async def simple_test(send: ClientSendType, recv: ClientRecvType):
@@ -59,9 +56,9 @@ async def json_rpc_test(send: ClientSendType, recv: ClientRecvType):
 
     # await client.send('{"jsonrpc": "2.0", "method": "foo", "params": ["fizz", "buzz"], "id": 1}')
 
-    # assert None == await client.call("sleep", 10.0)
+    # assert None == await client.call("sleep", 10)
 
-    # assert None == await client.notify("sleep", [2.0])
+    # assert None == await client.notify("sleep", [2])
     # assert "fizzbuzz" == await client.call("foo", args.split(','))
     res = await client.call("foo", {"bar": "fizz", "baz": "buzz"})
     # print(res)
@@ -97,9 +94,15 @@ async def item_attr_test(send: ClientSendType, recv: ClientRecvType):
 
     # assert "fizzbuzz" == await client.foo("fizz", "buzz")
     # assert "fizzbuzz" == await client.foo(bar="fizz", baz="buzz")
+    # assert None == await client.notify("sleep", {"interval": 10.0})
     # assert None == await client.notify("sleep", 10.0)
-    # assert None == await client.notify.sleep(10.0)
+    # assert None == await client.notify("sleep", interval=10.0)
     # assert None == await client.notify.sleep(interval=10.0)
+
+    # assert None == await client["notify"].sleep(10.0)
+    # assert None == await client["notify"].sleep(interval=10.0)
+    # assert None == await client["notify"]("sleep", 10.0)
+    # assert None == await client["notify"]("sleep", interval=10.0)
 
     assert None == await client.notify.sleep(10.0)
     assert ["ab", "cd"] == (
@@ -117,13 +120,28 @@ async def item_attr_test(send: ClientSendType, recv: ClientRecvType):
     print("Test success")
 
 
+async def valid_types_test(send: ClientSendType, recv: ClientRecvType):
+    client = ClientJsonRPC(send, recv)
+    print("Client JSON RPC 2.0 Validation Types Test")
+
+    error = None
+    try:
+        await client.sleep("john")
+    except TypeError as e:
+        error = e
+    assert isinstance(error, TypeError)
+
+    print("Test success")
+
+
 async def run():
     async with client_sr("127.0.0.1", 9999) as (send, recv):
         try:
             # await simple_test(send, recv)
             # await json_rpc_test(send, recv)
             # await batch_test(send, recv)
-            await item_attr_test(send, recv)
+            # await item_attr_test(send, recv)
+            await valid_types_test(send, recv)
         except Exception as ex:
             print(f"Error: {ex}")
             print(traceback.format_exc())

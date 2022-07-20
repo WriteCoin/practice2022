@@ -1,6 +1,4 @@
-import threading
-from typing import Awaitable, Callable, Optional, Tuple, Union
-
+from typing import Awaitable, Callable, Tuple, Union
 
 Token = str
 

@@ -1,20 +1,12 @@
 import asyncio
-from contextlib import asynccontextmanager
-from functools import partial
 import secrets
 import string
+from contextlib import asynccontextmanager
+from functools import partial
 from typing import Any, AsyncGenerator, Dict, Optional, Tuple, Union
-from json_rpc.socket_base.send_recv import (
-    ClientRecvType,
-    ClientSendType,
-    Peername,
-    Token,
-)
 
-
-DISCONNECT_COMMAND = "disconnect"
-DEFAULT_ENCODING = "UTF-8"
-NOTIFY_COMMAND = "notify"
+from json_rpc.socket_base.send_recv import (ClientRecvType, ClientSendType,
+                                            Peername, Token)
 
 writers: Dict[Token, Optional[asyncio.StreamWriter]] = {}
 read_queue: asyncio.Queue = asyncio.Queue()
@@ -35,10 +27,6 @@ def is_data_empty(data: bytes) -> bool:
 def new_token() -> Token:
     alphabet = string.ascii_letters + string.digits
     return "".join(secrets.choice(alphabet) for i in range(20))
-
-
-def is_data_disconnect(data: bytes) -> bool:
-    return data.decode(DEFAULT_ENCODING) == DISCONNECT_COMMAND
 
 
 async def read(reader: asyncio.StreamReader, token: Optional[Token] = None):
