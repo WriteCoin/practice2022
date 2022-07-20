@@ -1,11 +1,16 @@
 import asyncio
-from functools import partial
 import inspect
 import json
 import traceback
+from functools import partial
 from typing import Any, Callable, Dict, Optional, Tuple
+
 from pydantic import ValidationError
-from json_rpc.model import Error, FuncSchema, FuncType, InternalError, InvalidParamsError, InvalidRequestError, MethodNotFoundError, ParamType, ParseError, ProcRequest, ResponseError, ResponseResult
+
+from json_rpc.model import (Error, FuncSchema, FuncType, DefaultInternalError,
+                            DefaultInvalidParamsError, DefaultInvalidRequestError,
+                            DefaultMethodNotFoundError, ParamType, DefaultParseError,
+                            ProcRequest, ResponseError, ResponseResult)
 from json_rpc.socket_base.send_recv import RecvType, SendType, Token
 
 
@@ -51,7 +56,7 @@ class ServerJsonRPC():
         for i, (key, anno) in enumerate(arg_types.items()):
             value = args[i] if isinstance(args, list) else args[key]
             if not issubclass(type(value), anno):
-                raise ValueError
+                raise TypeError
 
     async def send(self, message: str, token: Token):
         b_message = message.encode(self.default_encondig)
@@ -133,30 +138,32 @@ class ServerJsonRPC():
                 request = ProcRequest.parse_raw(data)
             except ValidationError as e:
                 print("ValidationError", e.json())
-                await self.__handle_error(InvalidRequestError, token)
+                await self.__handle_error(DefaultInvalidRequestError, token)
                 return
             except Exception:
-                await self.__handle_error(ParseError, token)
+                await self.__handle_error(DefaultParseError, token)
                 return
             try:
                 func = self.__functions[request.method]
             except KeyError:
-                await self.__handle_error(MethodNotFoundError, token, request)
+                await self.__handle_error(DefaultMethodNotFoundError, token, request)
                 return
             try:
                 self.__validate_func_args(func, request.params)
             except:
-                await self.__handle_error(InvalidParamsError, token, request)
+                await self.__handle_error(DefaultInvalidParamsError, token, request)
                 return
-            result = (
-                (await func(*request.params)
-                 if inspect.iscoroutinefunction(func)
-                 else func(*request.params))
-                if isinstance(request.params, list)
-                else await func(**request.params)
-                if inspect.iscoroutinefunction(func)
-                else func(**request.params)
-            )
+
+            if isinstance(request.params, list):
+                func = partial(func, *request.params)
+            else:
+                func = partial(func, **request.params)
+
+            if inspect.iscoroutinefunction(func):
+                result = await func()
+            else:
+                result = func()
+
             if issubclass(type(result), type(Error)):
                 await self.__handle_error(
                     result_err,  # type: ignore
@@ -170,7 +177,7 @@ class ServerJsonRPC():
             print("Internal Error", e)
             print(traceback.format_exc())
             await self.__handle_error(
-                InternalError,
+                DefaultInternalError,
                 token,
                 request  # type: ignore
             )
@@ -181,7 +188,7 @@ class ServerJsonRPC():
             except Exception as e:
                 print("Internal Error", e)
                 print(traceback.format_exc())
-                await self.__handle_error(InternalError, token, request)
+                await self.__handle_error(DefaultInternalError, token, request)
 
     async def run(self):
         while True:

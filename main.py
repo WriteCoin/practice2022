@@ -1,6 +1,6 @@
+import sys
 from types import CodeType
 from typing import Any, ClassVar, final
-import sys
 
 
 @final
