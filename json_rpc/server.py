@@ -5,12 +5,14 @@ import traceback
 from functools import partial
 from typing import Any, Callable, Dict, Optional, Tuple
 
-from pydantic import ValidationError
+from pydantic import ValidationError, validate_arguments
+from pydantic.typing import AnyCallable
 
-from json_rpc.model import (Error, FuncSchema, FuncType, DefaultInternalError,
-                            DefaultInvalidParamsError, DefaultInvalidRequestError,
-                            DefaultMethodNotFoundError, ParamType, DefaultParseError,
-                            ProcRequest, ResponseError, ResponseResult)
+from json_rpc.model import (DefaultInternalError, DefaultInternalErrorDict, DefaultInvalidParamsError, DefaultInvalidRequestErrorDict, DefaultMethodNotFoundErrorDict, DefaultParseErrorDict, ErrorDataType,
+                            InvalidRequestError,
+                            DefaultMethodNotFoundError, DefaultParseError,
+                            Error, ErrorDict, FuncSchema, FuncType, ParamType,
+                            ProcRequest, ResponseError, ResponseResult, get_invalid_params_error_dict)
 from json_rpc.socket_base.send_recv import RecvType, SendType, Token
 
 
@@ -31,7 +33,7 @@ class ServerJsonRPC():
         self.__send = send
         self.__recv = recv
         self.__addr = addr
-        self.__functions: Dict[str, FuncType] = {}
+        self.__functions: Dict[str, tuple[AnyCallable, FuncType]] = {}
 
     def get_addr(self):
         return "" if self.__addr is None else f"{self.__addr}: "
@@ -41,31 +43,33 @@ class ServerJsonRPC():
         func=None,
         *,
         name: Optional[str] = None
-    ) -> Callable:  # type: ignore
+    ) -> Callable:
 
         if func is None:
             return partial(self.register, name=name)
         key = func.__name__ if name is None else name
-        self.__functions[key] = func
+        pydantic_func = validate_arguments(func)
+        self.__functions[key] = (pydantic_func, func)
+        return func
 
-    @staticmethod
-    def __validate_func_args(func: FuncType, args: ParamType):
-        func_spec = inspect.getfullargspec(func)
-        anno_types = func_spec.annotations
-        arg_types = {k: v for k, v in anno_types.items() if k != "return"}
-        for i, (key, anno) in enumerate(arg_types.items()):
-            value = args[i] if isinstance(args, list) else args[key]
-            if not issubclass(type(value), anno):
-                raise TypeError
+    # @staticmethod
+    # def __validate_func_args(func: FuncType, args: ParamType):
+    #     func_spec = inspect.getfullargspec(func)
+    #     anno_types = func_spec.annotations
+    #     arg_types = {k: v for k, v in anno_types.items() if k != "return"}
+    #     for i, (key, anno) in enumerate(arg_types.items()):
+    #         value = args[i] if isinstance(args, list) else args[key]
+    #         if not issubclass(type(value), anno):
+    #             raise TypeError
 
     async def send(self, message: str, token: Token):
         b_message = message.encode(self.default_encondig)
-        await self.__send(b_message, token)  # type: ignore
+        await self.__send(b_message, token)
 
     async def recv(self) -> Tuple[Token, str]:
         token, data = await self.__recv()
-        result = data.decode(self.default_encondig)  # type: ignore
-        return (token, result)  # type: ignore
+        result = data.decode(self.default_encondig)
+        return (token, result)
 
     async def __send_error(
         self, err: ResponseError, token: Token
@@ -75,11 +79,15 @@ class ServerJsonRPC():
         await self.send(response, token)
 
     async def __handle_error(
-        self, err: Error, token: Token, request: ProcRequest = default_request
+        self, err: ErrorDict, token: Token, request: ProcRequest = default_request
     ):
-        response = ResponseError(
-            jsonrpc=request.json_rpc, error=err, id=request.id
-        )
+        try:
+            response = ResponseError(
+                jsonrpc=request.json_rpc, error=err, id=request.id
+            )
+        except ValidationError as e:
+            print("ValidationError", e.json())
+            return
         if request.id is not None:
             await self.__send_error(response, token)
         else:
@@ -107,7 +115,7 @@ class ServerJsonRPC():
 
     def schema(self) -> dict:
         result: Dict[str, dict] = {}
-        for alias_func_name, func in self.__functions.items():
+        for alias_func_name, (_, func) in self.__functions.items():
             arg_spec = inspect.getfullargspec(func)
             parameters = arg_spec._asdict()
             del parameters["annotations"]
@@ -138,46 +146,72 @@ class ServerJsonRPC():
                 request = ProcRequest.parse_raw(data)
             except ValidationError as e:
                 print("ValidationError", e.json())
-                await self.__handle_error(DefaultInvalidRequestError, token)
+                await self.__handle_error(DefaultInvalidRequestErrorDict, token)
                 return
             except Exception:
-                await self.__handle_error(DefaultParseError, token)
+                await self.__handle_error(DefaultParseErrorDict, token)
                 return
             try:
-                func = self.__functions[request.method]
+                pydantic_func, func = self.__functions[request.method]
             except KeyError:
-                await self.__handle_error(DefaultMethodNotFoundError, token, request)
+                await self.__handle_error(DefaultMethodNotFoundErrorDict, token, request)
                 return
-            try:
-                self.__validate_func_args(func, request.params)
-            except:
-                await self.__handle_error(DefaultInvalidParamsError, token, request)
-                return
+            # try:
+            #     self.__validate_func_args(func, request.params)
+            # except:
+            #     await self.__handle_error(DefaultInvalidParamsError, token, request)
+            #     return
+
+            # if isinstance(request.params, list):
+            #     pydantic_func.validate(*request.params)
+            # else:
+            #     pydantic_func.validate(**request.params)
 
             if isinstance(request.params, list):
-                func = partial(func, *request.params)
+                pydantic_func = partial(pydantic_func, *request.params)
             else:
-                func = partial(func, **request.params)
+                pydantic_func = partial(pydantic_func, **request.params)
 
             if inspect.iscoroutinefunction(func):
-                result = await func()
+                result = await pydantic_func()
             else:
-                result = func()
+                result = pydantic_func()
 
-            if issubclass(type(result), type(Error)):
-                await self.__handle_error(
-                    result_err,  # type: ignore
-                    token,
-                    request
-                )
+            # if isinstance(request.params, list):
+            #     func = partial(func, *request.params)
+            # else:
+            #     func = partial(func, **request.params)
 
+            # if inspect.iscoroutinefunction(func):
+            #     result = await func()
+            # else:
+            #     result = func()
+
+            # if issubclass(type(result), type(Error)):
+            #     await self.__handle_error(
+            #         result_err,  # type: ignore
+            #         token,
+            #         request
+            #     )
+        except ValidationError as err:
+            print("ValidationError", err.json())
+            error_data = json.loads(err.json())[0]
+            try:
+                error_data["ctx"]
+            except KeyError:
+                error_data["ctx"] = None
+            await self.__handle_error(
+                get_invalid_params_error_dict([error_data]),
+                token,
+                request  # type: ignore
+            )
         except asyncio.CancelledError:
             print(f"{self.get_addr()} Task for request: {data} cancelled")
         except Exception as e:
             print("Internal Error", e)
             print(traceback.format_exc())
             await self.__handle_error(
-                DefaultInternalError,
+                DefaultInternalErrorDict,
                 token,
                 request  # type: ignore
             )
@@ -188,7 +222,7 @@ class ServerJsonRPC():
             except Exception as e:
                 print("Internal Error", e)
                 print(traceback.format_exc())
-                await self.__handle_error(DefaultInternalError, token, request)
+                await self.__handle_error(DefaultInternalErrorDict, token, request)
 
     async def run(self):
         while True:

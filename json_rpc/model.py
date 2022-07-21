@@ -1,5 +1,6 @@
 from inspect import FullArgSpec
-from lib2to3.pgen2.parse import ParseError
+import json
+from types import MemberDescriptorType
 from typing import (Any, Awaitable, Callable, Dict, List, Mapping, Optional,
                     Union)
 
@@ -44,10 +45,30 @@ class ErrorData(TypedDict):
     ctx: Optional[dict]
 
 
-class Error(TypedDict):
+ErrorDataType = Optional[list[ErrorData]]
+
+
+class ErrorDict(TypedDict):
     code: int
     message: str
-    data: Optional[ErrorData]
+    data: ErrorDataType
+
+
+class Error(Exception):
+    code: int
+    message: str
+    data: ErrorDataType
+
+    def __init__(self, code: int, message: str, data: ErrorDataType = None) -> None:
+        self.code = code
+        self.message = message
+        self.data = data
+
+    def __str__(self):
+        if self.data is None:
+            return f"{self.message}"
+        else:
+            return f"{self.message}\n{json.dumps(self.data)}"
 
 
 INVALID_REQUEST_ERROR_CODE = -32600
@@ -66,41 +87,68 @@ PARSE_ERROR_CODE = -32700
 PARSE_ERROR_MESSAGE = "Parse error"
 PARSE_ERROR_TYPE = "parse_error"
 
+VALUE_ERROR_TYPE = "value_error"
 
-def get_invalid_request_error(data: ErrorData):
-    return Error(
+
+class InvalidRequestError(Error):
+    def __init__(self, data: ErrorDataType = None) -> None:
+        super().__init__(INVALID_REQUEST_ERROR_CODE, INVALID_REQUEST_ERROR_MESSAGE, data)
+
+
+class MethodNotFoundError(Error):
+    def __init__(self, data: ErrorDataType = None) -> None:
+        super().__init__(METHOD_NOT_FOUND_ERROR_CODE, METHOD_NOT_FOUND_ERROR_MESSAGE, data)
+
+
+class InvalidParamsError(Error):
+    def __init__(self, data: ErrorDataType = None) -> None:
+        super().__init__(INVALID_PARAMS_ERROR_CODE, INVALID_PARAMS_ERROR_MESSAGE, data)
+
+
+class InternalError(Error):
+    def __init__(self, data: ErrorDataType = None) -> None:
+        super().__init__(INTERNAL_ERROR_CODE, INTERNAL_ERROR_MESSAGE, data)
+
+
+class ParseError(Error):
+    def __init__(self, data: ErrorDataType = None) -> None:
+        super().__init__(PARSE_ERROR_CODE, PARSE_ERROR_MESSAGE, data)
+
+
+def get_invalid_request_error_dict(data: ErrorDataType = None):
+    return ErrorDict(
         code=INVALID_REQUEST_ERROR_CODE,
         message=INVALID_REQUEST_ERROR_MESSAGE,
         data=data
     )
 
 
-def get_method_not_found_error(data: ErrorData):
-    return Error(
+def get_method_not_found_error_dict(data: ErrorDataType = None):
+    return ErrorDict(
         code=METHOD_NOT_FOUND_ERROR_CODE,
         message=METHOD_NOT_FOUND_ERROR_MESSAGE,
         data=data
     )
 
 
-def get_invalid_params_error(data: ErrorData):
-    return Error(
+def get_invalid_params_error_dict(data: ErrorDataType = None):
+    return ErrorDict(
         code=INVALID_PARAMS_ERROR_CODE,
         message=INVALID_PARAMS_ERROR_MESSAGE,
         data=data
     )
 
 
-def get_internal_error(data: ErrorData):
-    return Error(
+def get_internal_error_dict(data: ErrorDataType = None):
+    return ErrorDict(
         code=INTERNAL_ERROR_CODE,
         message=INTERNAL_ERROR_MESSAGE,
         data=data
     )
 
 
-def get_parse_error(data: ErrorData):
-    return Error(
+def get_parse_error_dict(data: ErrorDataType = None):
+    return ErrorDict(
         code=PARSE_ERROR_CODE,
         message=PARSE_ERROR_MESSAGE,
         data=data
@@ -114,8 +162,11 @@ DefaultInvalidRequestErrorData = ErrorData(
     ctx=None
 )
 
-DefaultInvalidRequestError = get_invalid_request_error(
-    DefaultInvalidRequestErrorData)
+DefaultInvalidRequestErrorDict = get_invalid_request_error_dict(
+    [DefaultInvalidRequestErrorData])
+
+DefaultInvalidRequestError = InvalidRequestError(
+    [DefaultInvalidRequestErrorData])
 
 DefaultMethodNotFoundErrorData = ErrorData(
     loc=None,
@@ -124,8 +175,11 @@ DefaultMethodNotFoundErrorData = ErrorData(
     ctx=None
 )
 
-DefaultMethodNotFoundError = get_method_not_found_error(
-    DefaultMethodNotFoundErrorData)
+DefaultMethodNotFoundErrorDict = get_method_not_found_error_dict(
+    [DefaultMethodNotFoundErrorData])
+
+DefaultMethodNotFoundError = MethodNotFoundError(
+    [DefaultMethodNotFoundErrorData])
 
 DefaultInvalidParamsErrorData = ErrorData(
     loc=None,
@@ -134,8 +188,11 @@ DefaultInvalidParamsErrorData = ErrorData(
     ctx=None
 )
 
-DefaultInvalidParamsError = get_invalid_params_error(
-    DefaultInvalidParamsErrorData)
+DefaultInvalidParamsErrorDict = get_invalid_params_error_dict(
+    [DefaultInvalidParamsErrorData])
+
+DefaultInvalidParamsError = InvalidParamsError(
+    [DefaultInvalidParamsErrorData])
 
 DefaultInternalErrorData = ErrorData(
     loc=None,
@@ -144,7 +201,9 @@ DefaultInternalErrorData = ErrorData(
     ctx=None
 )
 
-DefaultInternalError = get_internal_error(DefaultInternalErrorData)
+DefaultInternalErrorDict = get_internal_error_dict([DefaultInternalErrorData])
+
+DefaultInternalError = InternalError([DefaultInternalErrorData])
 
 DefaultParseErrorData = ErrorData(
     loc=None,
@@ -153,30 +212,17 @@ DefaultParseErrorData = ErrorData(
     ctx=None
 )
 
-DefaultParseError = get_parse_error(DefaultParseErrorData)
+DefaultParseErrorDict = get_parse_error_dict([DefaultParseErrorData])
+
+DefaultParseError = ParseError([DefaultParseErrorData])
 
 
 class ResponseError(JsonRpcModel):
-    error: Error
+    error: ErrorDict
 
 
 class ResponseResult(JsonRpcModel):
     result: Any
-
-
-class InvalidRequestException(Exception):
-    def __str__(self) -> str:
-        return DefaultInvalidRequestError["message"]
-
-
-class MethodNotFoundException(Exception):
-    def __str__(self) -> str:
-        return DefaultMethodNotFoundError["message"]
-
-
-class InternalErrorException(Exception):
-    def __str__(self) -> str:
-        return DefaultInternalError["message"]
 
 
 class FuncSchema(BaseModel):
@@ -189,9 +235,10 @@ class JsonRpcSchema(BaseModel):
 
 
 exceptions = {
-    INVALID_REQUEST_ERROR_TYPE: InvalidRequestException,
-    METHOD_NOT_FOUND_ERROR_TYPE: MethodNotFoundException,
+    INVALID_REQUEST_ERROR_TYPE: InvalidRequestError,
+    METHOD_NOT_FOUND_ERROR_TYPE: MethodNotFoundError,
     INVALID_PARAMS_ERROR_TYPE: TypeError,
-    INTERNAL_ERROR_TYPE: InternalErrorException,
-    PARSE_ERROR_TYPE: ParseError
+    INTERNAL_ERROR_TYPE: InternalError,
+    PARSE_ERROR_TYPE: ParseError,
+    VALUE_ERROR_TYPE: ValueError
 }
