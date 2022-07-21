@@ -5,6 +5,7 @@ from pprint import pprint
 from time import sleep
 
 from json_rpc.client import ClientJsonRPC, notification
+from json_rpc.model import InternalError
 from json_rpc.socket_base.send_recv import (ClientRecvType, ClientSendType,
                                             RecvType, SendType)
 from json_rpc.socket_base.socket_fabric import client_sr

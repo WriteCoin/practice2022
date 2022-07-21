@@ -3,13 +3,14 @@ import json
 from contextlib import asynccontextmanager
 from functools import partial
 from inspect import getargs
+import traceback
 from typing import (Any, Awaitable, Callable, Dict, List, Literal, Optional,
                     Tuple, Union)
 
-from json_rpc.model import (ArgsType, exceptions, JsonRpcModel, ParamType, ProcRequest,
-                            RequestResult, ResponseError, ResponseResult)
+from json_rpc.model import (ArgsType, Error, JsonRpcModel, ParamType, ProcRequest,
+                            RequestResult, ResponseError, ResponseResult,
+                            exceptions)
 from json_rpc.socket_base.send_recv import ClientRecvType, ClientSendType
-
 
 BatchArg = Union[Tuple[str, Union[ParamType, Any]],
                  Tuple[str, Union[ParamType, Any], bool]]
@@ -69,12 +70,24 @@ class ClientJsonRPC():
                 try:
                     result = ResponseError.parse_raw(result_json).error
                     if result["data"] is not None:
-                        result = exceptions[result["data"]["type"]]
-                except:
+                        error_type = result["data"][0]["type"]
+                        try:
+                            result = exceptions[error_type]
+                        except KeyError:
+                            try:
+                                result = exceptions[error_type.split('.')[0]]
+                            except KeyError:
+                                result = Error(
+                                    result["code"], result["message"], result["data"])
+                    else:
+                        result = Error(result["code"], result["message"])
+                except Exception as e:
                     result = ResponseResult.parse_raw(result_json).result
                 finally:
                     if base_response.id is not None:
-                        await self.__tasks_queue[base_response.id].put(result)
+                        await self.__tasks_queue[
+                            base_response.id
+                        ].put(result)  # type: ignore
 
     def __get_request(self, func_name: str, args: Union[ParamType, Any], send_id: bool = True) -> RequestResult:
         if send_id:

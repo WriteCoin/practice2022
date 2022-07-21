@@ -28,7 +28,7 @@ async def run():
 
         @server.register
         def sample_func():
-            pass
+            a = 1 / 0
 
         await server.run()
 
