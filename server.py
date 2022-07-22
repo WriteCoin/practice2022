@@ -1,8 +1,14 @@
 import asyncio
 from time import sleep
+from json_rpc.model import Error
 
 from json_rpc.server import ServerJsonRPC
 from json_rpc.socket_base.socket_fabric import server_sr
+
+
+class MyError(Error):
+    code = 991
+    message = "My error"
 
 
 async def run():
@@ -28,6 +34,7 @@ async def run():
 
         @server.register
         def sample_func():
+            raise MyError()
             a = 1 / 0
 
         await server.run()

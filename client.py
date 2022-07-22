@@ -5,10 +5,11 @@ from pprint import pprint
 from time import sleep
 
 from json_rpc.client import ClientJsonRPC, notification
-from json_rpc.model import InternalError
+from json_rpc.model import Error, InternalError
 from json_rpc.socket_base.send_recv import (ClientRecvType, ClientSendType,
                                             RecvType, SendType)
 from json_rpc.socket_base.socket_fabric import client_sr
+from server import MyError
 
 
 async def simple_test(send: ClientSendType, recv: ClientRecvType):
@@ -125,12 +126,18 @@ async def valid_types_test(send: ClientSendType, recv: ClientRecvType):
     client = ClientJsonRPC(send, recv)
     print("Client JSON RPC 2.0 Validation Types Test")
 
-    error = None
     try:
-        await client.sleep("john")
-    except TypeError as e:
-        error = e
-    assert isinstance(error, TypeError)
+        await client.sample_func()
+    except MyError as e:
+        print("Exception")
+        print(e.json())
+
+    # error = None
+    # try:
+    #     await client.sleep("john")
+    # except TypeError as e:
+    #     error = e
+    # assert isinstance(error, TypeError)
 
     print("Test success")
 

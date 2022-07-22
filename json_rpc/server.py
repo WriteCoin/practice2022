@@ -8,11 +8,10 @@ from typing import Any, Callable, Dict, Optional, Tuple
 from pydantic import ValidationError, validate_arguments
 from pydantic.typing import AnyCallable
 
-from json_rpc.model import (DefaultInternalError, DefaultInternalErrorDict, DefaultInvalidParamsError, DefaultInvalidRequestErrorDict, DefaultMethodNotFoundErrorDict, DefaultParseErrorDict, ErrorDataType,
+from json_rpc.model import (ErrorDataType,
                             InvalidRequestError,
-                            DefaultMethodNotFoundError, DefaultParseError,
-                            Error, ErrorDict, FuncSchema, FuncType, ParamType,
-                            ProcRequest, ResponseError, ResponseResult, get_invalid_params_error_dict)
+                            Error, JsonRpcError, FuncSchema, FuncType, ParamType,
+                            ProcRequest, ResponseError, ResponseResult, get_internal_error, get_invalid_params_error, get_invalid_request_error, get_method_not_found_error, get_parse_error)
 from json_rpc.socket_base.send_recv import RecvType, SendType, Token
 
 
@@ -52,16 +51,6 @@ class ServerJsonRPC():
         self.__functions[key] = (pydantic_func, func)
         return func
 
-    # @staticmethod
-    # def __validate_func_args(func: FuncType, args: ParamType):
-    #     func_spec = inspect.getfullargspec(func)
-    #     anno_types = func_spec.annotations
-    #     arg_types = {k: v for k, v in anno_types.items() if k != "return"}
-    #     for i, (key, anno) in enumerate(arg_types.items()):
-    #         value = args[i] if isinstance(args, list) else args[key]
-    #         if not issubclass(type(value), anno):
-    #             raise TypeError
-
     async def send(self, message: str, token: Token):
         b_message = message.encode(self.default_encondig)
         await self.__send(b_message, token)
@@ -79,7 +68,7 @@ class ServerJsonRPC():
         await self.send(response, token)
 
     async def __handle_error(
-        self, err: ErrorDict, token: Token, request: ProcRequest = default_request
+        self, err: JsonRpcError, token: Token, request: ProcRequest = default_request
     ):
         try:
             response = ResponseError(
@@ -145,28 +134,22 @@ class ServerJsonRPC():
                     return
                 request = ProcRequest.parse_raw(data)
             except ValidationError as e:
-                print("ValidationError", e.json())
-                await self.__handle_error(DefaultInvalidRequestErrorDict, token)
+                print("Base validation values model error", e.json())
+                error = get_invalid_request_error(e.errors)
+                await self.__handle_error(error, token)
                 return
-            except Exception:
-                await self.__handle_error(DefaultParseErrorDict, token)
+            except json.JSONDecodeError as e:
+                print("Parse JSON error", e)
+                error_info = e.__dict__
+                error_info["traceback"] = traceback.format_exc()
+                await self.__handle_error(get_parse_error(error_info), token)
                 return
             try:
                 pydantic_func, func = self.__functions[request.method]
-            except KeyError:
-                await self.__handle_error(DefaultMethodNotFoundErrorDict, token, request)
+            except KeyError as e:
+                error = get_method_not_found_error(traceback.format_exc())
+                await self.__handle_error(error, token, request)
                 return
-            # try:
-            #     self.__validate_func_args(func, request.params)
-            # except:
-            #     await self.__handle_error(DefaultInvalidParamsError, token, request)
-            #     return
-
-            # if isinstance(request.params, list):
-            #     pydantic_func.validate(*request.params)
-            # else:
-            #     pydantic_func.validate(**request.params)
-
             if isinstance(request.params, list):
                 pydantic_func = partial(pydantic_func, *request.params)
             else:
@@ -176,32 +159,16 @@ class ServerJsonRPC():
                 result = await pydantic_func()
             else:
                 result = pydantic_func()
-
-            # if isinstance(request.params, list):
-            #     func = partial(func, *request.params)
-            # else:
-            #     func = partial(func, **request.params)
-
-            # if inspect.iscoroutinefunction(func):
-            #     result = await func()
-            # else:
-            #     result = func()
-
-            # if issubclass(type(result), type(Error)):
-            #     await self.__handle_error(
-            #         result_err,  # type: ignore
-            #         token,
-            #         request
-            #     )
         except ValidationError as err:
-            print("ValidationError", err.json())
-            error_data = json.loads(err.json())[0]
-            try:
-                error_data["ctx"]
-            except KeyError:
-                error_data["ctx"] = None
+            print("Validation types error", err.json())
             await self.__handle_error(
-                get_invalid_params_error_dict([error_data]),
+                get_invalid_params_error(err.errors),
+                token,
+                request  # type: ignore
+            )
+        except Error as e:
+            await self.__handle_error(
+                e.get_error(),
                 token,
                 request  # type: ignore
             )
@@ -210,8 +177,11 @@ class ServerJsonRPC():
         except Exception as e:
             print("Internal Error", e)
             print(traceback.format_exc())
+            error = {}
+            error["args"] = e.args
+            error["traceback"] = traceback.format_exc()
             await self.__handle_error(
-                DefaultInternalErrorDict,
+                get_internal_error(error),
                 token,
                 request  # type: ignore
             )
@@ -222,7 +192,10 @@ class ServerJsonRPC():
             except Exception as e:
                 print("Internal Error", e)
                 print(traceback.format_exc())
-                await self.__handle_error(DefaultInternalErrorDict, token, request)
+                error = {}
+                error["args"] = e.args
+                error["traceback"] = traceback.format_exc()
+                await self.__handle_error(get_internal_error(error), token, request)
 
     async def run(self):
         while True:

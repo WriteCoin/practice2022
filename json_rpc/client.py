@@ -8,8 +8,7 @@ from typing import (Any, Awaitable, Callable, Dict, List, Literal, Optional,
                     Tuple, Union)
 
 from json_rpc.model import (ArgsType, Error, JsonRpcModel, ParamType, ProcRequest,
-                            RequestResult, ResponseError, ResponseResult,
-                            exceptions)
+                            RequestResult, ResponseError, ResponseResult)
 from json_rpc.socket_base.send_recv import ClientRecvType, ClientSendType
 
 BatchArg = Union[Tuple[str, Union[ParamType, Any]],
@@ -45,8 +44,9 @@ class ClientJsonRPC():
         self.__recv = recv
         self.__id = 0
         self.__tasks_queue: Dict[int, asyncio.Queue] = {}
-        self.notify = CallNotifyDecorator(self, self.__notify)
-        self.batch = BatchDecorator(self, self.__batch)
+        # self.__responses: Dict[int, asyncio.Future] = {}
+        self.notify = CallNotifyGasket(self, self.__notify)
+        self.batch = BatchGasket(self, self.__batch)
         asyncio.create_task(self.find_response())
 
     async def send(self, message: str):
@@ -54,10 +54,16 @@ class ClientJsonRPC():
         await self.__send(b_message)
 
     async def recv(self, request_id: int) -> str:
-        result = await self.__tasks_queue[request_id].get()
-        if issubclass(result, Exception):
-            raise result
-        return result
+        response = await self.__tasks_queue[request_id].get()
+        if issubclass(type(response), Error):
+            raise response
+        return response
+
+    # async def recv(self, response: Any, request_id: int) -> Any:
+    #     if issubclass(response, Exception):
+    #         raise response
+    #     del self.__responses[request_id]
+    #     return response
 
     async def find_response(self):
         while True:
@@ -68,26 +74,28 @@ class ClientJsonRPC():
                 print(f"Response: {result_json}")
                 base_response = JsonRpcModel.parse_raw(result_json)
                 try:
-                    result = ResponseError.parse_raw(result_json).error
-                    if result["data"] is not None:
-                        error_type = result["data"][0]["type"]
-                        try:
-                            result = exceptions[error_type]
-                        except KeyError:
-                            try:
-                                result = exceptions[error_type.split('.')[0]]
-                            except KeyError:
-                                result = Error(
-                                    result["code"], result["message"], result["data"])
-                    else:
-                        result = Error(result["code"], result["message"])
+                    response = ResponseError.parse_raw(result_json).error
+                    response = Error.from_error(response)
                 except Exception as e:
-                    result = ResponseResult.parse_raw(result_json).result
+                    print(e)
+                    print(traceback.format_exc())
+                    response = ResponseResult.parse_raw(result_json).result
                 finally:
                     if base_response.id is not None:
+                        # async def recv() -> Any:
+                        #     if issubclass(response, Exception):  # type: ignore
+                        #         raise response
+                        # if base_response.id is not None:
+                        #     del self.__responses[base_response.id]
+                        # return response
+                        # self.__responses[base_response.id] = asyncio.ensure_future(
+                        # recv())
+
+                        # self.__responses[base_response.id] = asyncio.ensure_future(self.recv(response, base_response.id)  # type: ignore
+                        #                                                            )
                         await self.__tasks_queue[
                             base_response.id
-                        ].put(result)  # type: ignore
+                        ].put(response)  # type: ignore
 
     def __get_request(self, func_name: str, args: Union[ParamType, Any], send_id: bool = True) -> RequestResult:
         if send_id:
@@ -121,6 +129,7 @@ class ClientJsonRPC():
         async def callee():
             request_result = await self.__remote_call(func_name, args)
             if request_result["request_id"] is not None:
+                # return await self.__responses[request_result["request_id"]]
                 return await self.recv(request_result["request_id"])
 
         future = asyncio.ensure_future(callee())
@@ -145,6 +154,7 @@ class ClientJsonRPC():
         for request in requests:
             if request.id is not None:
                 result = await self.recv(request.id)
+                # result = await self.__responses[request.id]
                 results.append(result)
 
         return results
@@ -163,7 +173,7 @@ FuncType = Callable[[str, ArgsType], Awaitable[Any]]
 BatchFunc = Callable[[BatchArg], Awaitable[List[Any]]]
 
 
-class CallNotifyDecorator():
+class CallNotifyGasket():
     def __init__(self, client: ClientJsonRPC, func: FuncType):
         self.client = client
         self.func = func
@@ -181,7 +191,7 @@ class CallNotifyDecorator():
         return await self.__func(name, *args, **kwargs)
 
 
-class BatchDecorator():
+class BatchGasket():
     def __init__(self, client: ClientJsonRPC, func: BatchFunc, args: List[BatchArg] = [], call_available: bool = True, no_notify: bool = True):
         self.client = client
         self.func = func
