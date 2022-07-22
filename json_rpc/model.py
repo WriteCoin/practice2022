@@ -37,18 +37,10 @@ class RequestResult(TypedDict):
 class BatchRequest(BaseModel):
     params: List[ProcRequest]
 
-
-class ErrorData(TypedDict):
-    loc: Optional[list]
-    msg: Optional[str]
-    type: str
-    ctx: Optional[dict]
+ErrorDataType = Any
 
 
-ErrorDataType = Optional[list[ErrorData]]
-
-
-class ErrorDict(TypedDict):
+class JsonRpcError(TypedDict):
     code: int
     message: str
     data: ErrorDataType
@@ -59,9 +51,9 @@ class Error(Exception):
     message: str
     data: ErrorDataType
 
-    def __init__(self, code: int, message: str, data: ErrorDataType = None) -> None:
-        self.code = code
-        self.message = message
+    def __init__(self, code: Optional[int] = None, message: Optional[str] = None, data: ErrorDataType = None) -> None:
+        self.code = code or self.__class__.code
+        self.message = message or self.__class__.message
         self.data = data
 
     def __str__(self):
@@ -69,6 +61,26 @@ class Error(Exception):
             return f"{self.message}"
         else:
             return f"{self.message}\n{json.dumps(self.data)}"
+
+    def get_error(self, include_data: bool = True):
+        return JsonRpcError(
+            code=self.code,
+            message=self.message,
+            data=self.message if include_data else None
+        )
+
+    def json(self):
+        try:
+            return json.dumps(self.get_error())
+        except:
+            return json.dumps(self.get_error(False))
+
+    @classmethod
+    def from_error(cls, error: JsonRpcError):
+        for error_class in cls.__subclasses__():
+            if error_class.code == error["code"]:
+                return error_class(error["code"], error["message"], error["data"])
+        return cls(error["code"], error["message"], error["data"])
 
 
 INVALID_REQUEST_ERROR_CODE = -32600
@@ -91,134 +103,72 @@ VALUE_ERROR_TYPE = "value_error"
 
 
 class InvalidRequestError(Error):
-    def __init__(self, data: ErrorDataType = None) -> None:
-        super().__init__(INVALID_REQUEST_ERROR_CODE, INVALID_REQUEST_ERROR_MESSAGE, data)
+    code: int = INVALID_REQUEST_ERROR_CODE
+    message: str = INVALID_REQUEST_ERROR_MESSAGE
 
 
 class MethodNotFoundError(Error):
-    def __init__(self, data: ErrorDataType = None) -> None:
-        super().__init__(METHOD_NOT_FOUND_ERROR_CODE, METHOD_NOT_FOUND_ERROR_MESSAGE, data)
+    code: int = METHOD_NOT_FOUND_ERROR_CODE
+    message: str = METHOD_NOT_FOUND_ERROR_MESSAGE
 
 
 class InvalidParamsError(Error):
-    def __init__(self, data: ErrorDataType = None) -> None:
-        super().__init__(INVALID_PARAMS_ERROR_CODE, INVALID_PARAMS_ERROR_MESSAGE, data)
+    code: int = INVALID_PARAMS_ERROR_CODE
+    message: str = INVALID_PARAMS_ERROR_MESSAGE
 
 
 class InternalError(Error):
-    def __init__(self, data: ErrorDataType = None) -> None:
-        super().__init__(INTERNAL_ERROR_CODE, INTERNAL_ERROR_MESSAGE, data)
+    code: int = INTERNAL_ERROR_CODE
+    message: str = INTERNAL_ERROR_MESSAGE
 
 
 class ParseError(Error):
-    def __init__(self, data: ErrorDataType = None) -> None:
-        super().__init__(PARSE_ERROR_CODE, PARSE_ERROR_MESSAGE, data)
+    code: int = PARSE_ERROR_CODE
+    message: str = PARSE_ERROR_MESSAGE
 
 
-def get_invalid_request_error_dict(data: ErrorDataType = None):
-    return ErrorDict(
+def get_invalid_request_error(data: ErrorDataType = None):
+    return JsonRpcError(
         code=INVALID_REQUEST_ERROR_CODE,
         message=INVALID_REQUEST_ERROR_MESSAGE,
         data=data
     )
 
 
-def get_method_not_found_error_dict(data: ErrorDataType = None):
-    return ErrorDict(
+def get_method_not_found_error(data: ErrorDataType = None):
+    return JsonRpcError(
         code=METHOD_NOT_FOUND_ERROR_CODE,
         message=METHOD_NOT_FOUND_ERROR_MESSAGE,
         data=data
     )
 
 
-def get_invalid_params_error_dict(data: ErrorDataType = None):
-    return ErrorDict(
+def get_invalid_params_error(data: ErrorDataType = None):
+    return JsonRpcError(
         code=INVALID_PARAMS_ERROR_CODE,
         message=INVALID_PARAMS_ERROR_MESSAGE,
         data=data
     )
 
 
-def get_internal_error_dict(data: ErrorDataType = None):
-    return ErrorDict(
+def get_internal_error(data: ErrorDataType = None):
+    return JsonRpcError(
         code=INTERNAL_ERROR_CODE,
         message=INTERNAL_ERROR_MESSAGE,
         data=data
     )
 
 
-def get_parse_error_dict(data: ErrorDataType = None):
-    return ErrorDict(
+def get_parse_error(data: ErrorDataType = None):
+    return JsonRpcError(
         code=PARSE_ERROR_CODE,
         message=PARSE_ERROR_MESSAGE,
         data=data
     )
 
 
-DefaultInvalidRequestErrorData = ErrorData(
-    loc=None,
-    msg=None,
-    type=INVALID_REQUEST_ERROR_TYPE,
-    ctx=None
-)
-
-DefaultInvalidRequestErrorDict = get_invalid_request_error_dict(
-    [DefaultInvalidRequestErrorData])
-
-DefaultInvalidRequestError = InvalidRequestError(
-    [DefaultInvalidRequestErrorData])
-
-DefaultMethodNotFoundErrorData = ErrorData(
-    loc=None,
-    msg=None,
-    type=METHOD_NOT_FOUND_ERROR_TYPE,
-    ctx=None
-)
-
-DefaultMethodNotFoundErrorDict = get_method_not_found_error_dict(
-    [DefaultMethodNotFoundErrorData])
-
-DefaultMethodNotFoundError = MethodNotFoundError(
-    [DefaultMethodNotFoundErrorData])
-
-DefaultInvalidParamsErrorData = ErrorData(
-    loc=None,
-    msg=None,
-    type=INVALID_PARAMS_ERROR_TYPE,
-    ctx=None
-)
-
-DefaultInvalidParamsErrorDict = get_invalid_params_error_dict(
-    [DefaultInvalidParamsErrorData])
-
-DefaultInvalidParamsError = InvalidParamsError(
-    [DefaultInvalidParamsErrorData])
-
-DefaultInternalErrorData = ErrorData(
-    loc=None,
-    msg=None,
-    type=INTERNAL_ERROR_TYPE,
-    ctx=None
-)
-
-DefaultInternalErrorDict = get_internal_error_dict([DefaultInternalErrorData])
-
-DefaultInternalError = InternalError([DefaultInternalErrorData])
-
-DefaultParseErrorData = ErrorData(
-    loc=None,
-    msg=None,
-    type=PARSE_ERROR_TYPE,
-    ctx=None
-)
-
-DefaultParseErrorDict = get_parse_error_dict([DefaultParseErrorData])
-
-DefaultParseError = ParseError([DefaultParseErrorData])
-
-
 class ResponseError(JsonRpcModel):
-    error: ErrorDict
+    error: JsonRpcError
 
 
 class ResponseResult(JsonRpcModel):
@@ -232,13 +182,3 @@ class FuncSchema(BaseModel):
 
 class JsonRpcSchema(BaseModel):
     title: str = "JSON-RPC 2.0"
-
-
-exceptions = {
-    INVALID_REQUEST_ERROR_TYPE: InvalidRequestError,
-    METHOD_NOT_FOUND_ERROR_TYPE: MethodNotFoundError,
-    INVALID_PARAMS_ERROR_TYPE: TypeError,
-    INTERNAL_ERROR_TYPE: InternalError,
-    PARSE_ERROR_TYPE: ParseError,
-    VALUE_ERROR_TYPE: ValueError
-}
