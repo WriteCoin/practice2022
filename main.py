@@ -1,5 +1,6 @@
 import json
 import sys
+from time import time
 import traceback
 from types import CodeType
 from typing import Any, ClassVar, TypedDict, final
@@ -20,7 +21,9 @@ class A():
 
 
 class B(A):
-    pass
+
+    def __init__(self, a: int) -> None:
+        super().__init__(a)
 
 
 class Values(TypedDict):
@@ -83,6 +86,24 @@ class C:
         self.a = a
 
 
+def test_thread():
+    import concurrent.futures as pool
+    import time
+
+    def worker(n):
+        s = n / 10
+        time.sleep(s)
+        return s
+
+    with pool.ThreadPoolExecutor(max_workers=2) as executor:
+        # создается объект `Future`
+        future = executor.submit(worker, 5)
+        print(future)
+        # получение результата
+        print(future.result())
+        print("result")
+
+
 if __name__ == '__main__':
     # print(A.__subclasses__())
 
@@ -99,8 +120,10 @@ if __name__ == '__main__':
     # except KeyError as e:
     #     print(traceback.format_exc())
 
-    a = A(5)
+    # a = A(5)
 
-    a.method()
+    # a.method()
     # for subclass in A.__subclasses__():
     #     print(subclass.a)
+
+    test_thread()
