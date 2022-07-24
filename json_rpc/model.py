@@ -15,33 +15,34 @@ ArgsType = Union[ParamType, Any]
 
 
 class BatchParam(TypedDict):
+    """batch procedure argument"""
     func_name: str
     args: Union[ParamType, Any]
 
 
 class JsonRpcModel(BaseModel):
+    """The basis of the JSON RPC model."""
     json_rpc: str = Field(alias="jsonrpc")
     id: Optional[int]
 
 
 class ProcRequest(JsonRpcModel):
+    """JSON RPC request model."""
     method: str
     params: ParamType
 
 
 class RequestResult(TypedDict):
+    """data of the generated request."""
     request: ProcRequest
     request_id: Optional[int]
-
-
-class BatchRequest(BaseModel):
-    params: List[ProcRequest]
 
 
 ErrorDataType = Any
 
 
 class JsonRpcError(TypedDict):
+    """JSON RPC Error Data"""
     code: int
     message: str
     data: ErrorDataType
@@ -54,11 +55,17 @@ def _all_subclasses(cls):
 
 
 class Error(Exception):
+    """Base class of the JSON RPC error."""
     code: int
     message: str
     data: ErrorDataType
 
     def __init__(self, code: Optional[int] = None, message: Optional[str] = None, data: ErrorDataType = None) -> None:
+        """
+        :param code: error code
+        :param message: error message
+        :param data: additional information about the error
+        """
         self.code = code or self.__class__.code
         self.message = message or self.__class__.message
         self.data = data
@@ -175,17 +182,21 @@ def get_parse_error(data: ErrorDataType = None):
 
 
 class ResponseError(JsonRpcModel):
+    """JSON RPC error model"""
     error: JsonRpcError
 
 
 class ResponseResult(JsonRpcModel):
+    """JSON RPC result model"""
     result: Any
 
 
 class FuncSchema(BaseModel):
+    """JSON RPC schema function"""
     func_name: str = Field(alias="funcName")
     parameters: dict
 
 
 class JsonRpcSchema(BaseModel):
+    """JSON RPC schema model"""
     title: str = "JSON-RPC 2.0"

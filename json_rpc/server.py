@@ -51,7 +51,14 @@ class ServerJsonRPC():
         *,
         name: Optional[str] = None
     ) -> Callable:
-
+        """
+            Registering a new feature.
+            It is recommended to use as a decorator.
+            Pre-passes the type check using pedantic.
+        :param func: if None, then a special name is required
+        :param name: the alias of the registered function, the client will have to specify this name to call it
+        :return func
+        """
         if func is None:
             return partial(self.register, name=name)
         key = func.__name__ if name is None else name
@@ -60,10 +67,20 @@ class ServerJsonRPC():
         return func
 
     async def send(self, message: str, token: Token):
+        """
+            Sending a message.
+        :param message: message to send
+        :param token: the client ID received by receiving the message
+        :return
+        """
         b_message = message.encode(self.default_encondig)
         await self.__send(b_message, token)
 
     async def recv(self) -> Tuple[Token, str]:
+        """
+            Receiving a message.
+        :return Token and message string
+        """
         token, data = await self.__recv()
         result = data.decode(self.default_encondig)
         return (token, result)
@@ -71,6 +88,13 @@ class ServerJsonRPC():
     async def __send_error(
         self, err: ResponseError, token: Token
     ):
+        """
+            Sending an error in JSON RPC format.
+            in the error object, especially the data property, you need to put the correct data for JSON serialization
+        :param err: error object
+        :param token: Token
+        :return
+        """
         response = err.json(by_alias=True)
         print(f"{self.get_addr()} Response with error: {response}")
         await self.send(response, token)
@@ -78,6 +102,16 @@ class ServerJsonRPC():
     async def __handle_error(
         self, err: JsonRpcError, token: Token, request: ProcRequest = default_request
     ):
+        """
+            Generating and sending an error, if it occurred, in JSON RPC format.
+            The link between Exception and Target sending.
+            it is strongly recommended to specify valid data for the JsonRpcError object.
+            Otherwise, sending is not possible.
+            If there is no request ID, nothing is sent (notify call), and the message is output in string form.
+        :param err: error object
+        :param token: Token
+        :param request: Generated (optional) request
+        """
         try:
             response = ResponseError(
                 jsonrpc=request.json_rpc, error=err, id=request.id
@@ -94,6 +128,12 @@ class ServerJsonRPC():
     async def __send_result(
         self, response: ResponseResult, token: Token
     ):
+        """
+            Sending the result in JSON RPC format.
+            The function that worked correctly should return the correct JSON format for serialization.
+        :param response: result model object
+        :param token: Token
+        """
         result = response.json(by_alias=True)
         print(f"{self.get_addr()} Response: {result}")
         await self.send(result, token)
@@ -101,6 +141,17 @@ class ServerJsonRPC():
     async def __handle_result(
         self, result: Any, token: Token, request: ProcRequest = default_request
     ):
+        """
+            Generating and sending the result in JSON RPC format.
+            The link between Exception and Target sending.
+            it is strongly recommended to specify a valid result data type for serialization.
+            Otherwise, sending is not possible.
+            If the request ID is missing, nothing is sent (notification call), and the result is JSON in string form.
+        :param result: valid value for serialization
+        :param token: Token
+        :param request: Generated (optional) request
+        :return
+        """
         response = ResponseResult(
             jsonrpc=request.json_rpc, result=result, id=request.id
         )
@@ -111,6 +162,13 @@ class ServerJsonRPC():
                 f"{self.get_addr()} Result for request: {response.json(by_alias=True)}")
 
     def schema(self) -> dict:
+        """
+            Getting the server schema.
+            Getting information about the JSON RPC specification version and the functions used,
+            in dictionary format: `alias_func_name`: (annotations object).
+            Annotations are taken from the standard inspect module.
+        :return dict
+        """
         result: Dict[str, dict] = {}
         for alias_func_name, (_, func) in self.__functions.items():
             arg_spec = inspect.getfullargspec(func)
@@ -131,6 +189,29 @@ class ServerJsonRPC():
         return dict_base
 
     async def __handle_request(self, data: str, token: Token):
+        """
+            Server-side request processing.
+            Sends a result in the normal case or an error.
+            Handles all errors provided by the JSON RPC specification.
+
+            The first ValidationError is responsible for the error 
+            of invalid data as not conforming to the specification (invalid format).
+
+            The second JSONDecodeError error is a basic JSON parsing error.
+
+            KeyError - the function was not registered.
+
+            The second ValidationError error is an error
+            related to incorrect data types sent to the function.
+
+            Error - a custom error that you can implement yourself.
+
+            Exception - general Internal error.
+
+        :param data: data
+        :param token: Token
+        :return
+        """
         try:
             try:
                 print(f"{self.get_addr()} Request: {data}")
@@ -206,6 +287,11 @@ class ServerJsonRPC():
                 await self.__handle_error(get_internal_error(error), token, request)
 
     async def run(self):
+        """
+            The basis of the server operation.
+            Constantly receives messages and creates tasks for new requests.
+        :return
+        """
         while True:
             try:
                 req = await self.recv()

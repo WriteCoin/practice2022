@@ -45,6 +45,11 @@ class ClientJsonRPC():
         send: ClientSendType,
         recv: ClientRecvType,
     ):
+        """
+        :param send: message sending function
+        :param recv: message receiving function
+        addr: information (optional) about the client's IP and port
+        """
         self.__send = send
         self.__recv = recv
         self.__id = 0
@@ -54,10 +59,20 @@ class ClientJsonRPC():
         asyncio.create_task(self.find_response())
 
     async def send(self, message: str):
+        """
+            Sending a message.
+        :param message: message to send
+        :return
+        """
         b_message = message.encode(self.default_encondig)
         await self.__send(b_message)
 
     async def recv(self, request_id: int) -> str:
+        """
+            Receiving a message.
+        :param request_id: request ID
+        :return message
+        """
         response = await self.__responses[request_id].get()
         if issubclass(type(response), Error):
             raise response
@@ -65,6 +80,12 @@ class ClientJsonRPC():
         return response
 
     async def find_response(self):
+        """
+            the general task of finding all the responses from the server.
+            Tries to parse as an error first and translate to Exception.
+            In case of failure, parses as a result and writes it.
+        :return
+        """
         while True:
             rcv_bytes = await self.__recv()
             result_json = rcv_bytes.decode(
@@ -84,6 +105,14 @@ class ClientJsonRPC():
                         ].put(response)  # type: ignore
 
     def __get_request(self, func_name: str, args: Union[ParamType, Any], send_id: bool = True) -> RequestResult:
+        """
+            Forming a new request
+            Auto-increment works for call calls, arguments are given in dict or list format.
+        :param func_name: name of function
+        :param args: arguments of function
+        :send_id: send as a call request
+        :return Request result model
+        """
         if send_id:
             self.__id += 1
             id = self.__id
@@ -105,6 +134,13 @@ class ClientJsonRPC():
     async def __remote_call(
         self, func_name: str, args: Union[ParamType, Any], send_id: bool = True
     ) -> RequestResult:
+        """
+            Remote function call.
+        :param func_name: name of function
+        :param args: arguments of function
+        :send_id: send as a call request
+        :return Request result model  
+        """
         request_result = self.__get_request(func_name, args, send_id)
         json_request = request_result["request"].json(by_alias=True)
         print(f"Send request: {json_request}")
@@ -112,6 +148,12 @@ class ClientJsonRPC():
         return request_result
 
     def call(self, func_name: str, args: Union[ParamType, Any]) -> Any:
+        """
+            Call method.
+        :param func_name: name of function
+        :param args: arguments of function
+        :return Any
+        """
         async def callee():
             request_result = await self.__remote_call(func_name, args)
             if request_result["request_id"] is not None:
@@ -121,6 +163,14 @@ class ClientJsonRPC():
         return future
 
     async def __notify(self, name: str, *args, **kwargs):
+        """
+            The real notify method.
+            Unlike a call, it sends a request without waiting for any response.
+        :param name: name of function
+        :param *args:
+        :param **kwargs:
+        :return
+        """
         await self.__remote_call(
             name,
             get_args(*args, **kwargs)[0],  # type: ignore
@@ -128,6 +178,11 @@ class ClientJsonRPC():
         )
 
     async def __batch(self, *args: BatchArg) -> List[Any]:
+        """
+            The current batch method.
+        :param *args: Many parts defined as a sequence of the format that is transmitted with notify and call.
+        :return
+        """
         requests = [self.__get_request(*arg)["request"]  # type: ignore
                     for arg in args]
         json_requests = [request.json(by_alias=True) for request in requests]
