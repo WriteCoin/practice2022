@@ -16,6 +16,8 @@ from json_rpc.socket_base.send_recv import RecvType, SendType, Token
 
 
 class ServerJsonRPC():
+    """JSON RPC wrapper for the server."""
+
     default_version = "2.0"
     default_encondig = "UTF-8"
     default_request = ProcRequest(
@@ -29,12 +31,18 @@ class ServerJsonRPC():
         recv: RecvType,
         addr: Optional[str] = None,
     ):
+        """
+        :param send: message sending function
+        :param recv: message receiving function
+        addr: information (optional) about the client's IP and port
+        """
         self.__send = send
         self.__recv = recv
         self.__addr = addr
         self.__functions: Dict[str, tuple[AnyCallable, FuncType]] = {}
 
     def get_addr(self):
+        """address getter."""
         return "" if self.__addr is None else f"{self.__addr}: "
 
     def register(

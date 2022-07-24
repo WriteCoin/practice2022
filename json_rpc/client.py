@@ -1,8 +1,10 @@
 import asyncio
+from http.client import responses
 import json
 from contextlib import asynccontextmanager
 from functools import partial
 from inspect import getargs
+from socketserver import BaseRequestHandler
 import traceback
 from typing import (Any, Awaitable, Callable, Dict, List, Literal, Optional,
                     Tuple, Union)
@@ -10,6 +12,7 @@ from typing import (Any, Awaitable, Callable, Dict, List, Literal, Optional,
 from json_rpc.model import (ArgsType, Error, JsonRpcModel, ParamType, ProcRequest,
                             RequestResult, ResponseError, ResponseResult)
 from json_rpc.socket_base.send_recv import ClientRecvType, ClientSendType
+import concurrent.futures as pool
 
 BatchArg = Union[Tuple[str, Union[ParamType, Any]],
                  Tuple[str, Union[ParamType, Any], bool]]
@@ -28,6 +31,8 @@ def get_args(*args, **kwargs):
 
 
 class ClientJsonRPC():
+    """JSON RPC wrapper for the client."""
+
     default_version = "2.0"
     default_encondig = "UTF-8"
     default_request = ProcRequest(
@@ -43,8 +48,7 @@ class ClientJsonRPC():
         self.__send = send
         self.__recv = recv
         self.__id = 0
-        self.__tasks_queue: Dict[int, asyncio.Queue] = {}
-        # self.__responses: Dict[int, asyncio.Future] = {}
+        self.__responses: Dict[int, asyncio.Queue] = {}
         self.notify = CallNotifyGasket(self, self.__notify)
         self.batch = BatchGasket(self, self.__batch)
         asyncio.create_task(self.find_response())
@@ -54,16 +58,11 @@ class ClientJsonRPC():
         await self.__send(b_message)
 
     async def recv(self, request_id: int) -> str:
-        response = await self.__tasks_queue[request_id].get()
+        response = await self.__responses[request_id].get()
         if issubclass(type(response), Error):
             raise response
+        del self.__responses[request_id]
         return response
-
-    # async def recv(self, response: Any, request_id: int) -> Any:
-    #     if issubclass(response, Exception):
-    #         raise response
-    #     del self.__responses[request_id]
-    #     return response
 
     async def find_response(self):
         while True:
@@ -76,24 +75,11 @@ class ClientJsonRPC():
                 try:
                     response = ResponseError.parse_raw(result_json).error
                     response = Error.from_error(response)
-                except Exception as e:
-                    print(e)
-                    print(traceback.format_exc())
+                except:
                     response = ResponseResult.parse_raw(result_json).result
                 finally:
                     if base_response.id is not None:
-                        # async def recv() -> Any:
-                        #     if issubclass(response, Exception):  # type: ignore
-                        #         raise response
-                        # if base_response.id is not None:
-                        #     del self.__responses[base_response.id]
-                        # return response
-                        # self.__responses[base_response.id] = asyncio.ensure_future(
-                        # recv())
-
-                        # self.__responses[base_response.id] = asyncio.ensure_future(self.recv(response, base_response.id)  # type: ignore
-                        #                                                            )
-                        await self.__tasks_queue[
+                        await self.__responses[
                             base_response.id
                         ].put(response)  # type: ignore
 
@@ -101,7 +87,7 @@ class ClientJsonRPC():
         if send_id:
             self.__id += 1
             id = self.__id
-            self.__tasks_queue[id] = asyncio.Queue()
+            self.__responses[id] = asyncio.Queue()
         else:
             id = None
         params = (
@@ -129,7 +115,6 @@ class ClientJsonRPC():
         async def callee():
             request_result = await self.__remote_call(func_name, args)
             if request_result["request_id"] is not None:
-                # return await self.__responses[request_result["request_id"]]
                 return await self.recv(request_result["request_id"])
 
         future = asyncio.ensure_future(callee())
@@ -154,7 +139,6 @@ class ClientJsonRPC():
         for request in requests:
             if request.id is not None:
                 result = await self.recv(request.id)
-                # result = await self.__responses[request.id]
                 results.append(result)
 
         return results

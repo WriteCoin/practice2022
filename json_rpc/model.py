@@ -37,6 +37,7 @@ class RequestResult(TypedDict):
 class BatchRequest(BaseModel):
     params: List[ProcRequest]
 
+
 ErrorDataType = Any
 
 
@@ -44,6 +45,12 @@ class JsonRpcError(TypedDict):
     code: int
     message: str
     data: ErrorDataType
+
+
+def _all_subclasses(cls):
+    return set(cls.__subclasses__()).union(
+        [s for c in cls.__subclasses__() for s in _all_subclasses(c)]
+    )
 
 
 class Error(Exception):
@@ -77,7 +84,7 @@ class Error(Exception):
 
     @classmethod
     def from_error(cls, error: JsonRpcError):
-        for error_class in cls.__subclasses__():
+        for error_class in _all_subclasses(cls):
             if error_class.code == error["code"]:
                 return error_class(error["code"], error["message"], error["data"])
         return cls(error["code"], error["message"], error["data"])
