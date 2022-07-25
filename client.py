@@ -5,7 +5,7 @@ from pprint import pprint
 from time import sleep
 
 from json_rpc.client import ClientJsonRPC, notification
-from json_rpc.model import Error, InternalError
+from json_rpc.model import Error, InternalError, InvalidParamsError
 from json_rpc.socket_base.send_recv import (ClientRecvType, ClientSendType,
                                             RecvType, SendType)
 from json_rpc.socket_base.socket_fabric import client_sr
@@ -46,9 +46,9 @@ async def json_rpc_test(send: ClientSendType, recv: ClientRecvType):
         result = await f
         print(f"result: {result}")
 
-    assert None == await client.notify("sleep", [2.0])
-    res = await client.call("foo", {"bar": "fizz", "baz": "buzz"})
-    assert "fizzbuzz" == res
+    # assert None == await client.notify("sleep", [2.0])
+    # res = await client.call("foo", {"bar": "fizz", "baz": "buzz"})
+    # assert "fizzbuzz" == res
 
     print("Test success")
 
@@ -102,9 +102,9 @@ async def valid_types_test(send: ClientSendType, recv: ClientRecvType):
     error = None
     try:
         await client.sleep("john")
-    except TypeError as e:
+    except InvalidParamsError as e:
         error = e
-    assert isinstance(error, TypeError)
+    assert isinstance(error, InvalidParamsError)
 
     print("Test success")
 
@@ -112,10 +112,10 @@ async def valid_types_test(send: ClientSendType, recv: ClientRecvType):
 async def run():
     async with client_sr("127.0.0.1", 9999) as (send, recv):
         try:
-            await simple_test(send, recv)
-            await json_rpc_test(send, recv)
-            await batch_test(send, recv)
-            await item_attr_test(send, recv)
+            # await simple_test(send, recv)
+            # await json_rpc_test(send, recv)
+            # await batch_test(send, recv)
+            # await item_attr_test(send, recv)
             await valid_types_test(send, recv)
         except Exception as ex:
             print(f"Error: {ex}")

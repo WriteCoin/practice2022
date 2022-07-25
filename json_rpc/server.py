@@ -251,7 +251,7 @@ class ServerJsonRPC():
         except ValidationError as err:
             print("Validation types error", err.json())
             await self.__handle_error(
-                get_invalid_params_error(err.errors),
+                get_invalid_params_error(err.json()),
                 token,
                 request  # type: ignore
             )
